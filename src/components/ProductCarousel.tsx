@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -12,6 +12,14 @@ import { getPopularProducts } from "@/data/products";
 
 const ProductCarousel = () => {
   const popularProducts = getPopularProducts();
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
+
+  const handleImageError = (productId: string) => {
+    setImageErrors(prev => ({
+      ...prev,
+      [productId]: true
+    }));
+  };
 
   return (
     <div className="py-10">
@@ -21,14 +29,14 @@ const ProductCarousel = () => {
             <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/3">
               <Card className="overflow-hidden h-full">
                 <CardContent className="p-0">
-                  <div className="h-48 overflow-hidden">
+                  <div className="h-48 overflow-hidden bg-gray-100">
                     <img
-                      src={getProductImage(product.id)}
+                      src={imageErrors[product.id] ? 
+                        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=500&auto=format&fit=crop" : 
+                        getProductImage(product.id)}
                       alt={product.name}
                       className="w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=500&auto=format&fit=crop";
-                      }}
+                      onError={() => handleImageError(product.id)}
                     />
                   </div>
                   <div className="p-4">
