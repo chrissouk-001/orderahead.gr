@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Coffee, Clock, User, CreditCard, ShieldCheck } from 'lucide-react';
@@ -37,7 +36,7 @@ const Index: React.FC = () => {
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button variant="outline" className="border-white text-white hover:bg-white/10" asChild>
+                <Button variant="outline" className="border-canteen-yellow text-canteen-yellow hover:bg-canteen-yellow/20 hover:text-canteen-dark transition-colors duration-300 font-medium shadow-sm" asChild>
                   <Link to="/contact">Μάθετε Περισσότερα</Link>
                 </Button>
               </div>
