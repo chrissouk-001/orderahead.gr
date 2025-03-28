@@ -1,7 +1,6 @@
 # Smart Canteen Atsoglou
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) <!-- Replace with your actual license if different -->
-[![Build Status](https://img.shields.io/github/actions/workflow/status/chrissouk-001/smart-canteen-solution/ci.yml?branch=main)](https://github.com/chrissouk-001/smart-canteen-solution/actions) <!-- Replace 'ci.yml' if your workflow file has a different name, or remove if no CI -->
 [![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/chrissouk-001/smart-canteen-solution?utm_source=oss&utm_medium=github&utm_campaign=chrissouk-001%2Fsmart-canteen-solution&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)](https://coderabbit.ai)
 [![React](https://img.shields.io/badge/React-^18.3.1-blue?logo=react)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-^5.5.3-blue?logo=typescript)](https://www.typescriptlang.org/)
