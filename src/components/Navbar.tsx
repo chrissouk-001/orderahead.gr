@@ -23,9 +23,9 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto px-4 flex justify-between items-center h-16">
         <Link to="/" className="flex items-center">
           <img 
-            src="/images/school-logo.png" 
+            src="https://img.freepik.com/free-vector/gradient-school-logo-design-template_23-2149664346.jpg?size=338&ext=jpg&ga=GA1.1.87170709.1701907200&semt=sph" 
             alt="Smart Canteen Atsoglou Logo" 
-            className="h-8 w-auto mr-2" 
+            className="h-8 w-auto mr-2 rounded-md" 
           />
           <span className="text-xl font-bold text-canteen-dark">
             Smart Canteen <span className="text-canteen-teal">Atsoglou</span>
