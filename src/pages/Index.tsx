@@ -44,7 +44,7 @@ const Index: React.FC = () => {
             </div>
             <div className="md:w-1/2 flex justify-center">
               <img 
-                src="/images/hero-image.jpg" 
+                src="/lovable-uploads/8c8c878b-ccef-4b47-9625-910f0cdf1bd7.png" 
                 alt="Smart Canteen App" 
                 className="max-w-full h-auto rounded-lg shadow-lg" 
               />
@@ -53,8 +53,9 @@ const Index: React.FC = () => {
         </section>
         
         {/* Popular Products Section */}
-        <section className="bg-white">
+        <section className="bg-white py-16">
           <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12">Δημοφιλή Προϊόντα</h2>
             <ProductCarousel />
           </div>
         </section>
