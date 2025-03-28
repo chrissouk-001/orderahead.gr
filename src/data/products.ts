@@ -7,7 +7,7 @@ export const products: Product[] = [
     name: 'Σάντουιτς Γαλοπούλα',
     description: 'Φρέσκο ψωμάκι με γαλοπούλα, τυρί και μαρούλι',
     price: 2.50,
-    image: '/sandwich.jpg', 
+    image: '/images/sandwich.jpg', 
     category: 'sandwich',
     popular: true
   },
@@ -16,7 +16,7 @@ export const products: Product[] = [
     name: 'Τυρόπιτα',
     description: 'Παραδοσιακή τυρόπιτα με φέτα',
     price: 1.80,
-    image: '/cheese-pie.jpg',
+    image: '/images/cheese-pie.jpg',
     category: 'pastry',
     popular: true
   },
@@ -25,7 +25,7 @@ export const products: Product[] = [
     name: 'Κουλούρι Θεσσαλονίκης',
     description: 'Φρεσκοψημένο κουλούρι με σουσάμι',
     price: 0.80,
-    image: '/koulouri.jpg',
+    image: '/images/koulouri.jpg',
     category: 'pastry'
   },
   {
@@ -33,7 +33,7 @@ export const products: Product[] = [
     name: 'Χυμός Πορτοκάλι',
     description: 'Φυσικός χυμός πορτοκάλι (250ml)',
     price: 1.50,
-    image: '/orange-juice.jpg',
+    image: '/images/orange-juice.jpg',
     category: 'drink',
     popular: true
   },
@@ -42,7 +42,7 @@ export const products: Product[] = [
     name: 'Νερό Εμφιαλωμένο',
     description: 'Φυσικό μεταλλικό νερό (500ml)',
     price: 0.50,
-    image: '/water.jpg',
+    image: '/images/water.jpg',
     category: 'drink'
   },
   {
@@ -50,7 +50,7 @@ export const products: Product[] = [
     name: 'Σοκολατένιο Muffin',
     description: 'Αφράτο muffin με κομμάτια σοκολάτας',
     price: 1.70,
-    image: '/chocolate-muffin.jpg',
+    image: '/images/chocolate-muffin.jpg',
     category: 'sweet'
   },
   {
@@ -58,7 +58,7 @@ export const products: Product[] = [
     name: 'Μπάρα Δημητριακών',
     description: 'Υγιεινή μπάρα με βρώμη και μέλι',
     price: 1.20,
-    image: '/granola-bar.jpg',
+    image: '/images/granola-bar.jpg',
     category: 'snack'
   },
   {
@@ -66,7 +66,7 @@ export const products: Product[] = [
     name: 'Σπανακόπιτα',
     description: 'Χωριάτικη σπανακόπιτα με φέτα',
     price: 1.90,
-    image: '/spinach-pie.jpg',
+    image: '/images/spinach-pie.jpg',
     category: 'pastry'
   },
   {
@@ -74,7 +74,7 @@ export const products: Product[] = [
     name: 'Τοστ τυρί-γαλοπούλα',
     description: 'Ζεστό τοστ με τυρί και γαλοπούλα',
     price: 1.80,
-    image: '/toast.jpg',
+    image: '/images/toast.jpg',
     category: 'sandwich'
   },
   {
@@ -82,7 +82,7 @@ export const products: Product[] = [
     name: 'Σοκολατούχο Γάλα',
     description: 'Κρύο σοκολατούχο γάλα (250ml)',
     price: 1.30,
-    image: '/chocolate-milk.jpg',
+    image: '/images/chocolate-milk.jpg',
     category: 'drink'
   }
 ];

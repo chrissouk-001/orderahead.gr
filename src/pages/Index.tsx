@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import ProductCarousel from '@/components/ProductCarousel';
 
 const Index: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -43,7 +44,7 @@ const Index: React.FC = () => {
             </div>
             <div className="md:w-1/2 flex justify-center">
               <img 
-                src="/placeholder.svg" 
+                src="/images/hero-image.jpg" 
                 alt="Smart Canteen App" 
                 className="max-w-full h-auto rounded-lg shadow-lg" 
               />
@@ -51,8 +52,15 @@ const Index: React.FC = () => {
           </div>
         </section>
         
+        {/* Popular Products Section */}
+        <section className="bg-white">
+          <div className="container mx-auto px-4">
+            <ProductCarousel />
+          </div>
+        </section>
+        
         {/* Features Section */}
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-gray-100">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">Λειτουργίες της Εφαρμογής</h2>
             
@@ -123,12 +131,12 @@ const Index: React.FC = () => {
         </section>
         
         {/* About Project Section */}
-        <section className="py-16 bg-gray-100">
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center">
               <div className="md:w-1/2 mb-10 md:mb-0">
                 <img 
-                  src="/placeholder.svg" 
+                  src="/images/school-canteen.jpg" 
                   alt="Εκπαιδευτήρια Ατσόγλου" 
                   className="max-w-full h-auto rounded-lg shadow-lg" 
                 />
@@ -146,6 +154,37 @@ const Index: React.FC = () => {
                 </p>
                 <Button variant="outline" className="border-canteen-teal text-canteen-teal hover:bg-canteen-teal/10" asChild>
                   <Link to="/contact">Επικοινωνήστε μαζί μας</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* Eco-friendly Section */}
+        <section className="py-16 bg-gray-100">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col md:flex-row-reverse items-center">
+              <div className="md:w-1/2 mb-10 md:mb-0 md:pl-12">
+                <img 
+                  src="/images/eco-friendly.jpg" 
+                  alt="Οικολογική Συσκευασία" 
+                  className="max-w-full h-auto rounded-lg shadow-lg" 
+                />
+              </div>
+              <div className="md:w-1/2">
+                <h2 className="text-3xl font-bold mb-6">Φιλικό προς το Περιβάλλον</h2>
+                <p className="mb-4 text-gray-700">
+                  Η εφαρμογή Smart Canteen Atsoglou προωθεί την οικολογική συνείδηση, επιτρέποντας στους 
+                  μαθητές να επιλέξουν εάν επιθυμούν να χρησιμοποιήσουν πλαστική σακούλα ή όχι.
+                </p>
+                <p className="mb-6 text-gray-700">
+                  Επιπλέον, η ηλεκτρονική παραγγελία μειώνει τη χρήση χαρτιού και συμβάλλει στη 
+                  μείωση του περιβαλλοντικού αποτυπώματος του σχολείου.
+                </p>
+                <Button className="bg-canteen-teal hover:bg-canteen-teal/90" asChild>
+                  <Link to={isAuthenticated ? "/menu" : "/login"}>
+                    Δοκιμάστε το Τώρα
+                  </Link>
                 </Button>
               </div>
             </div>
