@@ -1,7 +1,8 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
 }
 
@@ -39,4 +40,17 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Additional styling for better UI */
+.card-hover {
+  @apply transition-all duration-300 hover:shadow-md hover:-translate-y-1;
+}
+
+.section-padding {
+  @apply py-16 px-4 md:px-8;
+}
+
+.text-gradient {
+  @apply bg-gradient-to-r from-canteen-teal to-canteen-dark bg-clip-text text-transparent;
 }
