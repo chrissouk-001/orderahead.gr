@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Coffee, Clock, User, CreditCard, ShieldCheck } from 'lucide-react';
@@ -136,7 +137,7 @@ const Index: React.FC = () => {
             <div className="flex flex-col md:flex-row items-center">
               <div className="md:w-1/2 mb-10 md:mb-0">
                 <img 
-                  src="/images/school-canteen.jpg" 
+                  src="/lovable-uploads/08576bba-ec2f-4c53-8d8f-332b86064f41.png" 
                   alt="Εκπαιδευτήρια Ατσόγλου" 
                   className="max-w-full h-auto rounded-lg shadow-lg" 
                 />
@@ -166,7 +167,7 @@ const Index: React.FC = () => {
             <div className="flex flex-col md:flex-row-reverse items-center">
               <div className="md:w-1/2 mb-10 md:mb-0 md:pl-12">
                 <img 
-                  src="/images/eco-friendly.jpg" 
+                  src="https://images.unsplash.com/photo-1605600659873-d808a13e4e2c?q=80&w=500&auto=format&fit=crop" 
                   alt="Οικολογική Συσκευασία" 
                   className="max-w-full h-auto rounded-lg shadow-lg" 
                 />
