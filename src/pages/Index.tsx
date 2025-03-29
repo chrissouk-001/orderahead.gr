@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Coffee, Clock, User, CreditCard, ShieldCheck, MessageSquare, Leaf, ChevronDown } from 'lucide-react';
+import { ArrowRight, Coffee, Clock, User, CreditCard, ShieldCheck, MessageSquare, Leaf, ChevronDown, Plus } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useAuth } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
@@ -63,7 +63,7 @@ const Index: React.FC = () => {
   };
   
   return (
-    <div className="flex flex-col min-h-screen dark:bg-background transition-colors duration-300">
+    <div className="flex flex-col min-h-screen dark:bg-[#0f172a] transition-colors duration-300">
       <Navbar />
       
       <main className="flex-grow">
@@ -159,113 +159,132 @@ const Index: React.FC = () => {
         </section>
         
         {/* Popular Products Section */}
-        <section className="bg-white dark:bg-background py-20 relative overflow-hidden">
-          <div className="absolute left-0 top-0 w-full h-20 bg-gradient-to-b from-gray-50 dark:from-background to-transparent"></div>
-          <div className="absolute left-0 bottom-0 w-full h-20 bg-gradient-to-t from-gray-50 dark:from-background to-transparent"></div>
+        <section className="bg-white dark:bg-[#0f172a] py-20 relative overflow-hidden">
+          <div className="absolute left-0 top-0 w-full h-20 bg-gradient-to-b from-gray-50 dark:from-[#0f172a] to-transparent"></div>
+          <div className="absolute left-0 bottom-0 w-full h-20 bg-gradient-to-t from-gray-50 dark:from-[#0f172a] to-transparent"></div>
           
           <div className="absolute -left-32 top-1/4 w-64 h-64 bg-canteen-yellow/10 dark:bg-secondary/10 rounded-full blur-3xl"></div>
           <div className="absolute -right-32 bottom-1/4 w-64 h-64 bg-canteen-teal/10 dark:bg-primary/10 rounded-full blur-3xl"></div>
           
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-canteen-dark dark:text-white">Δημοφιλή Προϊόντα</h2>
-              <div className="w-20 h-1 bg-canteen-teal dark:bg-primary mx-auto mt-4 mb-6 rounded-full"></div>
-              <p className="text-gray-600 dark:text-muted-foreground max-w-2xl mx-auto">Ανακαλύψτε τις αγαπημένες επιλογές των μαθητών και καθηγητών του σχολείου μας.</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-canteen-dark dark:text-white animate-fade-in">Δημοφιλή Προϊόντα</h2>
+              <div className="w-20 h-1 bg-canteen-teal dark:bg-primary mx-auto mt-4 mb-6 rounded-full animate-width-expand"></div>
+              <p className="text-gray-600 dark:text-muted-foreground max-w-2xl mx-auto animate-fade-in-up">Ανακαλύψτε τις αγαπημένες επιλογές των μαθητών και καθηγητών του σχολείου μας.</p>
             </div>
             
             <div className="relative">
               <div className="absolute hidden md:block left-1/2 top-0 -translate-x-1/2 -translate-y-10 text-canteen-teal/10 dark:text-primary/10">
-                <svg xmlns="http://www.w3.org/2000/svg" width="240" height="120" fill="currentColor" viewBox="0 0 512 512">
+                <svg xmlns="http://www.w3.org/2000/svg" width="240" height="120" fill="currentColor" viewBox="0 0 512 512" className="animate-float">
                   <path d="M156.56 32a16 16 0 00-13.42 24.56l21.1 35.16c4.98 8.3 8.26 13.71 10.42 18.57 2.33 5.24 3.34 9.23 3.34 17.71v224c0 8.84 7.16 16 16 16h16c8.84 0 16-7.16 16-16V128c0-8.48 1.01-12.47 3.34-17.71 2.16-4.86 5.44-10.27 10.42-18.57l21.1-35.16A16 16 0 00247.44 32h-90.88zM343.3 141.66l-14.8 26.88c-2.55 4.62-4.29 7.19-5.53 8.92-1.7 2.37-2.79 3.8-3.97 5.34V349c0 17.67 14.33 32 32 32h16c17.67 0 32-14.33 32-32V95c0-17.67-14.33-32-32-32h-4c-12.73 0-24.25 7.39-29.7 18.66z"/>
                 </svg>
               </div>
               
-              <div className="mt-12 text-center">
-                <Button className="bg-canteen-teal hover:bg-canteen-teal/90 dark:bg-primary dark:hover:bg-primary/90 text-white dark:text-primary-foreground font-medium shadow-lg py-4 px-8 text-lg rounded-md transform hover:translate-y-[-4px] transition-all duration-300" asChild>
+              {/* Enhanced product display with carousel-like scrolling */}
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* Product Card 1 - Τυρόπιτα */}
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+                  <div className="relative h-56 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
+                    <img 
+                      src="https://images.unsplash.com/photo-1559598467-f8b76c8155d0?q=80&w=500&auto=format&fit=crop" 
+                      alt="Τυρόπιτα" 
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
+                    />
+                    <div className="absolute top-4 left-4 bg-canteen-yellow text-canteen-dark font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md animate-pulse-gentle">2.50€</div>
+                    <div className="absolute top-4 right-4 bg-canteen-teal/90 text-white font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md">★ δημοφιλές</div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="text-xl font-bold text-canteen-dark mb-2">Τυρόπιτα</h3>
+                    <p className="text-gray-600 text-sm mb-4">Παραδοσιακή τυρόπιτα με φέτα και φύλλο κρούστας</p>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <div className="flex">
+                          <span className="text-canteen-yellow">★★★★</span><span className="text-gray-300">★</span>
+                        </div>
+                        <span className="text-xs text-gray-500 ml-1">(42)</span>
+                      </div>
+                      <Button size="sm" className="rounded-full h-10 w-10 p-0 flex items-center justify-center bg-canteen-teal hover:bg-canteen-teal/90 text-white transform transition-all duration-300 hover:scale-110">
+                        <Plus className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Product Card 2 - Κρουασάν σοκολάτα */}
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                  <div className="relative h-56 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
+                    <img 
+                      src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=500&auto=format&fit=crop" 
+                      alt="Κρουασάν σοκολάτα" 
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
+                    />
+                    <div className="absolute top-4 left-4 bg-canteen-yellow text-canteen-dark font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md animate-pulse-gentle">1.80€</div>
+                    <div className="absolute top-4 right-4 bg-canteen-teal/90 text-white font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md">★ δημοφιλές</div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="text-xl font-bold text-canteen-dark mb-2">Κρουασάν σοκολάτα</h3>
+                    <p className="text-gray-600 text-sm mb-4">Βουτυρένιο κρουασάν με γέμιση σοκολάτας</p>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <div className="flex">
+                          <span className="text-canteen-yellow">★★★★★</span>
+                        </div>
+                        <span className="text-xs text-gray-500 ml-1">(56)</span>
+                      </div>
+                      <Button size="sm" className="rounded-full h-10 w-10 p-0 flex items-center justify-center bg-canteen-teal hover:bg-canteen-teal/90 text-white transform transition-all duration-300 hover:scale-110">
+                        <Plus className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Product Card 3 - Χυμός πορτοκάλι */}
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+                  <div className="relative h-56 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
+                    <img 
+                      src="https://images.unsplash.com/photo-1600271886742-f049cd451bba?q=80&w=500&auto=format&fit=crop" 
+                      alt="Χυμός πορτοκάλι" 
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
+                    />
+                    <div className="absolute top-4 left-4 bg-canteen-yellow text-canteen-dark font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md animate-pulse-gentle">1.50€</div>
+                    <div className="absolute top-4 right-4 bg-canteen-teal/90 text-white font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md">★ δημοφιλές</div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="text-xl font-bold text-canteen-dark mb-2">Χυμός πορτοκάλι</h3>
+                    <p className="text-gray-600 text-sm mb-4">Φρέσκος χυμός από στυμμένα πορτοκάλια</p>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <div className="flex">
+                          <span className="text-canteen-yellow">★★★★</span><span className="text-gray-300">★</span>
+                        </div>
+                        <span className="text-xs text-gray-500 ml-1">(38)</span>
+                      </div>
+                      <Button size="sm" className="rounded-full h-10 w-10 p-0 flex items-center justify-center bg-canteen-teal hover:bg-canteen-teal/90 text-white transform transition-all duration-300 hover:scale-110">
+                        <Plus className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-12 text-center animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+                <Button className="bg-canteen-teal hover:bg-canteen-teal/90 text-white font-medium shadow-lg py-4 px-8 text-lg rounded-md transform hover:-translate-y-2 transition-all duration-300 animate-pulse-subtle" asChild>
                   <Link to="/menu">
                     Δείτε όλα τα προϊόντα
+                    <ArrowRight className="ml-2 h-5 w-5 animate-bounce-right" />
                   </Link>
                 </Button>
               </div>
               
-              {/* Enhanced product display */}
-              <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="bg-white dark:bg-card rounded-xl shadow-lg overflow-hidden group hover:shadow-xl dark:hover:shadow-primary/30 transition-all duration-300 transform hover:-translate-y-2">
-                  <div className="relative h-48 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
-                    <img src="/images/tyropita.jpg" alt="Τυρόπιτα" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
-                    <div className="absolute bottom-4 left-4 bg-canteen-yellow dark:bg-secondary text-canteen-dark dark:text-secondary-foreground font-bold py-1 px-3 rounded-full text-xs z-20">2.50€</div>
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-xl font-bold text-canteen-dark dark:text-white mb-2">Τυρόπιτα</h3>
-                    <p className="text-gray-600 dark:text-muted-foreground text-sm mb-4">Παραδοσιακή τυρόπιτα με φέτα και φύλλο κρούστας</p>
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center">
-                        <div className="flex">
-                          <span className="text-canteen-yellow dark:text-secondary">★★★★</span><span className="text-gray-300 dark:text-muted">★</span>
-                        </div>
-                        <span className="text-xs text-gray-500 dark:text-muted-foreground ml-1">(42)</span>
-                      </div>
-                      <Button size="sm" variant="outline" className="rounded-full h-8 w-8 p-0 flex items-center justify-center border-canteen-teal text-canteen-teal hover:bg-canteen-teal hover:text-white dark:border-primary dark:text-primary dark:hover:bg-primary/30 dark:hover:text-white">
-                        <ArrowRight className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-white dark:bg-card rounded-xl shadow-lg overflow-hidden group hover:shadow-xl dark:hover:shadow-primary/30 transition-all duration-300 transform hover:-translate-y-2">
-                  <div className="relative h-48 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
-                    <img src="/images/chocolate-muffin.jpg" alt="Κρουασάν σοκολάτα" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
-                    <div className="absolute bottom-4 left-4 bg-canteen-yellow dark:bg-secondary text-canteen-dark dark:text-secondary-foreground font-bold py-1 px-3 rounded-full text-xs z-20">1.80€</div>
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-xl font-bold text-canteen-dark dark:text-white mb-2">Κρουασάν σοκολάτα</h3>
-                    <p className="text-gray-600 dark:text-muted-foreground text-sm mb-4">Βουτυρένιο κρουασάν με γέμιση σοκολάτας</p>
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center">
-                        <div className="flex">
-                          <span className="text-canteen-yellow dark:text-secondary">★★★★★</span>
-                        </div>
-                        <span className="text-xs text-gray-500 dark:text-muted-foreground ml-1">(56)</span>
-                      </div>
-                      <Button size="sm" variant="outline" className="rounded-full h-8 w-8 p-0 flex items-center justify-center border-canteen-teal text-canteen-teal hover:bg-canteen-teal hover:text-white dark:border-primary dark:text-primary dark:hover:bg-primary/30 dark:hover:text-white">
-                        <ArrowRight className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-white dark:bg-card rounded-xl shadow-lg overflow-hidden group hover:shadow-xl dark:hover:shadow-primary/30 transition-all duration-300 transform hover:-translate-y-2">
-                  <div className="relative h-48 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
-                    <img src="/images/orange-juice.jpg" alt="Χυμός πορτοκάλι" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
-                    <div className="absolute bottom-4 left-4 bg-canteen-yellow dark:bg-secondary text-canteen-dark dark:text-secondary-foreground font-bold py-1 px-3 rounded-full text-xs z-20">1.50€</div>
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-xl font-bold text-canteen-dark dark:text-white mb-2">Χυμός πορτοκάλι</h3>
-                    <p className="text-gray-600 dark:text-muted-foreground text-sm mb-4">Φρέσκος χυμός από στυμμένα πορτοκάλια</p>
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center">
-                        <div className="flex">
-                          <span className="text-canteen-yellow dark:text-secondary">★★★★</span><span className="text-gray-300 dark:text-muted">★</span>
-                        </div>
-                        <span className="text-xs text-gray-500 dark:text-muted-foreground ml-1">(38)</span>
-                      </div>
-                      <Button size="sm" variant="outline" className="rounded-full h-8 w-8 p-0 flex items-center justify-center border-canteen-teal text-canteen-teal hover:bg-canteen-teal hover:text-white dark:border-primary dark:text-primary dark:hover:bg-primary/30 dark:hover:text-white">
-                        <ArrowRight className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
               <div className="relative mt-16 mb-6">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-200 dark:border-border"></div>
+                  <div className="w-full border-t border-gray-200 dark:border-primary/20"></div>
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="bg-white dark:bg-background px-4 text-sm text-gray-500 dark:text-muted-foreground">Περισσότερα προϊόντα</span>
+                  <span className="bg-white dark:bg-[#0f172a] px-4 text-sm text-gray-500 dark:text-muted-foreground">Περισσότερα προϊόντα</span>
                 </div>
               </div>
             </div>
@@ -273,7 +292,7 @@ const Index: React.FC = () => {
         </section>
         
         {/* Features Section */}
-        <section ref={featuresRef} className="py-20 bg-gray-100 dark:bg-card/30 relative overflow-hidden">
+        <section ref={featuresRef} className="py-20 bg-gray-100 dark:bg-[#0f172a] relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-canteen-teal/5 dark:bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-canteen-yellow/5 dark:bg-secondary/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
           
@@ -285,7 +304,7 @@ const Index: React.FC = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className={`bg-white dark:bg-card p-8 rounded-lg shadow-md text-center hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-500 border-t-4 border-canteen-teal dark:border-primary relative overflow-hidden group ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '0ms' }}>
+              <div className={`bg-white dark:bg-[#141d30] p-8 rounded-lg shadow-md text-center hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-500 border-t-4 border-canteen-teal dark:border-primary relative overflow-hidden group ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} dark:border dark:border-primary/10`} style={{ transitionDelay: '0ms' }}>
                 <div className="absolute inset-0 opacity-0 bg-canteen-teal/5 dark:bg-primary/10 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="inline-flex items-center justify-center p-4 bg-canteen-teal/10 dark:bg-primary/20 rounded-full mb-6 relative z-10">
                   <User className="h-8 w-8 text-canteen-teal dark:text-primary" />
@@ -296,7 +315,7 @@ const Index: React.FC = () => {
                 </p>
               </div>
               
-              <div className={`bg-white dark:bg-card p-8 rounded-lg shadow-md text-center hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-500 border-t-4 border-canteen-teal dark:border-primary relative overflow-hidden group ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '100ms' }}>
+              <div className={`bg-white dark:bg-[#141d30] p-8 rounded-lg shadow-md text-center hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-500 border-t-4 border-canteen-teal dark:border-primary relative overflow-hidden group ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} dark:border dark:border-primary/10`} style={{ transitionDelay: '100ms' }}>
                 <div className="absolute inset-0 opacity-0 bg-canteen-teal/5 dark:bg-primary/10 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="inline-flex items-center justify-center p-4 bg-canteen-teal/10 dark:bg-primary/20 rounded-full mb-6 relative z-10">
                   <Coffee className="h-8 w-8 text-canteen-teal dark:text-primary" />
@@ -307,7 +326,7 @@ const Index: React.FC = () => {
                 </p>
               </div>
               
-              <div className={`bg-white dark:bg-card p-8 rounded-lg shadow-md text-center hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-500 border-t-4 border-canteen-teal dark:border-primary relative overflow-hidden group ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '200ms' }}>
+              <div className={`bg-white dark:bg-[#141d30] p-8 rounded-lg shadow-md text-center hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-500 border-t-4 border-canteen-teal dark:border-primary relative overflow-hidden group ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} dark:border dark:border-primary/10`} style={{ transitionDelay: '200ms' }}>
                 <div className="absolute inset-0 opacity-0 bg-canteen-teal/5 dark:bg-primary/10 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="inline-flex items-center justify-center p-4 bg-canteen-teal/10 dark:bg-primary/20 rounded-full mb-6 relative z-10">
                   <CreditCard className="h-8 w-8 text-canteen-teal dark:text-primary" />
@@ -318,7 +337,7 @@ const Index: React.FC = () => {
                 </p>
               </div>
               
-              <div className={`bg-white dark:bg-card p-8 rounded-lg shadow-md text-center hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-500 border-t-4 border-canteen-teal dark:border-primary relative overflow-hidden group ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '300ms' }}>
+              <div className={`bg-white dark:bg-[#141d30] p-8 rounded-lg shadow-md text-center hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-500 border-t-4 border-canteen-teal dark:border-primary relative overflow-hidden group ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} dark:border dark:border-primary/10`} style={{ transitionDelay: '300ms' }}>
                 <div className="absolute inset-0 opacity-0 bg-canteen-teal/5 dark:bg-primary/10 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="inline-flex items-center justify-center p-4 bg-canteen-teal/10 dark:bg-primary/20 rounded-full mb-6 relative z-10">
                   <Clock className="h-8 w-8 text-canteen-teal dark:text-primary" />
@@ -329,7 +348,7 @@ const Index: React.FC = () => {
                 </p>
               </div>
               
-              <div className={`bg-white dark:bg-card p-8 rounded-lg shadow-md text-center hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-500 border-t-4 border-canteen-teal dark:border-primary relative overflow-hidden group ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '400ms' }}>
+              <div className={`bg-white dark:bg-[#141d30] p-8 rounded-lg shadow-md text-center hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-500 border-t-4 border-canteen-teal dark:border-primary relative overflow-hidden group ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} dark:border dark:border-primary/10`} style={{ transitionDelay: '400ms' }}>
                 <div className="absolute inset-0 opacity-0 bg-canteen-teal/5 dark:bg-primary/10 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="inline-flex items-center justify-center p-4 bg-canteen-teal/10 dark:bg-primary/20 rounded-full mb-6 relative z-10">
                   <ShieldCheck className="h-8 w-8 text-canteen-teal dark:text-primary" />
@@ -340,7 +359,7 @@ const Index: React.FC = () => {
                 </p>
               </div>
               
-              <div className={`bg-white dark:bg-card p-8 rounded-lg shadow-md text-center hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-500 border-t-4 border-canteen-teal dark:border-primary relative overflow-hidden group ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`} style={{ transitionDelay: '500ms' }}>
+              <div className={`bg-white dark:bg-[#141d30] p-8 rounded-lg shadow-md text-center hover:shadow-xl dark:hover:shadow-primary/20 transition-all duration-500 border-t-4 border-canteen-teal dark:border-primary relative overflow-hidden group ${isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} dark:border dark:border-primary/10`} style={{ transitionDelay: '500ms' }}>
                 <div className="absolute inset-0 opacity-0 bg-canteen-teal/5 dark:bg-primary/10 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="inline-flex items-center justify-center p-4 bg-canteen-teal/10 dark:bg-primary/20 rounded-full mb-6 relative z-10">
                   <MessageSquare className="h-8 w-8 text-canteen-teal dark:text-primary" />
@@ -355,7 +374,7 @@ const Index: React.FC = () => {
         </section>
         
         {/* About Project Section */}
-        <section ref={aboutRef} className="py-20 bg-white dark:bg-background">
+        <section ref={aboutRef} className="py-20 bg-white dark:bg-[#0f172a]">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center">
               <div className={`md:w-1/2 mb-10 md:mb-0 transition-all duration-700 ${isVisible.about ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
@@ -386,7 +405,7 @@ const Index: React.FC = () => {
         </section>
         
         {/* Eco-friendly Section */}
-        <section ref={ecoRef} className="py-20 bg-gray-100 dark:bg-card/30 relative overflow-hidden">
+        <section ref={ecoRef} className="py-20 bg-gray-100 dark:bg-[#0f172a] relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-white/5 dark:to-black/10"></div>
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col md:flex-row-reverse items-center">
@@ -422,7 +441,7 @@ const Index: React.FC = () => {
         </section>
         
         {/* Testimonials Section */}
-        <section className="py-20 bg-white dark:bg-background relative overflow-hidden">
+        <section className="py-20 bg-white dark:bg-[#0f172a] relative overflow-hidden">
           <div className="absolute -left-64 top-20 w-96 h-96 bg-canteen-yellow/5 dark:bg-secondary/10 rounded-full blur-3xl"></div>
           <div className="absolute -right-64 bottom-20 w-96 h-96 bg-canteen-teal/5 dark:bg-primary/10 rounded-full blur-3xl"></div>
           
@@ -434,7 +453,7 @@ const Index: React.FC = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-gray-50 dark:bg-card rounded-xl p-6 shadow-md dark:shadow-primary/10 relative">
+              <div className="bg-gray-50 dark:bg-[#141d30] rounded-xl p-6 shadow-md dark:shadow-primary/10 relative dark:border dark:border-primary/10">
                 <div className="absolute -top-4 left-6 text-canteen-teal dark:text-primary text-6xl opacity-20 dark:opacity-20">"</div>
                 <div className="relative z-10">
                   <p className="text-gray-700 dark:text-muted-foreground mb-6 italic">Εξαιρετική εφαρμογή! Τώρα δε χρειάζεται να περιμένω στην ουρά για το διάλειμμα.</p>
@@ -448,7 +467,7 @@ const Index: React.FC = () => {
                 </div>
               </div>
               
-              <div className="bg-gray-50 dark:bg-card rounded-xl p-6 shadow-md dark:shadow-primary/10 relative md:translate-y-6">
+              <div className="bg-gray-50 dark:bg-[#141d30] rounded-xl p-6 shadow-md dark:shadow-primary/10 relative md:translate-y-6 dark:border dark:border-primary/10">
                 <div className="absolute -top-4 left-6 text-canteen-teal dark:text-primary text-6xl opacity-20 dark:opacity-20">"</div>
                 <div className="relative z-10">
                   <p className="text-gray-700 dark:text-muted-foreground mb-6 italic">Ως καθηγήτρια, εκτιμώ ιδιαίτερα την οργάνωση που προσφέρει. Τώρα το διάλειμμα είναι πιο άνετο για όλους.</p>
@@ -462,7 +481,7 @@ const Index: React.FC = () => {
                 </div>
               </div>
               
-              <div className="bg-gray-50 dark:bg-card rounded-xl p-6 shadow-md dark:shadow-primary/10 relative">
+              <div className="bg-gray-50 dark:bg-[#141d30] rounded-xl p-6 shadow-md dark:shadow-primary/10 relative">
                 <div className="absolute -top-4 left-6 text-canteen-teal dark:text-primary text-6xl opacity-20 dark:opacity-20">"</div>
                 <div className="relative z-10">
                   <p className="text-gray-700 dark:text-muted-foreground mb-6 italic">Η επιλογή για οικολογική συσκευασία είναι φανταστική ιδέα. Χαίρομαι που το σχολείο μας προωθεί την περιβαλλοντική συνείδηση.</p>
@@ -480,10 +499,10 @@ const Index: React.FC = () => {
         </section>
         
         {/* CTA Section */}
-        <section className="py-24 bg-canteen-teal dark:bg-primary/90 text-white dark:text-primary-foreground text-center relative overflow-hidden">
-          <div className="absolute inset-0 opacity-5 dark:opacity-10">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-white dark:bg-white rounded-full -translate-y-1/2 translate-x-1/2"></div>
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-white dark:bg-white rounded-full translate-y-1/2 -translate-x-1/2"></div>
+        <section className="py-24 bg-canteen-teal dark:bg-[#0f172a] text-white dark:text-white text-center relative overflow-hidden">
+          <div className="absolute inset-0 opacity-5 dark:opacity-5">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-white dark:bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-white dark:bg-secondary/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
           </div>
           <div className="container mx-auto px-4 relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Έτοιμοι να δοκιμάσετε το Smart Canteen Atsoglou;</h2>

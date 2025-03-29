@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Search } from 'lucide-react';
@@ -158,28 +157,40 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <Card className="overflow-hidden card-hover">
-      <div className="h-48 overflow-hidden bg-gray-100">
+    <Card className="overflow-hidden group hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200/50">
+      <div className="relative h-56 overflow-hidden bg-gray-100">
+        <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
         <img 
           src={hasImageError ? 
             "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=500&auto=format&fit=crop" : 
             getProductImage(product.id)} 
           alt={product.name} 
-          className="w-full h-full object-cover" 
+          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
           onError={() => onImageError(product.id)}
         />
+        {product.popular && (
+          <div className="absolute top-4 right-4 bg-canteen-teal/90 text-white font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md">★ δημοφιλές</div>
+        )}
+        {product.isNew && (
+          <div className="absolute top-4 left-4 bg-canteen-yellow text-canteen-dark font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md animate-pulse-slow">Νέο</div>
+        )}
+        <div className="absolute bottom-4 left-4 bg-white/90 text-canteen-dark font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md group-hover:bg-canteen-yellow group-hover:text-canteen-dark transition-all duration-300">
+          {product.price.toFixed(2)}€
+        </div>
       </div>
       <CardHeader className="pb-2">
-        <CardTitle>{product.name}</CardTitle>
-        <CardDescription>{product.description}</CardDescription>
+        <CardTitle className="text-xl group-hover:text-canteen-teal transition-colors duration-300">{product.name}</CardTitle>
+        <CardDescription className="line-clamp-2">{product.description}</CardDescription>
       </CardHeader>
       <CardFooter className="flex justify-between pt-2">
-        <div className="text-lg font-bold text-canteen-teal">
-          {product.price.toFixed(2)}€
+        <div className="flex items-center">
+          <div className="flex text-sm text-canteen-yellow">
+            ★★★★★
+          </div>
         </div>
         <Button 
           size="sm" 
-          className="bg-canteen-teal hover:bg-canteen-teal/90"
+          className="bg-canteen-teal hover:bg-canteen-teal/90 text-white transition-all duration-300 transform hover:scale-105"
           onClick={() => onAddToCart(product)}
         >
           <Plus size={16} className="mr-1" />

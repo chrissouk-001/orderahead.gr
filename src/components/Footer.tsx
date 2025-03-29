@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-canteen-dark dark:bg-background text-white pt-10 pb-6 border-t border-gray-700 dark:border-border transition-colors duration-300">
+    <footer className="bg-canteen-dark dark:bg-[#0f172a] text-white pt-10 pb-6 border-t border-gray-700 dark:border-primary/20 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         
-        <div className="border-t border-gray-700 dark:border-muted mt-8 pt-6 flex flex-col md:flex-row justify-between items-center transition-colors duration-300">
+        <div className="border-t border-gray-700 dark:border-primary/20 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center transition-colors duration-300">
           <p className="text-gray-400 dark:text-muted-foreground/80 text-sm transition-colors duration-300">
             &copy; {new Date().getFullYear()} Εκπαιδευτήρια Ατσόγλου. Με επιφύλαξη παντός δικαιώματος.
           </p>

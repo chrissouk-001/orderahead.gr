@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
@@ -57,12 +56,14 @@ const Cart: React.FC = () => {
         <h1 className="text-3xl font-bold mb-8">Το καλάθι μου</h1>
         
         {items.length === 0 ? (
-          <div className="text-center py-16">
-            <ShoppingBag className="h-16 w-16 mx-auto text-gray-300 mb-4" />
-            <h2 className="text-2xl font-bold text-gray-700 mb-2">Το καλάθι σας είναι άδειο</h2>
-            <p className="text-gray-500 mb-6">Προσθέστε προϊόντα για να ξεκινήσετε την παραγγελία σας</p>
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-8 max-w-md mx-auto text-center">
+            <ShoppingBag className="h-16 w-16 mx-auto text-canteen-teal dark:text-primary mb-4 opacity-80" />
+            <h2 className="text-xl font-medium text-gray-800 dark:text-white mb-3">Το καλάθι σας είναι άδειο</h2>
+            <p className="text-gray-500 dark:text-gray-400 mb-6">
+              Προσθέστε προϊόντα για να ξεκινήσετε την παραγγελία σας
+            </p>
             <Button 
-              className="bg-canteen-teal hover:bg-canteen-teal/90"
+              className="bg-canteen-teal hover:bg-canteen-teal/90 dark:bg-primary px-8"
               onClick={() => navigate('/menu')}
             >
               Συνέχεια αγορών

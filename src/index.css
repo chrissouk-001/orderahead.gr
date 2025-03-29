@@ -39,41 +39,41 @@
 
   .dark {
     /* Deep blue-based dark background for better contrast */
-    --background: 220 25% 10%;
+    --background: 222 47% 11%;
     --foreground: 210 40% 98%;
 
     /* Slightly elevated card background */
-    --card: 220 25% 13%;
+    --card: 222 47% 15%;
     --card-foreground: 210 40% 98%;
 
     /* Popover with subtle elevation */
-    --popover: 220 25% 15%;
+    --popover: 222 47% 15%;
     --popover-foreground: 210 40% 98%;
 
     /* More vibrant teal with better visibility */
-    --primary: 174 55% 50%;
-    --primary-foreground: 220 25% 10%;
+    --primary: 174 60% 50%;
+    --primary-foreground: 222 47% 11%;
 
     /* Brighter secondary (yellow) for better contrast */
-    --secondary: 38 90% 65%;
-    --secondary-foreground: 220 25% 10%;
+    --secondary: 38 95% 65%;
+    --secondary-foreground: 222 47% 11%;
 
     /* Enhanced muted tones */
-    --muted: 220 25% 20%;
+    --muted: 222 47% 20%;
     --muted-foreground: 210 20% 80%;
 
     /* More vibrant accent */
-    --accent: 38 90% 65%;
-    --accent-foreground: 220 25% 10%;
+    --accent: 38 95% 65%;
+    --accent-foreground: 222 47% 11%;
 
     /* Improved destructive color */
     --destructive: 0 70% 50%;
     --destructive-foreground: 210 40% 98%;
 
     /* Better defined borders */
-    --border: 220 25% 20%;
-    --input: 220 25% 20%;
-    --ring: 174 55% 50%;
+    --border: 222 47% 20%;
+    --input: 222 47% 20%;
+    --ring: 174 60% 50%;
   }
 }
 
@@ -228,4 +228,117 @@
       transform: translateY(0);
     }
   }
+}
+
+/* Add new animation keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes widthExpand {
+  from { width: 0; }
+  to { width: 5rem; } /* 20 * 0.25rem (assuming w-20 refers to 5rem) */
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes pulseGentle {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+@keyframes pulseSubtle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes pulseSlow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes bounceRight {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+/* Apply animation classes */
+.animate-fade-in {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-width-expand {
+  animation: widthExpand 1.2s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out 1s infinite;
+}
+
+.animate-float-reverse {
+  animation: float 5s ease-in-out 0.5s infinite reverse;
+}
+
+.animate-pulse-gentle {
+  animation: pulseGentle 2.5s ease-in-out infinite;
+}
+
+.animate-pulse-subtle {
+  animation: pulseSubtle 3s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 3s ease-in-out infinite;
+}
+
+.animate-bounce-right {
+  animation: bounceRight 1.5s ease-in-out infinite;
 }
