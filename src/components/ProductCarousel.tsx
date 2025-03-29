@@ -22,7 +22,7 @@ const ProductCarousel = () => {
   };
 
   return (
-    <div className="py-10">
+    <div className="py-10 relative">
       <Carousel className="w-full max-w-5xl mx-auto">
         <CarouselContent>
           {popularProducts.map((product) => (
@@ -49,8 +49,8 @@ const ProductCarousel = () => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="hidden md:flex" />
-        <CarouselNext className="hidden md:flex" />
+        <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 md:-left-12" />
+        <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 md:-right-12" />
       </Carousel>
     </div>
   );
