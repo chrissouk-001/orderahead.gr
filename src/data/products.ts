@@ -9,7 +9,8 @@ export const products: Product[] = [
     price: 2.50,
     image: '/images/sandwich.jpg', 
     category: 'sandwich',
-    popular: true
+    popular: true,
+    isNew: true
   },
   {
     id: '2',
@@ -51,7 +52,8 @@ export const products: Product[] = [
     description: 'Αφράτο muffin με κομμάτια σοκολάτας',
     price: 1.70,
     image: '/images/chocolate-muffin.jpg',
-    category: 'sweet'
+    category: 'sweet',
+    isNew: true
   },
   {
     id: '7',
@@ -67,7 +69,9 @@ export const products: Product[] = [
     description: 'Χωριάτικη σπανακόπιτα με φέτα',
     price: 1.90,
     image: '/images/spinach-pie.jpg',
-    category: 'pastry'
+    category: 'pastry',
+    popular: true,
+    isNew: true
   },
   {
     id: '9',

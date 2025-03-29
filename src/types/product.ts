@@ -14,4 +14,5 @@ export type Product = {
   image: string;
   category: ProductCategory;
   popular?: boolean;
+  isNew?: boolean;
 };
