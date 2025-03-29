@@ -38,33 +38,42 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    /* Deep blue-based dark background for better contrast */
+    --background: 220 25% 10%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    /* Slightly elevated card background */
+    --card: 220 25% 13%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    /* Popover with subtle elevation */
+    --popover: 220 25% 15%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 174 42% 39%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* More vibrant teal with better visibility */
+    --primary: 174 55% 50%;
+    --primary-foreground: 220 25% 10%;
 
-    --secondary: 32 74% 62%;
-    --secondary-foreground: 210 40% 98%;
+    /* Brighter secondary (yellow) for better contrast */
+    --secondary: 38 90% 65%;
+    --secondary-foreground: 220 25% 10%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    /* Enhanced muted tones */
+    --muted: 220 25% 20%;
+    --muted-foreground: 210 20% 80%;
 
-    --accent: 40 69% 60%;
-    --accent-foreground: 210 40% 98%;
+    /* More vibrant accent */
+    --accent: 38 90% 65%;
+    --accent-foreground: 220 25% 10%;
 
-    --destructive: 0 62.8% 30.6%;
+    /* Improved destructive color */
+    --destructive: 0 70% 50%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 174 42% 39%;
+    /* Better defined borders */
+    --border: 220 25% 20%;
+    --input: 220 25% 20%;
+    --ring: 174 55% 50%;
   }
 }
 
@@ -99,6 +108,10 @@
     height: 100px;
     background: url('/wave.svg') repeat-x;
     background-size: 1200px 100px;
+  }
+  
+  .dark .wave {
+    filter: brightness(1.5) contrast(1.2);
   }
   
   .wave1 {
@@ -167,6 +180,42 @@
   
   .delay-500 {
     animation-delay: 500ms;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-float-delayed {
+    animation: float 8s ease-in-out infinite;
+  }
+  
+  .animate-float-reverse {
+    animation: float-reverse 7s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  
+  @keyframes float-reverse {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(20px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
   }
   
   @keyframes fade-in-up {
