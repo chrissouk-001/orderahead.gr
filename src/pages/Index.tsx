@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductCarousel from '@/components/ProductCarousel';
+import Todo from '@/components/Todo';
 
 const Index: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -126,6 +127,16 @@ const Index: React.FC = () => {
                   Άμεση επικοινωνία με τον υπεύθυνο του κυλικείου.
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* Todo Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12">Project Management</h2>
+            <div className="max-w-lg mx-auto">
+              <Todo />
             </div>
           </div>
         </section>
