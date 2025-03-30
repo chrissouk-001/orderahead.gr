@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { ProductCarousel } from "@/components/ProductCarousel";
+import { getPopularProducts } from "@/data/products";
 
 const Index: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -182,92 +183,40 @@ const Index: React.FC = () => {
               
               {/* Enhanced product display with carousel-like scrolling */}
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Product Card 1 - Τυρόπιτα */}
-                <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-                  <div className="relative h-56 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
-                    <img 
-                      src="https://images.unsplash.com/photo-1559598467-f8b76c8155d0?q=80&w=500&auto=format&fit=crop" 
-                      alt="Τυρόπιτα" 
-                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
-                    />
-                    <div className="absolute top-4 left-4 bg-canteen-yellow text-canteen-dark font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md animate-pulse-gentle">2.50€</div>
-                    <div className="absolute top-4 right-4 bg-canteen-teal/90 text-white font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md">★ δημοφιλές</div>
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-xl font-bold text-canteen-dark mb-2">Τυρόπιτα</h3>
-                    <p className="text-gray-600 text-sm mb-4">Παραδοσιακή τυρόπιτα με φέτα και φύλλο κρούστας</p>
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center">
-                        <div className="flex">
-                          <span className="text-canteen-yellow">★★★★</span><span className="text-gray-300">★</span>
+                {getPopularProducts().slice(0, 3).map((product, index) => (
+                  <div key={product.id} className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in-up" style={{ animationDelay: `${(index + 1) * 100}ms` }}>
+                    <div className="relative h-56 overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
+                      <img 
+                        src={product.image} 
+                        alt={product.name} 
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
+                      />
+                      <div className="absolute top-4 left-4 bg-canteen-yellow text-canteen-dark font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md animate-pulse-gentle">{product.price.toFixed(2)}€</div>
+                      {product.popular && (
+                        <div className="absolute top-4 right-4 bg-canteen-teal/90 text-white font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md">★ δημοφιλές</div>
+                      )}
+                      {product.isNew && (
+                        <div className="absolute bottom-4 right-4 bg-canteen-yellow text-canteen-dark font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md animate-pulse-slow">Νέο</div>
+                      )}
+                    </div>
+                    <div className="p-5">
+                      <h3 className="text-xl font-bold text-canteen-dark mb-2">{product.name}</h3>
+                      <p className="text-gray-600 text-sm mb-4">{product.description}</p>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center">
+                          <div className="flex">
+                            <span className="text-canteen-yellow">★★★★★</span>
+                          </div>
+                          <span className="text-xs text-gray-500 ml-1">(42)</span>
                         </div>
-                        <span className="text-xs text-gray-500 ml-1">(42)</span>
+                        <Button size="sm" className="rounded-full h-10 w-10 p-0 flex items-center justify-center bg-canteen-teal hover:bg-canteen-teal/90 text-white transform transition-all duration-300 hover:scale-110">
+                          <Plus className="h-5 w-5" />
+                        </Button>
                       </div>
-                      <Button size="sm" className="rounded-full h-10 w-10 p-0 flex items-center justify-center bg-canteen-teal hover:bg-canteen-teal/90 text-white transform transition-all duration-300 hover:scale-110">
-                        <Plus className="h-5 w-5" />
-                      </Button>
                     </div>
                   </div>
-                </div>
-                
-                {/* Product Card 2 - Κρουασάν σοκολάτα */}
-                <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-                  <div className="relative h-56 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
-                    <img 
-                      src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=500&auto=format&fit=crop" 
-                      alt="Κρουασάν σοκολάτα" 
-                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
-                    />
-                    <div className="absolute top-4 left-4 bg-canteen-yellow text-canteen-dark font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md animate-pulse-gentle">1.80€</div>
-                    <div className="absolute top-4 right-4 bg-canteen-teal/90 text-white font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md">★ δημοφιλές</div>
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-xl font-bold text-canteen-dark mb-2">Κρουασάν σοκολάτα</h3>
-                    <p className="text-gray-600 text-sm mb-4">Βουτυρένιο κρουασάν με γέμιση σοκολάτας</p>
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center">
-                        <div className="flex">
-                          <span className="text-canteen-yellow">★★★★★</span>
-                        </div>
-                        <span className="text-xs text-gray-500 ml-1">(56)</span>
-                      </div>
-                      <Button size="sm" className="rounded-full h-10 w-10 p-0 flex items-center justify-center bg-canteen-teal hover:bg-canteen-teal/90 text-white transform transition-all duration-300 hover:scale-110">
-                        <Plus className="h-5 w-5" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Product Card 3 - Χυμός πορτοκάλι */}
-                <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-                  <div className="relative h-56 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
-                    <img 
-                      src="https://images.unsplash.com/photo-1600271886742-f049cd451bba?q=80&w=500&auto=format&fit=crop" 
-                      alt="Χυμός πορτοκάλι" 
-                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
-                    />
-                    <div className="absolute top-4 left-4 bg-canteen-yellow text-canteen-dark font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md animate-pulse-gentle">1.50€</div>
-                    <div className="absolute top-4 right-4 bg-canteen-teal/90 text-white font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md">★ δημοφιλές</div>
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-xl font-bold text-canteen-dark mb-2">Χυμός πορτοκάλι</h3>
-                    <p className="text-gray-600 text-sm mb-4">Φρέσκος χυμός από στυμμένα πορτοκάλια</p>
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center">
-                        <div className="flex">
-                          <span className="text-canteen-yellow">★★★★</span><span className="text-gray-300">★</span>
-                        </div>
-                        <span className="text-xs text-gray-500 ml-1">(38)</span>
-                      </div>
-                      <Button size="sm" className="rounded-full h-10 w-10 p-0 flex items-center justify-center bg-canteen-teal hover:bg-canteen-teal/90 text-white transform transition-all duration-300 hover:scale-110">
-                        <Plus className="h-5 w-5" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
               
               <div className="mt-12 text-center animate-fade-in-up" style={{ animationDelay: '400ms' }}>
@@ -379,7 +328,7 @@ const Index: React.FC = () => {
             <div className="flex flex-col md:flex-row items-center">
               <div className={`md:w-1/2 mb-10 md:mb-0 transition-all duration-700 ${isVisible.about ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
                 <img 
-                  src="/images/project-about.jpg" 
+                  src="/images/school-project.jpg" 
                   alt="Εκπαιδευτήρια Ατσόγλου" 
                   className="max-w-full h-auto rounded-lg shadow-xl dark:shadow-primary/20" 
                 />
@@ -411,7 +360,7 @@ const Index: React.FC = () => {
             <div className="flex flex-col md:flex-row-reverse items-center">
               <div className={`md:w-1/2 mb-10 md:mb-0 md:pl-16 transition-all duration-700 ${isVisible.eco ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}>
                 <img 
-                  src="/images/eco-packaging.jpg" 
+                  src="/images/eco-friendly-bags.jpg" 
                   alt="Οικολογική Συσκευασία" 
                   className="max-w-full h-auto rounded-lg shadow-xl dark:shadow-primary/20" 
                 />

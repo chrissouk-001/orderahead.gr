@@ -31,19 +31,19 @@ export function ProductCarousel() {
   // Helper function to get product images
   const getProductImage = (id: string): string => {
     const imageMap: Record<string, string> = {
-      "1": "https://images.unsplash.com/photo-1528736235302-52922df5c122?q=80&w=500&auto=format&fit=crop", // Sandwich
-      "2": "https://images.unsplash.com/photo-1559598467-f8b76c8155d0?q=80&w=500&auto=format&fit=crop", // Cheese pie
-      "3": "https://images.unsplash.com/photo-1608198093002-ad4e005484ec?q=80&w=500&auto=format&fit=crop", // Koulouri
-      "4": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?q=80&w=500&auto=format&fit=crop", // Orange juice
-      "5": "https://images.unsplash.com/photo-1564419320461-6870880221ad?q=80&w=500&auto=format&fit=crop", // Water
-      "6": "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=500&auto=format&fit=crop", // Chocolate Muffin
-      "7": "https://images.unsplash.com/photo-1581400151483-fa25f4c088c2?q=80&w=500&auto=format&fit=crop", // Granola Bar
-      "8": "https://images.unsplash.com/photo-1662953929935-181baaabcb0c?q=80&w=500&auto=format&fit=crop", // Spinach pie
-      "9": "https://images.unsplash.com/photo-1554433607-66b5efe9d304?q=80&w=500&auto=format&fit=crop", // Toast
-      "10": "https://images.unsplash.com/photo-1563636619-e9143da7973b?q=80&w=500&auto=format&fit=crop" // Chocolate milk
+      "1": "/images/products/sandwich.jpg", // Sandwich
+      "2": "/images/products/cheese-pie.jpg", // Cheese pie
+      "3": "/images/products/koulouri.jpg", // Koulouri
+      "4": "/images/products/orange-juice.jpg", // Orange juice
+      "5": "/images/products/water.jpg", // Water
+      "6": "/images/products/muffin.jpg", // Chocolate Muffin
+      "7": "/images/products/cereal-bar.jpg", // Granola Bar
+      "8": "/images/products/spinach-pie.jpg", // Spinach pie
+      "9": "/images/products/toast.jpg", // Toast
+      "10": "/images/products/chocolate-milk.jpg" // Chocolate milk
     };
     
-    return imageMap[id] || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=500&auto=format&fit=crop"; // Default food image
+    return imageMap[id] || "/images/products/sandwich.jpg"; // Default food image
   };
 
   return (
@@ -61,7 +61,7 @@ export function ProductCarousel() {
               <div className="relative h-[180px] w-full flex-shrink-0 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
                 <img
-                  src={imageErrors[product.id] ? "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=500&auto=format&fit=crop" : getProductImage(product.id)}
+                  src={imageErrors[product.id] ? "/images/products/sandwich.jpg" : getProductImage(product.id)}
                   alt={product.name}
                   className="h-full w-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                   onError={() => handleImageError(product.id)}

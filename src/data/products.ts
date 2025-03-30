@@ -47,11 +47,12 @@ export const products: Product[] = [
   },
   {
     id: '6',
-    name: 'Σοκολατένιο Muffin',
-    description: 'Αφράτο muffin με κομμάτια σοκολάτας',
-    price: 1.70,
-    image: '/images/products/muffin.jpg',
+    name: 'Κρουασάν Σοκολάτας',
+    description: 'Βουτυρένιο κρουασάν με γέμιση σοκολάτας',
+    price: 1.80,
+    image: '/images/products/chocolate-croissant.jpg',
     category: 'sweet',
+    popular: true,
     isNew: true
   },
   {
