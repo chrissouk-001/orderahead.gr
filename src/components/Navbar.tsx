@@ -77,11 +77,11 @@ const Navbar: React.FC = () => {
   };
   
   return (
-    <header className="sticky top-0 z-50 bg-white dark:bg-[#0f172a] shadow-sm border-b border-gray-200 dark:border-primary/20 transition-colors duration-300">
+    <header className="sticky top-0 z-50 bg-white dark:bg-[#0f172a] shadow-md border-b border-gray-200 dark:border-primary/20 backdrop-blur-sm bg-white/90 dark:bg-[#0f172a]/95 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center group">
-            <div className="bg-canteen-teal dark:bg-primary rounded-full p-1.5 mr-2 overflow-hidden transform transition-all duration-300 group-hover:scale-110">
+            <div className="bg-canteen-teal dark:bg-primary rounded-full p-1.5 mr-2 overflow-hidden transform transition-all duration-300 group-hover:scale-110 shadow-md">
               <img 
                 src="https://img.freepik.com/premium-vector/school-food-logo-design-template_145155-2789.jpg?w=826" 
                 alt="Smart Canteen Atsoglou Logo" 
@@ -119,12 +119,15 @@ const Navbar: React.FC = () => {
               className={`
                 transition-all duration-300 
                 ${isDarkMode 
-                  ? "bg-[#141d30] text-primary border-primary/20 hover:bg-[#141d30]/90 hover:text-primary hover:border-primary" 
-                  : "rounded-full hover:bg-gray-100 text-canteen-dark"
+                  ? "bg-[#141d30] text-primary border-primary/20 hover:bg-[#141d30]/90 hover:text-primary hover:border-primary shadow-inner" 
+                  : "rounded-full hover:bg-gray-100 text-canteen-dark shadow-sm"
                 }`}
               aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             >
-              {isDarkMode ? <Sun size={18} className="animate-pulse-gentle" /> : <Moon size={18} />}
+              {isDarkMode ? 
+                <Sun size={18} className="transition-all duration-500 rotate-0 hover:rotate-90" /> : 
+                <Moon size={18} className="transition-all duration-500" />
+              }
             </Button>
             
             {isAuthenticated && (
@@ -135,7 +138,7 @@ const Navbar: React.FC = () => {
               >
                 <ShoppingBag size={20} />
                 {getTotalItems() > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-canteen-teal dark:bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center transition-all duration-300 animate-pulse-gentle">
+                  <span className="absolute -top-1 -right-1 bg-canteen-teal dark:bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center transition-all duration-300 animate-pulse">
                     {getTotalItems()}
                   </span>
                 )}
@@ -182,7 +185,7 @@ const Navbar: React.FC = () => {
             ) : (
               <Link to="/login">
                 <Button 
-                  className="bg-canteen-teal hover:bg-canteen-teal/90 dark:bg-primary dark:hover:bg-primary/90 text-white rounded-full px-4 transition-all duration-300 transform hover:scale-105"
+                  className="bg-canteen-teal hover:bg-canteen-teal/90 dark:bg-primary dark:hover:bg-primary/90 text-white rounded-full px-4 transition-all duration-300 transform hover:scale-105 shadow-md"
                 >
                   Σύνδεση
                 </Button>
@@ -225,7 +228,7 @@ const Navbar: React.FC = () => {
           
           {!isAuthenticated && (
             <Link to="/login" className="w-full mt-4">
-              <Button className="bg-canteen-teal hover:bg-canteen-teal/90 dark:bg-primary dark:hover:bg-primary/90 text-white w-full transition-colors duration-300">
+              <Button className="bg-canteen-teal hover:bg-canteen-teal/90 dark:bg-primary dark:hover:bg-primary/90 text-white w-full transition-colors duration-300 shadow-md">
                 Σύνδεση
               </Button>
             </Link>
@@ -246,16 +249,18 @@ const NavLink: React.FC<{ to: string; isActive: boolean; isDark: boolean; childr
   return (
     <Link 
       to={to} 
-      className={`relative text-base font-medium py-1 transition-colors duration-300 ${
+      className={`relative text-base font-medium py-1 transition-all duration-300 ${
         isActive 
-          ? 'text-canteen-teal dark:text-primary font-semibold' 
-          : 'text-gray-700 dark:text-muted-foreground hover:text-canteen-teal dark:hover:text-primary'
+          ? "text-canteen-teal dark:text-primary"
+          : "text-canteen-dark/80 dark:text-muted-foreground hover:text-canteen-teal dark:hover:text-primary"
       }`}
     >
       {children}
-      <span className={`absolute bottom-[-4px] left-0 h-[3px] ${isDark ? 'bg-primary' : 'bg-canteen-teal'} transition-all duration-300 rounded-full ${
-        isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'
-      }`}></span>
+      <span 
+        className={`absolute -bottom-1 left-0 w-full h-0.5 bg-canteen-teal dark:bg-primary transform origin-left transition-transform duration-300 ${
+          isActive ? 'scale-x-100' : 'scale-x-0'
+        } group-hover:scale-x-100`}
+      />
     </Link>
   );
 };
@@ -270,16 +275,13 @@ const MobileNavLink: React.FC<{ to: string; isActive: boolean; isDark: boolean; 
   return (
     <Link 
       to={to} 
-      className={`p-3 flex justify-between items-center rounded-lg transition-colors duration-300 ${
+      className={`w-full p-3 rounded-lg transition-all duration-300 ${
         isActive 
-          ? isDark 
-            ? 'bg-primary/10 text-primary font-semibold' 
-            : 'bg-canteen-teal/10 text-canteen-teal font-semibold'
-          : 'text-gray-700 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-[#141d30] hover:text-canteen-teal dark:hover:text-primary'
+          ? "bg-canteen-teal/10 dark:bg-primary/10 text-canteen-teal dark:text-primary font-medium"
+          : "text-canteen-dark dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-[#141d30]"
       }`}
     >
-      <span>{children}</span>
-      {isActive && <div className={`h-2 w-2 rounded-full ${isDark ? 'bg-primary' : 'bg-canteen-teal'}`}></div>}
+      {children}
     </Link>
   );
 };

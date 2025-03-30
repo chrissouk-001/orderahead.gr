@@ -204,8 +204,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   hasImageError
 }) => {
   return (
-    <Card className="overflow-hidden group hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200/50">
-      <div className="relative h-56 overflow-hidden bg-gray-100">
+    <Card className="overflow-hidden group hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200/50 dark:border-gray-800/50 dark:bg-gray-900/30 backdrop-filter backdrop-blur-sm">
+      <div className="relative h-56 overflow-hidden bg-gray-100 dark:bg-gray-800">
         <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
         <img 
           src={hasImageError ? "/images/products/sandwich.jpg" : product.image} 
@@ -214,18 +214,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
           onError={() => onImageError(product.id)}
         />
         {product.popular && (
-          <div className="absolute top-4 right-4 bg-canteen-teal/90 text-white font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md">★ δημοφιλές</div>
+          <div className="absolute top-4 right-4 bg-canteen-teal/90 dark:bg-primary/90 text-white font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md">★ δημοφιλές</div>
         )}
         {product.isNew && (
-          <div className="absolute top-4 left-4 bg-canteen-yellow text-canteen-dark font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md animate-pulse-slow">Νέο</div>
+          <div className="absolute top-4 left-4 bg-canteen-yellow text-canteen-dark font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md animate-pulse">Νέο</div>
         )}
-        <div className="absolute bottom-4 left-4 bg-white/90 text-canteen-dark font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md group-hover:bg-canteen-yellow group-hover:text-canteen-dark transition-all duration-300">
+        <div className="absolute bottom-4 left-4 bg-white/90 dark:bg-gray-900/90 text-canteen-dark dark:text-white font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md group-hover:bg-canteen-yellow group-hover:text-canteen-dark transition-all duration-300">
           {product.price.toFixed(2)}€
         </div>
       </div>
       <CardHeader className="pb-2">
-        <CardTitle className="text-xl group-hover:text-canteen-teal transition-colors duration-300">{product.name}</CardTitle>
-        <CardDescription className="line-clamp-2">{product.description}</CardDescription>
+        <CardTitle className="text-xl group-hover:text-canteen-teal dark:group-hover:text-primary transition-colors duration-300">{product.name}</CardTitle>
+        <CardDescription className="line-clamp-2 dark:text-gray-400">{product.description}</CardDescription>
       </CardHeader>
       <CardFooter className="flex justify-between pt-2">
         <div className="flex items-center">
@@ -235,7 +235,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
         <Button 
           size="sm" 
-          className="bg-canteen-teal hover:bg-canteen-teal/90 text-white transition-all duration-300 transform hover:scale-105"
+          className="bg-canteen-teal hover:bg-canteen-teal/90 dark:bg-primary dark:hover:bg-primary/90 text-white transition-all duration-300 transform hover:scale-105 shadow-sm"
           onClick={() => onAddToCart(product)}
         >
           <Plus size={16} className="mr-1" />
