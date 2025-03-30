@@ -1,7 +1,6 @@
-
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { CheckCircle, ArrowRight, Clock } from 'lucide-react';
+import { CheckCircle, ArrowRight, Clock, Info } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -26,52 +25,70 @@ const OrderSuccess: React.FC = () => {
     return null;
   }
   
+  // Calculate estimated time based on order number (simple example)
+  const estimatedTime = `${10 + state.orderNumber}:${Math.floor(Math.random() * 6)}${Math.floor(Math.random() * 10)}`;
+  
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-[#0a1023]">
       <Navbar />
       
       <main className="flex-grow container mx-auto px-4 py-12">
         <div className="max-w-md mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-green-100">
-            <CheckCircle className="h-10 w-10 text-green-600" />
+          {/* Green check icon */}
+          <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-green-100 dark:bg-green-900/20">
+            <CheckCircle className="h-10 w-10 text-green-600 dark:text-green-400" />
           </div>
           
-          <h1 className="text-3xl font-bold mb-4">Η παραγγελία σας ολοκληρώθηκε!</h1>
-          <p className="text-gray-600 mb-8">
+          {/* Order completed message */}
+          <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Η παραγγελία σας ολοκληρώθηκε!</h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">
             Σας ευχαριστούμε για την παραγγελία σας στο Smart Canteen Atsoglou.
           </p>
           
-          <div className="bg-gray-50 p-6 rounded-lg mb-8">
+          {/* Order details */}
+          <div className="bg-white dark:bg-[#141d30] border border-gray-100 dark:border-gray-800/20 p-6 rounded-lg mb-8 shadow-sm">
             <div className="flex justify-between items-center mb-4">
-              <span className="text-gray-600">Αριθμός παραγγελίας:</span>
-              <span className="font-bold"># {state.orderNumber}</span>
+              <span className="text-gray-600 dark:text-gray-400">Αριθμός παραγγελίας:</span>
+              <span className="font-bold text-gray-900 dark:text-white">{state.orderNumber}</span>
             </div>
             
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Εκτιμώμενος χρόνος παραλαβής:</span>
-              <span className="font-bold flex items-center">
-                <Clock className="mr-1 h-4 w-4" />
-                {state.orderNumber} λεπτά
+              <span className="text-gray-600 dark:text-gray-400">Εκτιμώμενος χρόνος παραλαβής:</span>
+              <span className="font-bold text-gray-900 dark:text-white flex items-center">
+                {estimatedTime}
               </span>
             </div>
           </div>
           
-          <div className="bg-canteen-yellow/10 border border-canteen-yellow/30 p-4 rounded-lg mb-8">
-            <h2 className="font-bold text-canteen-dark mb-2">Οδηγίες παραλαβής</h2>
-            <p className="text-sm text-gray-700">
-              Όταν έρθει η σειρά σας, θα ακούσετε/δείτε τον αριθμό σας. 
-              Παρακαλούμε πλησιάστε στο ταμείο του κυλικείου για την παραλαβή της παραγγελίας σας.
+          {/* Pickup instructions */}
+          <div className="bg-gray-700/20 dark:bg-gray-800/30 p-5 rounded-lg mb-8 text-left">
+            <h2 className="font-bold text-gray-900 dark:text-gray-200 mb-2 flex items-center">
+              <Info className="h-4 w-4 mr-2 text-gray-500 dark:text-gray-400" />
+              Οδηγίες παραλαβής
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Μόλις πάρετε τον αριθμό σας, θα ακούσετε/δείτε την σειθρα σας.
+              Παρακαλούμε πλησιάστε στο ταμείο του κυλικείου για την
+              παραλαβή της παραγγελίας σας.
             </p>
           </div>
           
+          {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild variant="outline">
+            <Button 
+              variant="outline" 
+              className="border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800/50"
+              asChild
+            >
               <Link to="/order-status">
                 Έλεγχος κατάστασης παραγγελίας
               </Link>
             </Button>
             
-            <Button asChild className="bg-canteen-teal hover:bg-canteen-teal/90">
+            <Button 
+              className="bg-teal-600 hover:bg-teal-700 text-white dark:bg-teal-600 dark:hover:bg-teal-700"
+              asChild
+            >
               <Link to="/menu">
                 Νέα παραγγελία
                 <ArrowRight className="ml-2 h-4 w-4" />
