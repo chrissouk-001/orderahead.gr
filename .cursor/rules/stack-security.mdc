@@ -1,7 +1,7 @@
 ---
 description: 
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
 # OrderAhead.gr - Security Rules for Cursor AI
 
