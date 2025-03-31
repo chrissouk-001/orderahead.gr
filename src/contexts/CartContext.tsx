@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from "sonner";
 import { Product } from '@/types/product';
@@ -34,8 +33,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
   // Load cart from localStorage
   useEffect(() => {
-    const storedCart = localStorage.getItem('smartCanteenCart');
-    const storedBag = localStorage.getItem('smartCanteenBag');
+    const storedCart = localStorage.getItem('orderAheadCart');
+    const storedBag = localStorage.getItem('orderAheadBag');
     
     if (storedCart) {
       setItems(JSON.parse(storedCart));
@@ -48,12 +47,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
   // Save cart to localStorage
   useEffect(() => {
-    localStorage.setItem('smartCanteenCart', JSON.stringify(items));
+    localStorage.setItem('orderAheadCart', JSON.stringify(items));
   }, [items]);
   
   // Save bag preference to localStorage
   useEffect(() => {
-    localStorage.setItem('smartCanteenBag', JSON.stringify(includesBag));
+    localStorage.setItem('orderAheadBag', JSON.stringify(includesBag));
   }, [includesBag]);
 
   // Add item to cart

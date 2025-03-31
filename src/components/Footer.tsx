@@ -4,25 +4,25 @@ import { Instagram, Twitter, Facebook, ExternalLink } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-canteen-dark dark:bg-[#0f172a] text-white pt-10 pb-6 border-t border-gray-700 dark:border-primary/20 transition-colors duration-300">
+    <footer className="bg-canteen-dark dark:bg-background text-white pt-10 pb-6 border-t border-gray-700 dark:border-muted/20 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
             <div className="flex items-center">
               <div className="bg-canteen-teal dark:bg-primary rounded-full p-1.5 mr-2 overflow-hidden shadow-md">
                 <img 
-                  src="https://img.freepik.com/premium-vector/school-food-logo-design-template_145155-2789.jpg?w=826" 
-                  alt="Smart Canteen Atsoglou Logo" 
+                  src="/OrderAhead-logo.svg" 
+                  alt="OrderAhead.gr Logo" 
                   className="h-8 w-8 rounded-full" 
                 />
               </div>
               <h3 className="text-lg font-bold text-white">
-                <span>Smart Canteen</span>{" "}
-                <span className="text-canteen-teal dark:text-primary">Atsoglou</span>
+                <span>Order</span>{" "}
+                <span className="text-canteen-teal dark:text-primary">Ahead.gr</span>
               </h3>
             </div>
             <p className="text-gray-300 dark:text-muted-foreground mb-4 transition-colors duration-300">
-              Μια καινοτόμα λύση για το σχολικό κυλικείο των Εκπαιδευτηρίων Ατσόγλου.
+              Η έξυπνη λύση για να παραγγείλετε το φαγητό σας χωρίς καθυστερήσεις.
             </p>
             <p className="text-gray-300 dark:text-muted-foreground transition-colors duration-300">
               Με την καθοδήγηση του κ. Δημήτρη Λιόφη, MSc.
@@ -82,11 +82,11 @@ const Footer: React.FC = () => {
             <address className="not-italic text-gray-300 dark:text-muted-foreground space-y-2 transition-colors duration-300">
               <p className="flex items-center">
                 <span className="w-1.5 h-1.5 bg-canteen-teal dark:bg-primary rounded-full mr-2"></span>
-                Εκπαιδευτήρια Ατσόγλου
+                OrderAhead.gr
               </p>
               <p className="flex items-center">
                 <span className="w-1.5 h-1.5 bg-canteen-teal dark:bg-primary rounded-full mr-2"></span>
-                Email: info@atsoglou.edu.gr
+                Email: support@orderahead.gr
               </p>
               <p className="flex items-center">
                 <span className="w-1.5 h-1.5 bg-canteen-teal dark:bg-primary rounded-full mr-2"></span>
@@ -104,13 +104,13 @@ const Footer: React.FC = () => {
           </div>
         </div>
         
-        <div className="border-t border-gray-700 dark:border-primary/20 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center transition-colors duration-300">
+        <div className="border-t border-gray-700 dark:border-muted/20 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center transition-colors duration-300">
           <p className="text-gray-400 dark:text-muted-foreground/80 text-sm transition-colors duration-300">
-            &copy; {new Date().getFullYear()} Εκπαιδευτήρια Ατσόγλου. Με επιφύλαξη παντός δικαιώματος.
+            &copy; {new Date().getFullYear()} OrderAhead.gr. Με επιφύλαξη παντός δικαιώματος.
           </p>
           <div className="mt-4 md:mt-0">
             <p className="text-gray-400 dark:text-muted-foreground/80 text-sm transition-colors duration-300">
-              Διαγωνισμός Επιχειρηματικότητας - Γυμνάσιο Εκπαιδευτηρίων Ατσόγλου
+              Εύκολη, γρήγορη και ασφαλής παραγγελία φαγητού
             </p>
           </div>
         </div>

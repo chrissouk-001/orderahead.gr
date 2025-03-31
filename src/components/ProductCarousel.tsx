@@ -57,7 +57,7 @@ export function ProductCarousel() {
       <CarouselContent className="-ml-4">
         {popularProducts.map((product, index) => (
           <CarouselItem key={product.id} className="pl-4 md:basis-1/3 lg:basis-1/3">
-            <div className="relative bg-white dark:bg-[#141d30] rounded-xl shadow-lg overflow-hidden group hover:shadow-xl dark:hover:shadow-primary/30 transition-all duration-500 transform hover:-translate-y-2 dark:border dark:border-primary/10 h-[360px] flex flex-col animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
+            <div className="relative bg-white dark:bg-card rounded-xl shadow-lg overflow-hidden group hover:shadow-xl dark:hover:shadow-primary/30 transition-all duration-500 transform hover:-translate-y-2 dark:border dark:border-primary/10 h-[360px] flex flex-col animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
               <div className="relative h-[180px] w-full flex-shrink-0 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
                 <img
@@ -76,7 +76,7 @@ export function ProductCarousel() {
                     ★ δημοφιλές
                   </div>
                 )}
-                <div className="absolute bottom-4 left-4 bg-white/90 dark:bg-[#141d30]/90 text-canteen-dark dark:text-white font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md group-hover:bg-canteen-yellow group-hover:text-canteen-dark transition-all duration-300">
+                <div className="absolute bottom-4 left-4 bg-white/90 dark:bg-card/90 text-canteen-dark dark:text-white font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md group-hover:bg-canteen-yellow group-hover:text-canteen-dark transition-all duration-300">
                   {product.price.toFixed(2)}€
                 </div>
               </div>

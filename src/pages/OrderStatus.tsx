@@ -74,7 +74,7 @@ const OrderStatus: React.FC = () => {
   const progress = calculateProgress();
   
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-[#0f172a]">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-background">
       <Navbar />
       
       <main className="flex-grow container mx-auto px-4 py-12">
@@ -92,7 +92,7 @@ const OrderStatus: React.FC = () => {
           </div>
           
           {isLoading ? (
-            <div className="bg-white dark:bg-[#141d30] rounded-xl shadow-md p-12 text-center">
+            <div className="bg-white dark:bg-card rounded-xl shadow-md p-12 text-center">
               <div className="relative w-20 h-20 mx-auto mb-6">
                 <div className="absolute inset-0 bg-canteen-teal/10 dark:bg-primary/10 rounded-full animate-ping"></div>
                 <div className="relative flex items-center justify-center w-full h-full bg-canteen-teal/20 dark:bg-primary/20 rounded-full">
@@ -103,10 +103,10 @@ const OrderStatus: React.FC = () => {
               <p className="text-gray-500 dark:text-gray-400">Παρακαλώ περιμένετε καθώς ελέγχουμε την κατάσταση της παραγγελίας σας...</p>
             </div>
           ) : !orderNumber ? (
-            <div className={`bg-white dark:bg-[#141d30] rounded-xl shadow-md overflow-hidden transition-all duration-500 transform ${animateStatus ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+            <div className={`bg-white dark:bg-card rounded-xl shadow-md overflow-hidden transition-all duration-500 transform ${animateStatus ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               <div className="p-8">
                 <div className="flex flex-col md:flex-row md:items-center">
-                  <div className="rounded-full bg-gray-100 dark:bg-[#0f172a]/60 w-20 h-20 flex items-center justify-center mb-6 md:mb-0 md:mr-6">
+                  <div className="rounded-full bg-gray-100 dark:bg-muted/60 w-20 h-20 flex items-center justify-center mb-6 md:mb-0 md:mr-6">
                     <XCircle className="h-10 w-10 text-gray-400" />
                   </div>
                   <div>
@@ -125,7 +125,7 @@ const OrderStatus: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className={`bg-white dark:bg-[#141d30] rounded-xl shadow-md overflow-hidden transition-all duration-500 transform ${animateStatus ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+            <div className={`bg-white dark:bg-card rounded-xl shadow-md overflow-hidden transition-all duration-500 transform ${animateStatus ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               <div className="p-8">
                 <div className="flex flex-col md:flex-row md:items-start mb-8">
                   <div className={`rounded-full w-20 h-20 flex items-center justify-center mb-6 md:mb-0 md:mr-6 ${StatusIcon === CheckCircle ? 'bg-green-100 dark:bg-green-900/20' : StatusIcon === Package ? 'bg-orange-100 dark:bg-orange-900/20' : 'bg-blue-100 dark:bg-blue-900/20'}`}>
@@ -134,7 +134,7 @@ const OrderStatus: React.FC = () => {
                   <div className="flex-1">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
                       <h2 className="text-2xl font-bold text-canteen-dark dark:text-white mb-2 md:mb-0">Παραγγελία #{orderNumber}</h2>
-                      <div className="flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-[#0f172a]">
+                      <div className="flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-muted">
                         <Clock className="mr-2 h-4 w-4 text-canteen-teal dark:text-primary" />
                         <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                           Τρέχουσα σειρά: <span className="font-bold text-canteen-teal dark:text-primary">{currentOrder}</span>
@@ -150,7 +150,7 @@ const OrderStatus: React.FC = () => {
                         <span className="text-gray-600 dark:text-gray-400 text-sm">Πρόοδος παραγγελίας</span>
                         <span className="font-medium text-canteen-teal dark:text-primary text-sm">{progress}%</span>
                       </div>
-                      <div className="relative h-2 w-full bg-gray-100 dark:bg-[#0f172a] rounded-full overflow-hidden">
+                      <div className="relative h-2 w-full bg-gray-100 dark:bg-muted rounded-full overflow-hidden">
                         <div 
                           className={`absolute left-0 top-0 h-full rounded-full transition-all duration-1000 ease-out ${orderNumber <= currentOrder ? 'bg-green-500' : 'bg-canteen-teal dark:bg-primary'}`} 
                           style={{ width: `${progress}%` }}
@@ -161,7 +161,7 @@ const OrderStatus: React.FC = () => {
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="rounded-xl p-4 bg-gray-50 dark:bg-[#0f172a]/60 border border-gray-100 dark:border-gray-800">
+                  <div className="rounded-xl p-4 bg-gray-50 dark:bg-muted/60 border border-gray-100 dark:border-muted">
                     <div className="flex items-start">
                       <Clock className="mr-3 h-5 w-5 text-canteen-teal dark:text-primary mt-0.5" />
                       <div>

@@ -169,7 +169,7 @@ const Menu: React.FC = () => {
           {!isMobile && isAuthenticated && (
             <div className="w-full lg:w-1/4 hidden lg:block">
               <div className="sticky top-24">
-                <MiniCart compact={true} />
+                <MiniCart layout="compact" />
               </div>
             </div>
           )}
@@ -180,7 +180,7 @@ const Menu: React.FC = () => {
       {isMobile && isAuthenticated && showMiniCart && (
         <div className="fixed bottom-0 left-0 right-0 z-50 transform transition-transform duration-300 ease-in-out">
           <div className="max-h-[70vh] overflow-auto">
-            <MiniCart compact={true} />
+            <MiniCart layout="compact" />
           </div>
         </div>
       )}
@@ -204,8 +204,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   hasImageError
 }) => {
   return (
-    <Card className="overflow-hidden group hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-200/50 dark:border-gray-800/50 dark:bg-gray-900/30 backdrop-filter backdrop-blur-sm">
-      <div className="relative h-56 overflow-hidden bg-gray-100 dark:bg-gray-800">
+    <Card className="group relative flex flex-col overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg translate-y-2 border border-gray-200/50 dark:border-muted/20 dark:bg-card/30 backdrop-filter backdrop-blur-sm">
+      <div className="relative h-56 overflow-hidden bg-gray-100 dark:bg-muted">
         <div className="absolute inset-0 bg-gradient-to-t from-canteen-dark/50 to-transparent z-10"></div>
         <img 
           src={hasImageError ? "/images/products/sandwich.jpg" : product.image} 
@@ -219,7 +219,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {product.isNew && (
           <div className="absolute top-4 left-4 bg-canteen-yellow text-canteen-dark font-bold py-1 px-3 rounded-full text-xs z-20 shadow-md animate-pulse">Νέο</div>
         )}
-        <div className="absolute bottom-4 left-4 bg-white/90 dark:bg-gray-900/90 text-canteen-dark dark:text-white font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md group-hover:bg-canteen-yellow group-hover:text-canteen-dark transition-all duration-300">
+        <div className="absolute bottom-4 left-4 bg-white/90 dark:bg-card/90 text-canteen-dark dark:text-white font-bold py-1 px-3 rounded-full text-sm z-20 shadow-md group-hover:bg-canteen-yellow group-hover:text-canteen-dark transition-all duration-300">
           {product.price.toFixed(2)}€
         </div>
       </div>

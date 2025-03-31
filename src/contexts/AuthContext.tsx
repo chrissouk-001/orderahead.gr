@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from "sonner";
 
@@ -45,14 +44,17 @@ const MOCK_USERS = [
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Check if user is already logged in
+  // Load user from localStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem('smartCanteenUser');
+    const storedUser = localStorage.getItem('orderAheadUser');
+    
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-    setIsLoading(false);
+    
+    setIsInitialized(true);
   }, []);
 
   // Login function
@@ -62,18 +64,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const foundUser = MOCK_USERS.find(
-        u => u.email === email && u.password === password
-      );
+      const user = MOCK_USERS.find(u => u.email === email && u.password === password);
       
-      if (foundUser) {
-        const { password, ...userWithoutPassword } = foundUser;
-        setUser(userWithoutPassword);
-        localStorage.setItem('smartCanteenUser', JSON.stringify(userWithoutPassword));
-        toast.success('Επιτυχής σύνδεση!');
-      } else {
-        throw new Error('Λανθασμένο email ή κωδικός πρόσβασης');
+      if (!user) {
+        throw new Error('Λάθος email ή κωδικός');
       }
+      
+      const { password: _, ...userWithoutPassword } = user;
+      setUser(userWithoutPassword);
+      localStorage.setItem('orderAheadUser', JSON.stringify(userWithoutPassword));
+      toast.success('Επιτυχής σύνδεση!');
     } catch (error) {
       toast.error((error as Error).message || 'Αποτυχία σύνδεσης');
       throw error;
@@ -92,7 +92,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // For demo, just log in as the student
       const { password, ...userWithoutPassword } = MOCK_USERS[0];
       setUser(userWithoutPassword);
-      localStorage.setItem('smartCanteenUser', JSON.stringify(userWithoutPassword));
+      localStorage.setItem('orderAheadUser', JSON.stringify(userWithoutPassword));
       toast.success('Επιτυχής σύνδεση με Google!');
     } catch (error) {
       toast.error('Αποτυχία σύνδεσης με Google');
@@ -123,7 +123,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       };
       
       setUser(newUser);
-      localStorage.setItem('smartCanteenUser', JSON.stringify(newUser));
+      localStorage.setItem('orderAheadUser', JSON.stringify(newUser));
       toast.success('Επιτυχής εγγραφή!');
     } catch (error) {
       toast.error((error as Error).message || 'Αποτυχία εγγραφής');
@@ -136,7 +136,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Logout function
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('smartCanteenUser');
+    localStorage.removeItem('orderAheadUser');
     toast.info('Αποσυνδεθήκατε επιτυχώς');
   };
 

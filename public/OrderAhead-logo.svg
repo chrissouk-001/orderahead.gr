@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#29696B" />
+  
+  <!-- Shopping Bag Icon -->
+  <g fill="#F5F3E5">
+    <!-- Bag -->
+    <path d="M201.8 141.1c-8.3 0-15 6.7-15 15v30h138.4v-30c0-8.3-6.7-15-15-15h-108.4z" />
+    <path d="M166.8 201.1v140c0 8.3 6.7 15 15 15h148.4c8.3 0 15-6.7 15-15v-140H166.8z" />
+    
+    <!-- Handle -->
+    <path d="M201.8 141.1c0-30 24.3-54.3 54.3-54.3s54.3 24.3 54.3 54.3" stroke="#F5F3E5" stroke-width="25" fill="none" />
+    
+    <!-- Checkmark -->
+    <path d="M230 260c5.5 5.5 14.3 5.5 19.8 0l30-30" stroke="#F5F3E5" stroke-width="20" stroke-linecap="round" fill="none" />
+    
+    <!-- Arrow -->
+    <path d="M310 280l40 40" stroke="#F5F3E5" stroke-width="20" stroke-linecap="round" fill="none" />
+    <path d="M350 320l-10-40" stroke="#F5F3E5" stroke-width="20" stroke-linecap="round" fill="none" />
+  </g>
+  
+  <!-- Order text -->
+  <text x="440" y="235" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#F5F3E5" text-anchor="end">Order</text>
+  
+  <!-- Ahead text -->
+  <text x="440" y="340" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#F3C963" text-anchor="end">Ahead</text>
+</svg> 

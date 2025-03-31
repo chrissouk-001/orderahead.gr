@@ -1,56 +1,65 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, CheckCircle } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ShoppingBag, Plus, Minus, X, ShoppingCart, Package, CreditCard } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
-import { toast } from 'sonner';
+import { useToast } from '@/components/ui/use-toast';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { motion } from 'framer-motion';
 
 const Cart: React.FC = () => {
-  const { 
-    items, 
-    updateQuantity, 
-    removeItem, 
-    includesBag, 
-    setIncludesBag, 
-    getTotalPrice,
-    placeOrder
-  } = useCart();
-  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const { items, getTotalPrice, updateQuantity, removeItem, clearCart } = useCart();
+  const { toast } = useToast();
   const navigate = useNavigate();
-  
-  const handleQuantityChange = (productId: string, newQuantity: number) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleUpdateQuantity = (productId: string, newQuantity: number) => {
+    if (newQuantity < 1) return;
     updateQuantity(productId, newQuantity);
   };
-  
+
   const handleRemoveItem = (productId: string) => {
     removeItem(productId);
+    toast({
+      title: "Αφαιρέθηκε από το καλάθι",
+      description: "Το προϊόν αφαιρέθηκε από το καλάθι σας.",
+    });
   };
-  
-  const handlePlaceOrder = async () => {
+
+  const handleCheckout = () => {
     if (items.length === 0) {
-      toast.error('Το καλάθι είναι άδειο');
+      toast({
+        title: "Άδειο καλάθι",
+        description: "Προσθέστε προϊόντα στο καλάθι σας για να προχωρήσετε στην πληρωμή.",
+        variant: "destructive",
+      });
       return;
     }
     
-    setIsPlacingOrder(true);
-    try {
-      const orderNumber = await placeOrder();
-      toast.success('Η παραγγελία σας καταχωρήθηκε με επιτυχία!');
-      navigate('/order-success', { state: { orderNumber } });
-    } catch (error) {
-      toast.error('Παρουσιάστηκε σφάλμα κατά την καταχώρηση της παραγγελίας');
-    } finally {
-      setIsPlacingOrder(false);
-    }
+    // Normally you would navigate to a checkout page
+    navigate("/order-success", { 
+      state: { 
+        orderNumber: Math.floor(Math.random() * 900000) + 100000,
+        totalAmount: getTotalPrice(),
+        items: items,
+      } 
+    });
+    
+    // Clear cart after successful checkout
+    clearCart();
   };
-  
+
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-[#0a1023]">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-background">
       <Navbar />
       
       <main className="flex-grow container mx-auto px-4 py-8">
@@ -58,85 +67,101 @@ const Cart: React.FC = () => {
         
         {items.length === 0 ? (
           <motion.div 
-            className="bg-white dark:bg-[#141d30] rounded-lg shadow-md p-8 max-w-md mx-auto text-center border border-gray-100 dark:border-gray-800/20"
+            className="bg-white dark:bg-card rounded-lg shadow-md p-8 max-w-md mx-auto text-center border border-gray-100 dark:border-muted/20"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <ShoppingBag className="h-16 w-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-            <h2 className="text-xl font-medium text-gray-800 dark:text-white mb-3">Το καλάθι σας είναι άδειο</h2>
-            <p className="text-gray-500 dark:text-gray-400 mb-6">
-              Προσθέστε προϊόντα για να ξεκινήσετε την παραγγελία σας
+            <div className="flex justify-center mb-4">
+              <div className="h-24 w-24 rounded-full bg-gray-100 dark:bg-muted/50 flex items-center justify-center">
+                <ShoppingCart className="h-12 w-12 text-gray-400" />
+              </div>
+            </div>
+            <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Το καλάθι σας είναι άδειο</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Προσθέστε προϊόντα από τον κατάλογο για να παραγγείλετε.
             </p>
-            <Button 
-              className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-600 dark:hover:bg-teal-700 text-white px-8"
-              onClick={() => navigate('/menu')}
-            >
-              Συνέχεια αγορών
+            <Button asChild className="bg-canteen-teal hover:bg-canteen-teal/90 text-white dark:bg-primary dark:hover:bg-primary/90">
+              <Link to="/menu">
+                Περιήγηση στον κατάλογο
+              </Link>
             </Button>
           </motion.div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Products Column */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Products List */}
             <motion.div 
-              className="lg:col-span-8"
+              className="lg:col-span-2"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
-              <div className="bg-white dark:bg-[#141d30] rounded-lg shadow-md overflow-hidden border border-gray-100 dark:border-gray-800/20">
+              <div className="bg-white dark:bg-card rounded-lg shadow-md overflow-hidden border border-gray-100 dark:border-muted/20">
                 <div className="p-6">
                   <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">Προϊόντα</h2>
                   
-                  <div className="space-y-5">
+                  <div className="space-y-4">
                     {items.map((item) => (
                       <div 
                         key={item.product.id} 
-                        className="flex items-center p-4 rounded-lg border border-gray-100 dark:border-gray-800/20 bg-white dark:bg-[#141d30]"
+                        className="flex items-center p-4 rounded-lg border border-gray-100 dark:border-muted/20 bg-white dark:bg-card"
                       >
                         {/* Product Image */}
-                        <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800/50 rounded-md overflow-hidden flex-shrink-0 mr-4">
+                        <div className="h-16 w-16 rounded-md bg-gray-200 dark:bg-muted/70 overflow-hidden flex-shrink-0">
                           <img 
-                            src={item.product.image || "/placeholder.svg"} 
+                            src={item.product.image} 
                             alt={item.product.name} 
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = "/placeholder.svg";
-                            }}
+                            className="h-full w-full object-cover"
                           />
                         </div>
                         
-                        {/* Product Details */}
-                        <div className="flex-grow">
-                          <h3 className="font-medium text-gray-800 dark:text-white">{item.product.name}</h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">{item.product.description}</p>
-                          <div className="text-teal-600 dark:text-teal-400 font-medium mt-1">
-                            {item.product.price.toFixed(2)}€
-                          </div>
+                        {/* Product Info */}
+                        <div className="flex-grow ml-4">
+                          <h3 className="font-medium text-gray-900 dark:text-white">{item.product.name}</h3>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{item.product.price.toFixed(2)}€ / τεμάχιο</p>
                         </div>
                         
-                        {/* Quantity Controls */}
-                        <div className="flex items-center space-x-1">
-                          <button 
-                            className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400"
-                            onClick={() => handleQuantityChange(item.product.id, item.quantity - 1)}
+                        {/* Quantity Control */}
+                        <div className="flex items-center space-x-2">
+                          <Button 
+                            variant="outline" 
+                            size="icon" 
+                            className="h-8 w-8 rounded-full"
+                            onClick={() => handleUpdateQuantity(item.product.id, item.quantity - 1)}
                           >
-                            <Minus size={16} />
-                          </button>
-                          <span className="w-8 text-center font-medium text-gray-800 dark:text-white">{item.quantity}</span>
-                          <button 
-                            className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400"
-                            onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
+                            <Minus className="h-3 w-3" />
+                          </Button>
+                          
+                          <span className="w-8 text-center font-medium text-gray-900 dark:text-white">
+                            {item.quantity}
+                          </span>
+                          
+                          <Button 
+                            variant="outline" 
+                            size="icon" 
+                            className="h-8 w-8 rounded-full"
+                            onClick={() => handleUpdateQuantity(item.product.id, item.quantity + 1)}
                           >
-                            <Plus size={16} />
-                          </button>
-                          <button 
-                            className="ml-2 p-1 rounded-full text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10"
-                            onClick={() => handleRemoveItem(item.product.id)}
-                          >
-                            <Trash2 size={16} />
-                          </button>
+                            <Plus className="h-3 w-3" />
+                          </Button>
                         </div>
+                        
+                        {/* Total Price */}
+                        <div className="ml-6 w-20 text-right">
+                          <p className="font-medium text-gray-900 dark:text-white">
+                            {(item.product.price * item.quantity).toFixed(2)}€
+                          </p>
+                        </div>
+                        
+                        {/* Remove Button */}
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="ml-2 text-gray-400 hover:text-red-500"
+                          onClick={() => handleRemoveItem(item.product.id)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
                       </div>
                     ))}
                   </div>
@@ -144,76 +169,55 @@ const Cart: React.FC = () => {
               </div>
             </motion.div>
             
-            {/* Order Summary Column */}
+            {/* Order Summary */}
             <motion.div 
-              className="lg:col-span-4"
+              className="lg:col-span-1"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.1 }}
             >
-              <div className="bg-white dark:bg-[#141d30] rounded-lg shadow-md overflow-hidden sticky top-24 border border-gray-100 dark:border-gray-800/20">
+              <div className="bg-white dark:bg-card rounded-lg shadow-md overflow-hidden sticky top-24 border border-gray-100 dark:border-muted/20">
                 <div className="p-6">
                   <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-white flex items-center">
-                    <ShoppingBag className="h-5 w-5 mr-2 text-teal-600 dark:text-teal-400" />
+                    <ShoppingBag className="mr-2 h-5 w-5 text-canteen-teal dark:text-primary" />
                     Σύνοψη Παραγγελίας
                   </h2>
                   
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between">
+                    <div className="flex justify-between pb-4 border-b border-gray-100 dark:border-gray-800/30">
                       <span className="text-gray-600 dark:text-gray-400">Υποσύνολο</span>
-                      <span className="font-medium text-gray-800 dark:text-white">{getTotalPrice().toFixed(2)}€</span>
+                      <span className="font-medium text-gray-900 dark:text-white">{getTotalPrice().toFixed(2)}€</span>
                     </div>
                     
-                    <div className="flex items-start gap-2 bg-gray-50 dark:bg-gray-800/30 p-3 rounded">
-                      <Checkbox 
-                        id="eco-option" 
-                        checked={!includesBag}
-                        onCheckedChange={(checked) => setIncludesBag(!checked as boolean)}
-                        className="mt-0.5 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500 border-gray-300 dark:border-gray-600"
-                      />
-                      <div>
-                        <label
-                          htmlFor="eco-option"
-                          className="text-sm font-medium text-gray-800 dark:text-white"
-                        >
-                          Οικολογική επιλογή
-                        </label>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          Χωρίς πλαστική σακούλα για προστασία του περιβάλλοντος
-                        </p>
-                      </div>
+                    <div className="flex justify-between pb-4 border-b border-gray-100 dark:border-gray-800/30">
+                      <span className="text-gray-600 dark:text-gray-400">Χρέωση εξυπηρέτησης</span>
+                      <span className="font-medium text-gray-900 dark:text-white">0.00€</span>
                     </div>
                     
-                    <Separator className="bg-gray-200 dark:bg-gray-700/30 my-2" />
-                    
-                    <div className="flex justify-between items-center">
-                      <span className="font-bold text-gray-800 dark:text-white">Σύνολο</span>
-                      <span className="font-bold text-teal-600 dark:text-teal-400">{getTotalPrice().toFixed(2)}€</span>
+                    <div className="flex justify-between text-lg font-bold">
+                      <span className="text-gray-900 dark:text-white">Σύνολο</span>
+                      <span className="text-canteen-teal dark:text-primary">{getTotalPrice().toFixed(2)}€</span>
                     </div>
                     
-                    <Button 
-                      className="w-full bg-teal-600 hover:bg-teal-700 dark:bg-teal-600 dark:hover:bg-teal-700 text-white py-5 mt-2"
-                      onClick={handlePlaceOrder}
-                      disabled={isPlacingOrder}
-                    >
-                      {isPlacingOrder ? (
-                        <div className="flex items-center justify-center">
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                          <span>Υποβολή παραγγελίας...</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center">
-                          <span>Υποβολή παραγγελίας</span>
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </div>
-                      )}
-                    </Button>
-                    
-                    <div className="flex justify-center mt-1">
-                      <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center">
-                        <CheckCircle className="h-3 w-3 mr-1 text-teal-600 dark:text-teal-400" />
-                        Ασφαλής ολοκλήρωση παραγγελίας
-                      </p>
+                    <div className="mt-6 space-y-4">
+                      <Button 
+                        className="w-full bg-canteen-teal hover:bg-canteen-teal/90 text-white dark:bg-primary dark:hover:bg-primary/90"
+                        onClick={handleCheckout}
+                      >
+                        <CreditCard className="mr-2 h-4 w-4" />
+                        Ολοκλήρωση Παραγγελίας
+                      </Button>
+                      
+                      <Button 
+                        variant="outline" 
+                        className="w-full"
+                        asChild
+                      >
+                        <Link to="/menu">
+                          <Package className="mr-2 h-4 w-4" />
+                          Συνέχεια για προσθήκη προϊόντων
+                        </Link>
+                      </Button>
                     </div>
                   </div>
                 </div>

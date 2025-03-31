@@ -77,20 +77,20 @@ const Navbar: React.FC = () => {
   };
   
   return (
-    <header className="sticky top-0 z-50 bg-white dark:bg-[#0f172a] shadow-md border-b border-gray-200 dark:border-primary/20 backdrop-blur-sm bg-white/90 dark:bg-[#0f172a]/95 transition-colors duration-300">
+    <header className="sticky top-0 z-50 bg-white dark:bg-background shadow-md border-b border-gray-200 dark:border-primary/20 backdrop-blur-sm bg-white/90 dark:bg-background/95 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center group">
             <div className="bg-canteen-teal dark:bg-primary rounded-full p-1.5 mr-2 overflow-hidden transform transition-all duration-300 group-hover:scale-110 shadow-md">
               <img 
-                src="https://img.freepik.com/premium-vector/school-food-logo-design-template_145155-2789.jpg?w=826" 
-                alt="Smart Canteen Atsoglou Logo" 
+                src="/OrderAhead-logo.svg" 
+                alt="OrderAhead.gr Logo" 
                 className="h-8 w-8 rounded-full" 
               />
             </div>
             <span className="text-xl font-bold text-canteen-dark dark:text-white transition-colors duration-300 flex flex-col md:flex-row">
-              <span className="mr-1">Smart Canteen</span> 
-              <span className="text-canteen-teal dark:text-primary transition-colors duration-300">Atsoglou</span>
+              <span className="mr-1">Order</span> 
+              <span className="text-canteen-teal dark:text-primary transition-colors duration-300">Ahead.gr</span>
             </span>
           </Link>
           
@@ -119,7 +119,7 @@ const Navbar: React.FC = () => {
               className={`
                 transition-all duration-300 
                 ${isDarkMode 
-                  ? "bg-[#141d30] text-primary border-primary/20 hover:bg-[#141d30]/90 hover:text-primary hover:border-primary shadow-inner" 
+                  ? "bg-card text-primary border-primary/20 hover:bg-card/90 hover:text-primary hover:border-primary shadow-inner" 
                   : "rounded-full hover:bg-gray-100 text-canteen-dark shadow-sm"
                 }`}
               aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
@@ -148,11 +148,11 @@ const Navbar: React.FC = () => {
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full text-canteen-dark dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-[#141d30]/70 transition-colors duration-300">
+                  <Button variant="ghost" size="icon" className="rounded-full text-canteen-dark dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-card/70 transition-colors duration-300">
                     <User size={20} />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-[#141d30] border-gray-200 dark:border-primary/20 shadow-lg rounded-lg mt-1">
+                <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-card border-gray-200 dark:border-primary/20 shadow-lg rounded-lg mt-1">
                   <DropdownMenuLabel className="text-canteen-dark dark:text-white flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-canteen-teal/20 dark:bg-primary/20 flex items-center justify-center text-canteen-teal dark:text-primary font-bold">
                       {user?.name?.charAt(0) || 'U'}
@@ -196,7 +196,7 @@ const Navbar: React.FC = () => {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="md:hidden rounded-full text-canteen-dark dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-[#141d30]/70 transition-colors duration-300"
+              className="md:hidden rounded-full text-canteen-dark dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-card/70 transition-colors duration-300"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
@@ -208,7 +208,7 @@ const Navbar: React.FC = () => {
       
       {/* Mobile Navigation Menu */}
       <div 
-        className={`md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-[#0f172a] shadow-lg border-b border-gray-200 dark:border-primary/20 transition-all duration-300 ${
+        className={`md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-background shadow-lg border-b border-gray-200 dark:border-primary/20 transition-all duration-300 ${
           mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
         } overflow-hidden`}
       >
@@ -275,10 +275,10 @@ const MobileNavLink: React.FC<{ to: string; isActive: boolean; isDark: boolean; 
   return (
     <Link 
       to={to} 
-      className={`w-full p-3 rounded-lg transition-all duration-300 ${
+      className={`flex items-center py-3 px-4 rounded-md transition-colors duration-300 ${
         isActive 
           ? "bg-canteen-teal/10 dark:bg-primary/10 text-canteen-teal dark:text-primary font-medium"
-          : "text-canteen-dark dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-[#141d30]"
+          : "text-canteen-dark dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-card"
       }`}
     >
       {children}
