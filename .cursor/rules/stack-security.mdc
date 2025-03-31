@@ -1,0 +1,290 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# OrderAhead.gr - Security Rules for Cursor AI
+
+## Technology Stack-Specific Security Rules
+
+### HTML Security
+- Use Content Security Policy (CSP) to prevent XSS attacks
+- Apply proper attribute escaping for dynamic content
+- Implement proper input sanitization before rendering HTML
+- Avoid inline JavaScript where possible
+- Use SameSite attributes on cookies to prevent CSRF
+- Implement proper iframe sandbox attributes when embedding content
+- Apply rel="noopener noreferrer" on external links
+- Avoid using innerHTML in favor of safer alternatives
+- Implement strict MIME type checking
+- Use HTTPOnly and Secure flags for cookies containing sensitive information
+
+### CSS Security
+- Avoid CSS injection by sanitizing user-provided styling
+- Implement proper CSS escaping for dynamic styles
+- Be cautious of CSS selectors that could leak information
+- Secure @import directives to prevent style injection
+- Be aware of CSS-based timing attacks in sensitive operations
+- Sanitize user input before using in CSS custom properties
+- Avoid using user-controlled input in CSS url() functions
+- Implement strict content type for CSS files
+- Consider CSS isolation techniques like CSS Modules or styled-components
+- Be aware of potential CSS exfiltration techniques
+
+### JavaScript Security
+- Use strict mode ('use strict') in all JavaScript files
+- Apply proper input validation for all user-provided data
+- Implement Content Security Policy (CSP) to restrict script execution
+- Avoid eval() and new Function() constructs
+- Use safe JSON parsing methods (JSON.parse) instead of eval
+- Secure localStorage and sessionStorage usage for sensitive data
+- Implement proper CSRF protection in AJAX requests
+- Apply timeout and resource limits to prevent DoS attacks
+- Use Subresource Integrity (SRI) checks for external scripts
+- Validate and sanitize data before DOM manipulation
+- Implement proper error handling that doesn't reveal sensitive information
+- Apply secure random number generation for security-critical operations
+
+### React Security
+- Sanitize props and state before rendering to prevent XSS
+- Use React's built-in escaping mechanisms instead of dangerouslySetInnerHTML
+- Implement proper authentication state management (React Context or state management libraries)
+- Apply strict prop validation using PropTypes or TypeScript
+- Use secure form handling with proper validation
+- Implement secure routing with proper authentication checks
+- Apply proper error boundaries to prevent exposing sensitive information
+- Use memo and useCallback properly to prevent security issues in renders
+- Sanitize URL parameters before use in components
+- Apply secure state management for sensitive information
+- Avoid storing sensitive information in React component state
+- Use environment variables properly for API keys (REACT_APP_ prefix)
+- Implement proper CSRF protection in forms
+
+### Supabase (Backend) Security
+- Apply Row Level Security (RLS) policies for all tables
+- Use proper JWT validation for authentication
+- Implement secure role-based access control
+- Never expose sensitive database operations to public roles
+- Create proper database schemas with security in mind
+- Use prepared statements for all SQL operations
+- Implement proper error handling that doesn't expose database details
+- Apply rate limiting for database operations
+- Use proper encryption for sensitive stored data
+- Implement secure file storage policies
+- Configure proper CORS settings for Supabase endpoints
+- Regularly audit and rotate API keys
+- Use secure WebSockets for real-time features
+- Apply proper database transaction isolation levels
+- Implement secure database migration practices
+- Create database backups with proper encryption
+
+### Python (Django) Security
+- Keep Django framework and dependencies updated
+- Enable Django's security middleware
+- Use Django's ORM to prevent SQL injection
+- Apply proper authentication with Django Auth
+- Implement Django's CSRF protection on all forms
+- Use Django's secure password hashing
+- Enable Django's clickjacking protection
+- Configure secure cookie settings in Django
+- Implement proper file upload validation
+- Use Django's URL validation to prevent open redirects
+- Apply Django's template escaping correctly
+- Configure Django's admin interface securely
+- Implement proper Django settings for production
+- Use Django's secure form validation
+- Apply Django's permission and group system properly
+- Configure proper ALLOWED_HOSTS settings
+- Implement secure Django REST framework if used
+- Use Django's secure session management
+- Apply Django's content security policy
+- Configure Django's database connection pooling securely
+
+## Security Best Practices for Development
+
+### 1. Input Validation Rules
+- Always validate all user inputs from both students and canteen administrators
+- Use whitelist validation patterns (approved patterns) instead of blacklists
+- Implement strict type checking for all form inputs
+- Apply length restrictions on all text inputs to prevent buffer overflows
+- Require Cursor AI to suggest input validation for any new form field created
+- Encode user-generated content before displaying it (React's built-in protections)
+- Never allow direct HTML injection through dangerouslySetInnerHTML without sanitization
+- Implement validation on both client and server side
+- Create reusable validation functions for common input types (email, phone numbers, student IDs)
+- Use validation libraries like Yup or Joi in React, Django's form validation on backend
+
+### 2. Authentication & Authorization Rules
+- Implement authentication securely using Supabase Auth or Django Auth
+- Store authentication tokens only in HTTP-only cookies, never in localStorage
+- Set proper expiration times for all session tokens
+- Require authentication checks on all API routes that access or modify data
+- Separate student, canteen staff, and administrator permission levels clearly
+- Always verify authorization server-side, never rely only on client-side checks
+- Include CSRF tokens in all form submissions using Django's built-in protection
+- Never generate or accept weak passwords (minimum 12 chars with complexity)
+- Implement account lockout after multiple failed login attempts
+- Create secure password reset workflows with time-limited tokens
+- Apply principle of least privilege in all role-based access controls
+- Log all authorization failures for security monitoring
+- Implement proper JWT handling if using token-based authentication
+- Consider implementing silent token refresh mechanisms for better UX
+- Use Supabase RLS policies to enforce row-level permissions
+
+### 3. Data Protection Rules
+- Hash all passwords using Django's password hashers or Supabase's auth
+- Use HTTPS/TLS 1.2+ for all communications
+- Apply HSTS headers in production environments
+- Store API keys and secrets only in environment variables, never in code
+- Configure Supabase security rules to restrict database access by user role
+- Implement proper data encryption for sensitive student information
+- Create separate development and production environments with different security settings
+- Apply database encryption for sensitive fields in Supabase or Django models
+- Secure all backup processes and storage
+- Implement proper key rotation schedules for encryption keys
+- Set up data access audit trails for sensitive information using Supabase or Django audit logs
+- Use secure cloud storage for any uploaded files
+- Apply proper database indexing to prevent performance-based DoS attacks
+- Create processes for securely decommissioning old data
+- Use Django's secure model fields for sensitive data
+
+### 4. School Data Protection Rules
+- Collect minimal personal data from students (principle of data minimization)
+- Build clear data deletion workflows when students leave the school
+- Implement proper GDPR compliance features (data export, consent, etc.) using Django or Supabase
+- Apply anonymization techniques for queue displays in public areas
+- Never use actual student data in development or testing environments
+- Include clear data handling documentation for all Supabase tables or Django models
+- Create age-appropriate privacy notices and consent mechanisms
+- Implement parental consent workflows for younger students if needed
+- Consider special categories of data (e.g., dietary restrictions that may reveal health data)
+- Design processes for handling data subject access requests
+- Create data classification schemes based on sensitivity
+- Develop protocols for reporting potential data breaches
+- Establish retention periods for different data categories
+- Use Django or Supabase data masking features for sensitive fields
+
+### 5. Secure Configuration Rules
+- Never commit secrets, API keys or credentials to the code repository
+- Disable debug features in production builds of React and Django
+- Implement proper Content-Security-Policy headers
+- Configure appropriate X-Frame-Options headers
+- Set up rate limiting on API endpoints, especially authentication
+- Apply proper CORS policies to restrict access to authorized domains only
+- Require Cursor AI to check for hardcoded secrets in suggested code
+- Use security scanning tools in the development workflow
+- Implement secure header configurations via Helmet.js for React and Django Middleware
+- Disable unnecessary HTTP methods on production servers
+- Remove or secure development endpoints before deployment
+- Configure session timeout policies appropriate for a school environment
+- Use trusted certificate authorities for SSL certificates
+- Implement secure redirect policies
+
+### 6. Error Handling & Logging Rules
+- Create user-friendly error messages that don't expose system details
+- Log authentication events, order submissions, and administrative actions
+- Implement different logging levels for development and production
+- Never log sensitive information (passwords, full student details)
+- Include contextual information in logs without compromising privacy
+- Build comprehensive error tracking for failed orders or system issues
+- Centralize log storage and management
+- Implement log rotation and archival policies
+- Create alerts for critical security events
+- Establish monitoring for unusual patterns (spike in failed logins, abnormal order volumes)
+- Sanitize all logged data to prevent log injection attacks
+- Implement proper exception handling throughout the application
+- Create custom error boundaries in React components
+- Use Django's logging configuration securely
+
+### 7. Secure Deployment Rules
+- Scan all dependencies for vulnerabilities before deployment
+- Update NPM packages and Python dependencies regularly to address security vulnerabilities
+- Implement security checks in CI/CD pipeline if used
+- Apply rate limiting on order submission and user registration endpoints
+- Create throttling mechanisms to prevent abuse
+- Verify the security of third-party services before integration
+- Use container security scanning if deploying with Docker
+- Implement infrastructure as code with security checks
+- Apply least-privilege principles to deployment service accounts
+- Create immutable deployments to prevent runtime modifications
+- Implement blue-green or canary deployment strategies for safer updates
+- Securely manage database migrations in Django and Supabase
+- Create automated rollback capabilities for failed deployments
+- Document security considerations in deployment runbooks
+
+### 8. Order Processing Security Rules
+- Verify order integrity throughout the processing pipeline
+- Implement mechanisms to prevent duplicate order submissions
+- Create secure protocols for order modification and cancellation
+- Apply user verification for any changes to existing orders
+- If implementing payments later, follow PCI DSS requirements
+- Build security around the environmental impact tracking features
+- Implement idempotency keys for order processing
+- Create secure audit trails for all order changes
+- Develop tamper-evident order records
+- Build mechanisms to detect unusual ordering patterns
+- Implement transaction isolation levels for concurrent order processing
+- Create secure order notification systems
+- Design secure queue position algorithms that prevent manipulation
+
+## Cursor AI Assistant Rules
+
+1. **Proactive Security Scanning**:
+   - Automatically identify potential security issues in code being written
+   - Flag insecure patterns like SQL injection vulnerabilities or XSS risks
+   - Warn about hardcoded credentials or secrets in code
+   - Alert about unvalidated inputs in form handlers
+   - Detect insecure use of third-party libraries
+   - Identify missing authorization checks in API routes
+   - Flag potential memory leaks or excessive resource usage
+   - Point out missing input validation in both React and Django code
+
+2. **Security Pattern Suggestions**:
+   - Recommend input validation whenever handling user inputs
+   - Suggest proper authentication token handling patterns
+   - Offer secure state management approaches for sensitive data
+   - Provide alternatives when detecting insecure coding practices
+   - Recommend state management patterns that preserve security
+   - Suggest secure alternatives to problematic dependencies
+   - Offer more secure component structures when appropriate
+   - Provide code examples that follow security best practices
+
+3. **School-Specific Security Context**:
+   - Prioritize student data protection in all suggestions
+   - Consider the specific threats relevant to a school environment
+   - Balance security with usability for student users
+   - Maintain awareness of the educational context of the application
+   - Consider age-appropriate security controls
+   - Suggest child-friendly error messages and security prompts
+   - Recommend GDPR-compliant approaches for educational data
+   - Consider school network environments in security recommendations
+
+4. **Technology-Specific Security Implementation**:
+   - For React: Recommend proper useEffect cleanup, secure prop handling
+   - For Supabase: Suggest proper RLS policies and secure query patterns
+   - For Django: Recommend proper model validation and secure views
+   - For HTML/CSS: Suggest secure markup patterns and safe styling practices
+   - For JavaScript: Recommend secure coding patterns and safe function usage
+   - Always suggest technology-appropriate security testing methods
+   - Provide security-focused code comments for each technology
+   - Recommend appropriate security libraries for each part of the stack
+
+5. **Environmental Feature Security**:
+   - Ensure secure data collection for plastic usage metrics
+   - Apply proper access controls to environmental impact dashboards
+   - Verify integrity of environmental savings calculations
+   - Implement secure storage of historical environmental data
+   - Suggest tamper-proof environmental impact tracking
+   - Recommend secure approaches for gamification features
+   - Provide secure ways to showcase environmental achievements
+   - Design security for feature expansion related to sustainability
+
+6. **Security Testing Recommendations**:
+   - Suggest appropriate testing frameworks for security testing
+   - Recommend React component testing with security focus
+   - Suggest Django test cases for security-critical features
+   - Recommend Supabase security testing approaches
+   - Provide examples of security-focused test cases
+   - Suggest integration tests for security-critical flows
+   - Recommend tools for automated security scanning
+   - Suggest manual security testing procedures for critical features
