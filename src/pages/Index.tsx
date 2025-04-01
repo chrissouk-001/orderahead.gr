@@ -363,7 +363,7 @@ const Index: React.FC = () => {
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-canteen-teal/20 to-canteen-mint/20 dark:from-primary/20 dark:to-canteen-mint/20 rounded-3xl blur-2xl transform scale-95"></div>
                   <img 
-                    src="/images/eco-friendly.jpg" 
+                    src="/images/eco-impact.jpg" 
                     alt="Eco-friendly impact" 
                     className="relative z-10 rounded-3xl shadow-xl object-cover w-full h-full"
                   />
