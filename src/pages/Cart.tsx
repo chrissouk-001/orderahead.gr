@@ -59,29 +59,29 @@ const Cart: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-background">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#0b1220] to-[#051129]">
       <Navbar />
       
       <main className="flex-grow container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Το καλάθι μου</h1>
+        <h1 className="text-3xl font-bold mb-8 text-white">Το καλάθι μου</h1>
         
         {items.length === 0 ? (
           <motion.div 
-            className="bg-white dark:bg-card rounded-lg shadow-md p-8 max-w-md mx-auto text-center border border-gray-100 dark:border-muted/20"
+            className="bg-[#112136]/80 dark:bg-[#112136]/80 backdrop-blur-sm rounded-lg shadow-md p-8 max-w-md mx-auto text-center border border-[#1d2f4f]"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
             <div className="flex justify-center mb-4">
-              <div className="h-24 w-24 rounded-full bg-gray-100 dark:bg-muted/50 flex items-center justify-center">
-                <ShoppingCart className="h-12 w-12 text-gray-400" />
+              <div className="h-24 w-24 rounded-full bg-[#0b1220] flex items-center justify-center relative border border-[#1d2f4f]">
+                <ShoppingCart className="h-12 w-12 text-canteen-teal animate-in fade-in zoom-in duration-500" />
               </div>
             </div>
-            <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Το καλάθι σας είναι άδειο</h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <h2 className="text-xl font-medium mb-2 text-white">Το καλάθι σας είναι άδειο</h2>
+            <p className="text-gray-400 mb-6">
               Προσθέστε προϊόντα από τον κατάλογο για να παραγγείλετε.
             </p>
-            <Button asChild className="bg-canteen-teal hover:bg-canteen-teal/90 text-white dark:bg-primary dark:hover:bg-primary/90">
+            <Button asChild className="bg-canteen-teal hover:bg-canteen-teal/90 text-white">
               <Link to="/menu">
                 Περιήγηση στον κατάλογο
               </Link>
@@ -96,18 +96,18 @@ const Cart: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
-              <div className="bg-white dark:bg-card rounded-lg shadow-md overflow-hidden border border-gray-100 dark:border-muted/20">
+              <div className="bg-[#112136]/80 dark:bg-[#112136]/80 backdrop-blur-sm rounded-lg shadow-md overflow-hidden border border-[#1d2f4f]">
                 <div className="p-6">
-                  <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">Προϊόντα</h2>
+                  <h2 className="text-xl font-bold mb-6 text-white">Προϊόντα</h2>
                   
                   <div className="space-y-4">
                     {items.map((item) => (
                       <div 
                         key={item.product.id} 
-                        className="flex items-center p-4 rounded-lg border border-gray-100 dark:border-muted/20 bg-white dark:bg-card"
+                        className="flex items-center p-4 rounded-lg border border-[#1d2f4f] bg-[#0b1220]/60 backdrop-blur-sm"
                       >
                         {/* Product Image */}
-                        <div className="h-16 w-16 rounded-md bg-gray-200 dark:bg-muted/70 overflow-hidden flex-shrink-0">
+                        <div className="h-16 w-16 rounded-md bg-[#051129] overflow-hidden flex-shrink-0 border border-[#1d2f4f]/50">
                           <img 
                             src={item.product.image} 
                             alt={item.product.name} 
@@ -117,8 +117,8 @@ const Cart: React.FC = () => {
                         
                         {/* Product Info */}
                         <div className="flex-grow ml-4">
-                          <h3 className="font-medium text-gray-900 dark:text-white">{item.product.name}</h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">{item.product.price.toFixed(2)}€ / τεμάχιο</p>
+                          <h3 className="font-medium text-white">{item.product.name}</h3>
+                          <p className="text-sm text-gray-400">{item.product.price.toFixed(2)}€ / τεμάχιο</p>
                         </div>
                         
                         {/* Quantity Control */}
@@ -126,20 +126,20 @@ const Cart: React.FC = () => {
                           <Button 
                             variant="outline" 
                             size="icon" 
-                            className="h-8 w-8 rounded-full"
+                            className="h-8 w-8 rounded-full bg-[#1a2c47]/50 border-[#1d2f4f] hover:bg-[#1a2c47] hover:border-canteen-teal/30 text-white"
                             onClick={() => handleUpdateQuantity(item.product.id, item.quantity - 1)}
                           >
                             <Minus className="h-3 w-3" />
                           </Button>
                           
-                          <span className="w-8 text-center font-medium text-gray-900 dark:text-white">
+                          <span className="w-8 text-center font-medium text-white">
                             {item.quantity}
                           </span>
                           
                           <Button 
                             variant="outline" 
                             size="icon" 
-                            className="h-8 w-8 rounded-full"
+                            className="h-8 w-8 rounded-full bg-[#1a2c47]/50 border-[#1d2f4f] hover:bg-[#1a2c47] hover:border-canteen-teal/30 text-white"
                             onClick={() => handleUpdateQuantity(item.product.id, item.quantity + 1)}
                           >
                             <Plus className="h-3 w-3" />
@@ -148,7 +148,7 @@ const Cart: React.FC = () => {
                         
                         {/* Total Price */}
                         <div className="ml-6 w-20 text-right">
-                          <p className="font-medium text-gray-900 dark:text-white">
+                          <p className="font-medium text-white">
                             {(item.product.price * item.quantity).toFixed(2)}€
                           </p>
                         </div>
@@ -157,7 +157,7 @@ const Cart: React.FC = () => {
                         <Button 
                           variant="ghost" 
                           size="icon" 
-                          className="ml-2 text-gray-400 hover:text-red-500"
+                          className="ml-2 text-gray-400 hover:text-canteen-coral"
                           onClick={() => handleRemoveItem(item.product.id)}
                         >
                           <X className="h-4 w-4" />
@@ -176,32 +176,32 @@ const Cart: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.1 }}
             >
-              <div className="bg-white dark:bg-card rounded-lg shadow-md overflow-hidden sticky top-24 border border-gray-100 dark:border-muted/20">
+              <div className="bg-[#112136]/80 dark:bg-[#112136]/80 backdrop-blur-sm rounded-lg shadow-md overflow-hidden sticky top-24 border border-[#1d2f4f]">
                 <div className="p-6">
-                  <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-white flex items-center">
-                    <ShoppingBag className="mr-2 h-5 w-5 text-canteen-teal dark:text-primary" />
+                  <h2 className="text-xl font-bold mb-6 text-white flex items-center">
+                    <ShoppingBag className="mr-2 h-5 w-5 text-canteen-teal" />
                     Σύνοψη Παραγγελίας
                   </h2>
                   
                   <div className="space-y-4">
-                    <div className="flex justify-between pb-4 border-b border-gray-100 dark:border-gray-800/30">
-                      <span className="text-gray-600 dark:text-gray-400">Υποσύνολο</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{getTotalPrice().toFixed(2)}€</span>
+                    <div className="flex justify-between pb-4 border-b border-[#1d2f4f]/70">
+                      <span className="text-gray-400">Υποσύνολο</span>
+                      <span className="font-medium text-white">{getTotalPrice().toFixed(2)}€</span>
                     </div>
                     
-                    <div className="flex justify-between pb-4 border-b border-gray-100 dark:border-gray-800/30">
-                      <span className="text-gray-600 dark:text-gray-400">Χρέωση εξυπηρέτησης</span>
-                      <span className="font-medium text-gray-900 dark:text-white">0.00€</span>
+                    <div className="flex justify-between pb-4 border-b border-[#1d2f4f]/70">
+                      <span className="text-gray-400">Χρέωση εξυπηρέτησης</span>
+                      <span className="font-medium text-white">0.00€</span>
                     </div>
                     
                     <div className="flex justify-between text-lg font-bold">
-                      <span className="text-gray-900 dark:text-white">Σύνολο</span>
-                      <span className="text-canteen-teal dark:text-primary">{getTotalPrice().toFixed(2)}€</span>
+                      <span className="text-white">Σύνολο</span>
+                      <span className="text-canteen-teal">{getTotalPrice().toFixed(2)}€</span>
                     </div>
                     
                     <div className="mt-6 space-y-4">
                       <Button 
-                        className="w-full bg-canteen-teal hover:bg-canteen-teal/90 text-white dark:bg-primary dark:hover:bg-primary/90"
+                        className="w-full bg-canteen-teal hover:bg-canteen-teal/90 text-white"
                         onClick={handleCheckout}
                       >
                         <CreditCard className="mr-2 h-4 w-4" />
@@ -210,7 +210,7 @@ const Cart: React.FC = () => {
                       
                       <Button 
                         variant="outline" 
-                        className="w-full"
+                        className="w-full bg-[#1a2c47]/50 border-[#1d2f4f] hover:bg-[#1a2c47] hover:border-canteen-teal/30 text-white"
                         asChild
                       >
                         <Link to="/menu">

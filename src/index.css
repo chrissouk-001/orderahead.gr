@@ -7,73 +7,64 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 174 42% 39%;
+    --primary: 174 100% 29%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 32 74% 62%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 46 96% 52%;
+    --secondary-foreground: 222 47% 11%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 40 69% 60%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 174 100% 29%;
+    --accent-foreground: 222 47% 11%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 174 42% 39%;
+    --ring: 174 100% 29%;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    /* Darker backgrounds to match the image */
-    --background: 0 0% 7%;
-    --foreground: 0 0% 95%;
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
 
-    /* Darker card background */
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 95%;
+    --card: 222 47% 13%;
+    --card-foreground: 210 40% 98%;
 
-    /* Darker popover */
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 222 47% 13%;
+    --popover-foreground: 210 40% 98%;
 
-    /* Keep teal accent more muted for better balance */
-    --primary: 174 35% 45%;
-    --primary-foreground: 0 0% 12%;
+    --primary: 174 100% 29%;
+    --primary-foreground: 222 47% 11%;
 
-    /* Slightly toned down secondary for less contrast */
-    --secondary: 38 60% 60%;
-    --secondary-foreground: 0 0% 12%;
+    --secondary: 46 96% 52%;
+    --secondary-foreground: 222 47% 11%;
 
-    /* Darker muted tones */
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 70%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    /* More neutral accent */
-    --accent: 38 60% 60%;
-    --accent-foreground: 0 0% 12%;
+    --accent: 174 100% 29%;
+    --accent-foreground: 210 40% 98%;
 
-    /* Improved destructive color */
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 95%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
 
-    /* Darker borders */
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 174 35% 45%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 174 100% 29%;
   }
 }
 
@@ -83,8 +74,9 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans text-[0.925rem];
     font-family: 'Open Sans', sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
   
   /* Smooth page transitions */
@@ -107,11 +99,11 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-canteen-teal text-white font-medium py-2 px-4 rounded-md hover:opacity-90 transition-opacity;
+    @apply bg-canteen-teal text-white font-medium py-1.5 px-3 text-sm rounded-md hover:opacity-90 transition-opacity;
   }
   
   .btn-secondary {
-    @apply bg-canteen-yellow text-canteen-dark font-medium py-2 px-4 rounded-md hover:opacity-90 transition-opacity;
+    @apply bg-canteen-yellow text-canteen-dark font-medium py-1.5 px-3 text-sm rounded-md hover:opacity-90 transition-opacity;
   }
   
   .card-hover {
@@ -135,9 +127,9 @@
   .wave {
     position: absolute;
     width: 100%;
-    height: 100px;
-    background: url('/wave.svg') repeat-x;
-    background-size: 1200px 100px;
+    height: 150px;
+    background: url('/wave.svg');
+    background-size: 1000px 150px;
   }
   
   .dark .wave {
@@ -146,23 +138,23 @@
   
   .wave1 {
     bottom: 0;
-    animation: wave-animation 18s linear infinite;
+    animation: animate-wave1 30s linear infinite;
     z-index: 1;
     animation-delay: 0s;
     opacity: 0.2;
   }
   
   .wave2 {
-    bottom: 20px;
-    animation: wave-animation 15s linear infinite;
+    bottom: 10px;
+    animation: animate-wave2 15s linear infinite;
     z-index: 2;
     animation-delay: -5s;
     opacity: 0.15;
   }
   
   .wave3 {
-    bottom: 40px;
-    animation: wave-animation 12s linear infinite;
+    bottom: 20px;
+    animation: animate-wave3 10s linear infinite;
     z-index: 3;
     animation-delay: -2s;
     opacity: 0.1;
@@ -172,8 +164,8 @@
   .wave-divider {
     position: absolute;
     width: 100%;
-    height: 70px;
-    background-size: 1200px 70px;
+    height: 60px;
+    background-size: 1200px 60px;
   }
   
   .wave-divider-1 {
@@ -211,7 +203,7 @@
   
   /* Eco badge and related styles */
   .eco-badge {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800 border border-green-200;
+    @apply inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800 border border-green-200;
   }
   
   .dark .eco-badge {
@@ -219,7 +211,7 @@
   }
   
   .eco-impact {
-    @apply flex items-center justify-center gap-2 p-2 rounded-lg bg-green-50 text-green-700 text-sm;
+    @apply flex items-center justify-center gap-1.5 p-1.5 rounded-lg bg-green-50 text-green-700 text-xs;
   }
   
   .dark .eco-impact {
@@ -247,7 +239,7 @@
   }
   
   .fade-in-up {
-    animation: fade-in-up 0.8s ease-out forwards;
+    animation: fadeInUp 0.8s ease-out forwards;
     opacity: 0;
   }
   
@@ -276,7 +268,7 @@
   }
   
   .animate-float-delayed {
-    animation: float 8s ease-in-out infinite;
+    animation: float 6s ease-in-out 2s infinite;
   }
   
   .animate-float-reverse {
@@ -288,7 +280,7 @@
       transform: translateY(0px);
     }
     50% {
-      transform: translateY(-10px);
+      transform: translateY(-15px);
     }
     100% {
       transform: translateY(0px);
@@ -297,13 +289,13 @@
   
   @keyframes float-reverse {
     0% {
-      transform: translateY(0px) rotate(0deg);
+      transform: translateY(0px) rotate(10deg);
     }
     50% {
-      transform: translateY(10px) rotate(5deg);
+      transform: translateY(-10px) rotate(-5deg);
     }
     100% {
-      transform: translateY(0px) rotate(0deg);
+      transform: translateY(0px) rotate(10deg);
     }
   }
   
@@ -423,15 +415,15 @@
 }
 
 .animate-float {
-  animation: float 4s ease-in-out infinite;
+  animation: float 6s ease-in-out infinite;
 }
 
 .animate-float-delayed {
-  animation: float 6s ease-in-out 1s infinite;
+  animation: float 6s ease-in-out 2s infinite;
 }
 
 .animate-float-reverse {
-  animation: float 5s ease-in-out 0.5s infinite reverse;
+  animation: float-reverse 7s ease-in-out infinite;
 }
 
 .animate-pulse-gentle {
@@ -439,7 +431,7 @@
 }
 
 .animate-pulse-subtle {
-  animation: pulseSubtle 3s ease-in-out infinite;
+  animation: pulse-subtle 3s ease-in-out infinite;
 }
 
 .animate-pulse-slow {
@@ -451,6 +443,57 @@
 }
 
 .animate-spin-slow {
-  animation: spinSlow 12s linear infinite;
+  animation: spin 12s linear infinite;
+}
+
+@keyframes animate-wave1 {
+  0% {
+    background-position-x: 0;
+  }
+  100% {
+    background-position-x: 1000px;
+  }
+}
+
+@keyframes animate-wave2 {
+  0% {
+    background-position-x: 0;
+  }
+  100% {
+    background-position-x: -1000px;
+  }
+}
+
+@keyframes animate-wave3 {
+  0% {
+    background-position-x: 0;
+  }
+  100% {
+    background-position-x: 1000px;
+  }
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--accent) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--accent) / 0.5);
+}
+
+/* Custom Utility Classes */
+.bg-grid-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 20v-1.41l1.41-1.41L4.24 20H0zm0-18.59V0h1.41l2.83 2.83-1.41 1.41L0 1.41zM20 0v4.24l-1.41-1.41L15.76 0H20zm18.59 0h1.41v1.41l-2.83 2.83-1.41-1.41L38.59 0zM40 20h-4.24l1.41-1.41L40 15.76V20zm0 18.59v1.41h-1.41l-2.83-2.83 1.41-1.41L40 38.59zm-20 0v-4.24l1.41 1.41L24.24 40H20zM15.76 40l-2.83-2.83 1.41-1.41L20 38.59V40h-4.24zM0 15.76l4.24 4.24-1.41 1.41L0 18.59v-2.83zm18.59 0l2.83 2.83-1.41 1.41L15.76 20H20v-4.24zM0 35.76l4.24-4.24 1.41 1.41L1.41 40H0v-4.24zM20 20h-4.24l4.24 4.24-1.41 1.41L15.76 20H20v4.24l4.24-4.24 1.41 1.41L20 24.24V20h4.24l-4.24-4.24 1.41-1.41L24.24 20H20v-4.24l-4.24 4.24-1.41-1.41L20 15.76V20zm0 0h4.24l-4.24 4.24 1.41 1.41L24.24 20H20v4.24l-4.24-4.24 1.41-1.41L20 15.76V20zm0 0h-4.24l4.24-4.24 1.41 1.41L15.76 20H20v-4.24l4.24 4.24-1.41 1.41L20 24.24V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 

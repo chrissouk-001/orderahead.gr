@@ -31,25 +31,24 @@ const Navbar: React.FC = () => {
   };
   
   return (
-    <header className="sticky top-0 z-50 bg-white dark:bg-background shadow-md border-b border-gray-200 dark:border-primary/20 backdrop-blur-sm bg-white/90 dark:bg-background/95 transition-colors duration-300">
+    <header className="sticky top-0 z-50 bg-white dark:bg-background shadow-sm border-b border-gray-100 dark:border-primary/10 backdrop-blur-md bg-white/90 dark:bg-background/95">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center group">
-            <div className="bg-canteen-teal dark:bg-primary rounded-full p-1.5 mr-2 overflow-hidden transform transition-all duration-300 group-hover:scale-110 shadow-md">
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="bg-gradient-to-br from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint rounded-full p-1.5 overflow-hidden transform transition-all duration-300 group-hover:scale-105 shadow-md">
               <img 
                 src="/OrderAhead-logo.svg" 
                 alt="OrderAhead.gr Logo" 
-                className="h-8 w-8 rounded-full" 
+                className="h-6 w-6 rounded-full" 
               />
             </div>
-            <span className="text-xl font-bold text-canteen-dark dark:text-white transition-colors duration-300 flex flex-col md:flex-row">
-              <span className="mr-1">Order</span> 
-              <span className="text-canteen-teal dark:text-primary transition-colors duration-300">Ahead.gr</span>
+            <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-canteen-dark to-canteen-teal dark:from-white dark:to-primary transition-colors duration-300">
+              OrderAhead.gr
             </span>
           </Link>
           
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-1">
             <NavLink to="/" isActive={isActive('/')} isDark={isDarkMode}>
               Αρχική
             </NavLink>
@@ -57,25 +56,20 @@ const Navbar: React.FC = () => {
               Κατάλογος
             </NavLink>
             <NavLink to="/order-status" isActive={isActive('/order-status')} isDark={isDarkMode}>
-              Κατάσταση Παραγγελίας
+              Κατάσταση
             </NavLink>
             <NavLink to="/contact" isActive={isActive('/contact')} isDark={isDarkMode}>
               Επικοινωνία
             </NavLink>
           </nav>
           
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center gap-1.5">
             {/* Dark Mode Toggle Button */}
             <Button 
-              variant={isDarkMode ? "outline" : "ghost"} 
+              variant="ghost" 
               size="icon" 
               onClick={toggleDarkMode} 
-              className={`
-                transition-all duration-300 
-                ${isDarkMode 
-                  ? "bg-card text-primary border-primary/20 hover:bg-card/90 hover:text-primary hover:border-primary shadow-inner" 
-                  : "rounded-full hover:bg-gray-100 text-canteen-dark shadow-sm"
-                }`}
+              className="rounded-full text-canteen-darkgray dark:text-gray-400 hover:text-canteen-teal dark:hover:text-primary hover:bg-canteen-lightgray dark:hover:bg-primary/10"
               aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             >
               {isDarkMode ? 
@@ -87,12 +81,12 @@ const Navbar: React.FC = () => {
             {isAuthenticated && (
               <Link 
                 to="/cart" 
-                className="relative inline-flex items-center p-2 text-canteen-dark dark:text-muted-foreground hover:text-canteen-teal dark:hover:text-primary transition-colors duration-300"
+                className="relative inline-flex items-center justify-center h-9 w-9 rounded-full text-canteen-darkgray dark:text-gray-400 hover:text-canteen-teal dark:hover:text-primary hover:bg-canteen-lightgray dark:hover:bg-primary/10"
                 aria-label="Shopping Cart"
               >
-                <ShoppingBag size={20} />
+                <ShoppingBag size={18} />
                 {getTotalItems() > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-canteen-teal dark:bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center transition-all duration-300 animate-pulse">
+                  <span className="absolute -top-1 -right-1 bg-canteen-coral dark:bg-canteen-coral text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center transition-all duration-300">
                     {getTotalItems()}
                   </span>
                 )}
@@ -102,35 +96,35 @@ const Navbar: React.FC = () => {
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full text-canteen-dark dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-card/70 transition-colors duration-300">
-                    <User size={20} />
+                  <Button variant="ghost" size="icon" className="rounded-full text-canteen-darkgray dark:text-gray-400 hover:text-canteen-teal dark:hover:text-primary hover:bg-canteen-lightgray dark:hover:bg-primary/10">
+                    <User size={18} />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-card border-gray-200 dark:border-primary/20 shadow-lg rounded-lg mt-1">
-                  <DropdownMenuLabel className="text-canteen-dark dark:text-white flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-canteen-teal/20 dark:bg-primary/20 flex items-center justify-center text-canteen-teal dark:text-primary font-bold">
+                <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-card border-gray-100 dark:border-primary/10 shadow-lg rounded-xl mt-1 p-1">
+                  <DropdownMenuLabel className="text-canteen-dark dark:text-white flex items-center gap-3 p-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint/70 flex items-center justify-center text-white font-bold">
                       {user?.name?.charAt(0) || 'U'}
                     </div>
                     <div className="flex flex-col">
                       <span className="font-medium">{user?.name}</span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">{user?.email}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{user?.email}</span>
                     </div>
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-gray-200 dark:bg-muted"/>
-                  <DropdownMenuItem asChild className="text-gray-700 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-muted/50 hover:text-canteen-teal dark:hover:text-primary transition-colors duration-300 rounded cursor-pointer">
+                  <DropdownMenuSeparator className="bg-gray-100 dark:bg-primary/10"/>
+                  <DropdownMenuItem asChild className="text-canteen-darkgray dark:text-gray-300 hover:bg-canteen-lightgray dark:hover:bg-primary/10 hover:text-canteen-teal dark:hover:text-primary focus:bg-canteen-lightgray dark:focus:bg-primary/10 cursor-pointer py-2.5 px-3 rounded-lg my-1">
                     <Link to="/profile" className="flex items-center">
                       <span>Το προφίλ μου</span>
-                      <ChevronRight size={16} className="ml-auto" />
+                      <ChevronRight size={14} className="ml-auto opacity-70" />
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="text-gray-700 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-muted/50 hover:text-canteen-teal dark:hover:text-primary transition-colors duration-300 rounded cursor-pointer">
+                  <DropdownMenuItem asChild className="text-canteen-darkgray dark:text-gray-300 hover:bg-canteen-lightgray dark:hover:bg-primary/10 hover:text-canteen-teal dark:hover:text-primary focus:bg-canteen-lightgray dark:focus:bg-primary/10 cursor-pointer py-2.5 px-3 rounded-lg my-1">
                     <Link to="/order-history" className="flex items-center">
                       <span>Ιστορικό παραγγελιών</span>
-                      <ChevronRight size={16} className="ml-auto" />
+                      <ChevronRight size={14} className="ml-auto opacity-70" />
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-gray-200 dark:bg-muted"/>
-                  <DropdownMenuItem onClick={logout} className="text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-300 transition-colors duration-300 rounded cursor-pointer">
+                  <DropdownMenuSeparator className="bg-gray-100 dark:bg-primary/10"/>
+                  <DropdownMenuItem onClick={logout} className="text-canteen-coral dark:text-canteen-coral hover:bg-canteen-coral/10 focus:bg-canteen-coral/10 hover:text-canteen-coral dark:hover:text-canteen-coral cursor-pointer py-2.5 px-3 rounded-lg my-1">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Αποσύνδεση</span>
                   </DropdownMenuItem>
@@ -139,7 +133,7 @@ const Navbar: React.FC = () => {
             ) : (
               <Link to="/login">
                 <Button 
-                  className="bg-canteen-teal hover:bg-canteen-teal/90 dark:bg-primary dark:hover:bg-primary/90 text-white rounded-full px-4 transition-all duration-300 transform hover:scale-105 shadow-md"
+                  className="bg-gradient-to-r from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint hover:opacity-90 text-white rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 shadow-md"
                 >
                   Σύνδεση
                 </Button>
@@ -150,11 +144,11 @@ const Navbar: React.FC = () => {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="md:hidden rounded-full text-canteen-dark dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-card/70 transition-colors duration-300"
+              className="md:hidden rounded-full text-canteen-darkgray dark:text-gray-400 hover:text-canteen-teal dark:hover:text-primary hover:bg-canteen-lightgray dark:hover:bg-primary/10"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </Button>
           </div>
         </div>
@@ -162,11 +156,11 @@ const Navbar: React.FC = () => {
       
       {/* Mobile Navigation Menu */}
       <div 
-        className={`md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-background shadow-lg border-b border-gray-200 dark:border-primary/20 transition-all duration-300 ${
+        className={`md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-card border-b border-gray-100 dark:border-primary/10 shadow-lg transition-all duration-300 ${
           mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
         } overflow-hidden`}
       >
-        <nav className="flex flex-col space-y-1 p-4">
+        <nav className="flex flex-col p-4 gap-2">
           <MobileNavLink to="/" isActive={isActive('/')} isDark={isDarkMode}>
             Αρχική
           </MobileNavLink>
@@ -181,8 +175,8 @@ const Navbar: React.FC = () => {
           </MobileNavLink>
           
           {!isAuthenticated && (
-            <Link to="/login" className="w-full mt-4">
-              <Button className="bg-canteen-teal hover:bg-canteen-teal/90 dark:bg-primary dark:hover:bg-primary/90 text-white w-full transition-colors duration-300 shadow-md">
+            <Link to="/login" className="w-full mt-2">
+              <Button className="bg-gradient-to-r from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint hover:opacity-90 text-white w-full transition-colors duration-300 shadow-md rounded-lg py-5">
                 Σύνδεση
               </Button>
             </Link>
@@ -203,18 +197,22 @@ const NavLink: React.FC<{ to: string; isActive: boolean; isDark: boolean; childr
   return (
     <Link 
       to={to} 
-      className={`relative text-base font-medium py-1 transition-all duration-300 ${
-        isActive 
-          ? "text-canteen-teal dark:text-primary"
-          : "text-canteen-dark/80 dark:text-muted-foreground hover:text-canteen-teal dark:hover:text-primary"
-      }`}
+      className={`
+        relative px-3 py-2 rounded-full text-sm font-medium transition-all duration-300
+        ${isActive 
+          ? isDark
+            ? 'text-white bg-primary/10'
+            : 'text-canteen-teal bg-canteen-lightgray' 
+          : isDark
+            ? 'text-gray-400 hover:text-white hover:bg-primary/10'
+            : 'text-canteen-darkgray hover:text-canteen-teal hover:bg-canteen-lightgray'
+        }
+      `}
     >
       {children}
-      <span 
-        className={`absolute -bottom-1 left-0 w-full h-0.5 bg-canteen-teal dark:bg-primary transform origin-left transition-transform duration-300 ${
-          isActive ? 'scale-x-100' : 'scale-x-0'
-        } group-hover:scale-x-100`}
-      />
+      {isActive && (
+        <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 rounded-full ${isDark ? 'bg-primary' : 'bg-canteen-teal'}`}></span>
+      )}
     </Link>
   );
 };
@@ -229,11 +227,17 @@ const MobileNavLink: React.FC<{ to: string; isActive: boolean; isDark: boolean; 
   return (
     <Link 
       to={to} 
-      className={`flex items-center py-3 px-4 rounded-md transition-colors duration-300 ${
-        isActive 
-          ? "bg-canteen-teal/10 dark:bg-primary/10 text-canteen-teal dark:text-primary font-medium"
-          : "text-canteen-dark dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-card"
-      }`}
+      className={`
+        px-4 py-3 rounded-lg text-base transition-all duration-300
+        ${isActive 
+          ? isDark
+            ? 'bg-primary/10 text-white font-medium'
+            : 'bg-canteen-lightgray text-canteen-teal font-medium' 
+          : isDark
+            ? 'text-gray-300 hover:bg-primary/10 hover:text-white'
+            : 'text-canteen-darkgray hover:bg-canteen-lightgray hover:text-canteen-teal'
+        }
+      `}
     >
       {children}
     </Link>
