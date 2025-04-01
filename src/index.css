@@ -38,16 +38,16 @@
   }
 
   .dark {
-    /* Minimal dark gray backgrounds for better contrast and less "gaming" look */
-    --background: 0 0% 12%;
+    /* Darker backgrounds to match the image */
+    --background: 0 0% 7%;
     --foreground: 0 0% 95%;
 
-    /* Subtle elevated card background */
-    --card: 0 0% 15%;
+    /* Darker card background */
+    --card: 0 0% 10%;
     --card-foreground: 0 0% 95%;
 
-    /* Popover with minimal elevation */
-    --popover: 0 0% 15%;
+    /* Darker popover */
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 95%;
 
     /* Keep teal accent more muted for better balance */
@@ -58,8 +58,8 @@
     --secondary: 38 60% 60%;
     --secondary-foreground: 0 0% 12%;
 
-    /* Neutral muted tones */
-    --muted: 0 0% 20%;
+    /* Darker muted tones */
+    --muted: 0 0% 15%;
     --muted-foreground: 0 0% 70%;
 
     /* More neutral accent */
@@ -70,9 +70,9 @@
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 95%;
 
-    /* Better defined borders */
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
+    /* Darker borders */
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
     --ring: 174 35% 45%;
   }
 }

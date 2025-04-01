@@ -107,6 +107,30 @@ export default {
 						transform: 'translate(0px, 0px) scale(1)'
 					}
 				},
+				'pulse-slow': {
+					'0%, 100%': {
+						opacity: '0.3'
+					},
+					'50%': {
+						opacity: '0.5'
+					}
+				},
+				'pulse-subtle': {
+					'0%, 100%': {
+						opacity: '0.9'
+					},
+					'50%': {
+						opacity: '1'
+					}
+				},
+				'spin-slow': {
+					'from': {
+						transform: 'rotate(0deg)'
+					},
+					'to': {
+						transform: 'rotate(360deg)'
+					}
+				},
 				float: {
 					'0%': {
 						transform: 'translateY(0px) rotate(0deg)'
@@ -134,6 +158,9 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				blob: 'blob 7s infinite',
+				'pulse-slow': 'pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+				'pulse-subtle': 'pulse-subtle 3s ease-in-out infinite',
+				'spin-slow': 'spin-slow 12s linear infinite',
 				float: 'float 8s ease-in-out infinite',
 				'float-delayed': 'float 10s ease-in-out 2s infinite',
 				'float-reverse': 'float-reverse 9s ease-in-out infinite'

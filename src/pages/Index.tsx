@@ -166,11 +166,18 @@ const Index: React.FC = () => {
         </section>
         
         {/* Popular Products Section */}
-        <section className="bg-white dark:bg-[#1E1E1E] py-20 relative overflow-hidden">
+        <section className="bg-white dark:bg-[#121212] py-20 relative overflow-hidden">
+          {/* Dark mode decorative elements */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-50/30 to-transparent dark:from-transparent dark:via-gray-800/5 dark:to-transparent"></div>
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute -top-96 -right-96 w-[800px] h-[800px] rounded-full bg-gradient-to-br from-canteen-teal/5 to-transparent dark:from-primary/10 dark:to-transparent blur-3xl"></div>
+            <div className="absolute -bottom-96 -left-96 w-[800px] h-[800px] rounded-full bg-gradient-to-br from-canteen-yellow/5 to-transparent dark:from-secondary/10 dark:to-transparent blur-3xl"></div>
+          </div>
+          
           {/* Section header with animated underline */}
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col items-center justify-center mb-16">
-              <div className="inline-flex items-center gap-1.5 mb-4 px-5 py-2 rounded-full bg-gradient-to-r from-canteen-teal via-canteen-yellow to-canteen-teal dark:from-primary dark:via-secondary dark:to-primary shadow-md border border-white/20 dark:border-white/10 animate-pulse-subtle">
+              <div className="inline-flex items-center gap-1.5 mb-4 px-5 py-2 rounded-full bg-gradient-to-r from-canteen-teal via-canteen-yellow to-canteen-teal dark:from-primary/90 dark:via-secondary/90 dark:to-primary/90 shadow-md border border-white/20 dark:border-white/10 animate-pulse-subtle">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white animate-spin-slow">
                   <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" />
                 </svg>
@@ -178,6 +185,7 @@ const Index: React.FC = () => {
               </div>
               <h2 className="text-4xl md:text-5xl font-bold text-center text-canteen-dark dark:text-white relative inline-block mb-6">
                 Δημοφιλή Προϊόντα
+                <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-transparent via-canteen-teal/70 to-transparent dark:via-primary/70"></span>
               </h2>
               <p className="text-gray-600 dark:text-gray-300 max-w-xl text-center">
                 Ανακαλύψτε τις αγαπημένες επιλογές των μαθητών και καθηγητών του σχολείου μας.
@@ -192,7 +200,7 @@ const Index: React.FC = () => {
                   className={`${index === 0 ? 'lg:col-span-2 lg:row-span-2' : ''} group`}
                   style={{ animationDelay: `${index * 150}ms` }}
                 >
-                  <div className="relative h-full bg-gray-100 dark:bg-gray-700 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 flex flex-col border border-gray-200 dark:border-gray-600">
+                  <div className="relative h-full bg-gray-50 dark:bg-[#1a1a1a] rounded-3xl overflow-hidden shadow-lg hover:shadow-xl dark:shadow-none dark:hover:shadow-primary/20 transition-all duration-500 flex flex-col border border-gray-100 dark:border-gray-800">
                     {/* Main content container with conditional height for featured item */}
                     <div className={`relative ${index === 0 ? 'lg:min-h-[480px] min-h-[350px]' : 'min-h-[270px]'} overflow-hidden`}>
                       {/* Background pattern */}
@@ -208,7 +216,7 @@ const Index: React.FC = () => {
                             (e.target as HTMLImageElement).src = "/images/products/sandwich.jpg";
                           }}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-800/40 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-800/50 to-transparent"></div>
                       </div>
                       
                       {/* Product info overlay */}
@@ -216,30 +224,27 @@ const Index: React.FC = () => {
                         {/* Tags container */}
                         <div className="flex flex-wrap gap-2 mb-3">
                           {product.popular && (
-                            <span className="bg-canteen-teal/80 text-white text-xs font-medium py-1 px-2.5 rounded-full flex items-center gap-1">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                              </svg>
-                              <span>Δημοφιλές</span>
+                            <span className="bg-canteen-teal/90 dark:bg-primary/90 text-white text-xs font-bold py-1 px-3 rounded-full z-20 shadow-md">
+                              ★ δημοφιλές
                             </span>
                           )}
                           {product.isNew && (
-                            <span className="bg-canteen-yellow dark:bg-secondary text-canteen-dark dark:text-secondary-foreground text-xs font-medium py-1 px-2.5 rounded-full animate-pulse-slow">
+                            <span className="bg-canteen-yellow text-canteen-dark text-xs font-bold py-1 px-3 rounded-full z-20 shadow-md animate-pulse">
                               Νέο
                             </span>
                           )}
                         </div>
                         
-                        {/* Product title and price */}
+                        {/* Product title and description */}
                         <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-canteen-yellow dark:group-hover:text-secondary transition-colors duration-300">
                           {product.name}
                         </h3>
-                        <p className="text-gray-300 text-sm mb-4 line-clamp-2">
+                        <p className="text-gray-200 text-sm mb-4 line-clamp-2">
                           {product.description}
                         </p>
                         
-                        {/* Rating and price */}
-                        <div className="flex justify-between items-center">
+                        {/* Rating */}
+                        <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5">
                             <div className="flex text-canteen-yellow dark:text-secondary">
                               {Array(5).fill(0).map((_, i) => (
@@ -250,9 +255,7 @@ const Index: React.FC = () => {
                             </div>
                             <span className="text-xs text-gray-300">(42)</span>
                           </div>
-                          <span className="bg-white/30 text-white font-bold py-1 px-3 rounded-lg shadow-lg group-hover:bg-canteen-yellow group-hover:text-canteen-dark transition-all duration-300">
-                            {product.price.toFixed(2)}€
-                          </span>
+                          <span className="text-white text-sm font-bold">{product.price.toFixed(2)}€</span>
                         </div>
                       </div>
                       

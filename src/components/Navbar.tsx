@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ShoppingBag, User, LogOut, Sun, Moon, Menu, X, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,61 +17,14 @@ import {
 const Navbar: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const { getTotalItems } = useCart();
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-
-  // Initialize theme from localStorage or system preference
-  useEffect(() => {
-    // Check if dark class is already applied (could be from server-side)
-    const isDarkActive = document.documentElement.classList.contains('dark');
-    
-    if (isDarkActive) {
-      setIsDarkMode(true);
-      return;
-    }
-    
-    // Otherwise, check saved preference and system preference
-    const savedTheme = localStorage.getItem('theme');
-    
-    if (savedTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-      setIsDarkMode(true);
-    } else if (savedTheme === 'light') {
-      document.documentElement.classList.remove('dark');
-      setIsDarkMode(false);
-    } else {
-      // No saved preference, check system preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (prefersDark) {
-        document.documentElement.classList.add('dark');
-        setIsDarkMode(true);
-      }
-    }
-  }, []);
 
   // Close mobile menu when route changes
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
-
-  // Toggle between light and dark mode
-  const toggleDarkMode = () => {
-    // Use functional state update to ensure we're working with latest state
-    setIsDarkMode(prevMode => {
-      const newMode = !prevMode;
-      
-      if (newMode) {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      }
-      
-      return newMode;
-    });
-  };
   
   const isActive = (path: string) => {
     return location.pathname === path;
