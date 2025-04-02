@@ -25,6 +25,7 @@ import { ProductCarousel } from "@/components/ProductCarousel";
 import { getPopularProducts } from "@/data/products";
 import { Product } from '@/types/product';
 import { AnimatedAppFlow } from '@/components/ui/animated-app-flow';
+import { Badge } from "@/components/ui/badge";
 
 const Index: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -224,68 +225,111 @@ const Index: React.FC = () => {
         {/* Feature Section */}
         <section 
           ref={featuresRef} 
-          className="py-20 bg-canteen-lightgray dark:bg-primary/5"
+          className="py-12 bg-canteen-lightgray dark:bg-primary/5"
         >
           <div className="container mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-canteen-dark dark:text-white mb-4">
-                Ανακαλύψτε τα <span className="text-canteen-teal dark:text-primary">πλεονεκτήματα</span>
-              </h2>
-              <p className="text-canteen-darkgray dark:text-gray-400 max-w-2xl mx-auto">
-                Απολαύστε μια άνετη εμπειρία παραγγελίας με την OrderAhead.gr
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {features.map((feature, index) => (
+            <div className="flex flex-col md:flex-row gap-12 items-center">
+              <div className="md:w-1/2">
                 <div 
-                  key={index}
-                  className={`bg-white dark:bg-card rounded-xl p-6 shadow-md border border-gray-100 dark:border-primary/10 transform transition-all duration-500 ${
-                    isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+                  className={`transition-all duration-700 ${
+                    isVisible.features ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'
                   }`}
-                  style={{ transitionDelay: `${index * 100}ms` }}
                 >
-                  <div className={`w-12 h-12 rounded-lg mb-4 flex items-center justify-center ${feature.bgColor}`}>
-                    {feature.icon}
+                  <div className="inline-flex items-center gap-1.5 mb-4 px-3 py-1.5 rounded-full bg-canteen-teal/10 dark:bg-primary/10 text-canteen-teal dark:text-primary text-sm font-medium">
+                    <CheckCircle className="w-4 h-4" />
+                    <span>ΠΡΟΤΕΙΝΟΜΕΝΑ</span>
                   </div>
-                  <h3 className="text-xl font-semibold text-canteen-dark dark:text-white mb-3">{feature.title}</h3>
-                  <p className="text-canteen-darkgray dark:text-gray-400">{feature.description}</p>
+                  <h2 className="text-2xl md:text-3xl font-bold text-canteen-dark dark:text-white mb-4">
+                    Ανακαλύψτε τα <span className="text-canteen-teal dark:text-primary">πλεονεκτήματα</span>
+                  </h2>
+                  <p className="text-canteen-darkgray dark:text-gray-400 mb-6">
+                    Απολαύστε μια άνετη εμπειρία παραγγελίας με την OrderAhead.gr
+                  </p>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    {features.slice(0, 4).map((feature, index) => (
+                      <div 
+                        key={index}
+                        className={`bg-white dark:bg-card rounded-xl p-3 shadow-sm border border-gray-100 dark:border-primary/10 flex items-start gap-3 transform transition-all duration-500 ${
+                          isVisible.features ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+                        }`}
+                        style={{ transitionDelay: `${index * 100}ms` }}
+                      >
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${feature.bgColor}`}>
+                          {feature.icon}
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-semibold text-canteen-dark dark:text-white mb-1">{feature.title}</h3>
+                          <p className="text-xs text-canteen-darkgray dark:text-gray-400">{feature.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
+              </div>
+              
+              <div 
+                className={`md:w-1/2 transition-all duration-700 ${
+                  isVisible.features ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
+                }`}
+              >
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-canteen-yellow/20 to-canteen-coral/20 dark:from-secondary/20 dark:to-canteen-coral/20 rounded-3xl blur-2xl transform scale-95"></div>
+                  <img 
+                    src="/images/features-app.jpg" 
+                    alt="App features" 
+                    className="relative z-10 rounded-3xl shadow-xl object-cover w-full h-full"
+                  />
+                  
+                  <div className="absolute -bottom-6 -right-6 bg-white dark:bg-card p-4 rounded-xl shadow-lg border border-gray-100 dark:border-primary/10 z-20">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-canteen-yellow to-canteen-coral dark:from-secondary dark:to-canteen-coral flex items-center justify-center">
+                        <Clock className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-canteen-darkgray dark:text-gray-400">Εξοικονόμηση χρόνου</p>
+                        <p className="font-bold text-xl text-canteen-dark dark:text-white">
+                          -70% <span className="text-sm font-normal">χρόνος αναμονής</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
         
         {/* Popular Products Section */}
-        <section className="py-20 bg-white dark:bg-background">
+        <section className="py-12 bg-white dark:bg-background">
           <div className="container mx-auto px-4">
-            <div className="flex flex-col items-center justify-center mb-16">
-              <div className="inline-flex items-center gap-1.5 mb-4 px-3 py-1.5 rounded-full bg-canteen-yellow/10 dark:bg-secondary/10 text-canteen-yellow dark:text-secondary text-sm font-medium">
-                <CheckCircle className="w-4 h-4" />
-                <span>TOP PICKS</span>
+            <div className="flex flex-col md:flex-row gap-12 items-center">
+              <div className="md:w-1/2">
+                <div className="inline-flex items-center gap-1.5 mb-4 px-3 py-1.5 rounded-full bg-accent/20 text-amber-500 dark:text-amber-400 border-amber-200 dark:border-amber-800/30">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>TOP PICKS</span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+                  Δημοφιλή Προϊόντα
+                </h2>
+                <p className="text-muted-foreground text-sm mb-6">
+                  Ανακαλύψτε τις αγαπημένες επιλογές των μαθητών και καθηγητών του σχολείου μας.
+                </p>
+                
+                <Button 
+                  asChild 
+                  className="px-6 py-2 text-sm rounded-xl shadow hover:shadow-md transition-all duration-300 mb-4 md:mb-0"
+                >
+                  <Link to="/menu">
+                    Δείτε όλα τα προϊόντα
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-center text-canteen-dark dark:text-white mb-4">
-                Δημοφιλή Προϊόντα
-              </h2>
-              <p className="text-canteen-darkgray dark:text-gray-400 max-w-xl text-center">
-                Ανακαλύψτε τις αγαπημένες επιλογές των μαθητών και καθηγητών του σχολείου μας.
-              </p>
-            </div>
-            
-            <ProductCarousel />
-            
-            <div className="mt-12 text-center">
-              <Button 
-                asChild 
-                className="bg-gradient-to-r from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint
-                hover:opacity-90 text-white px-8 py-6 text-lg rounded-xl
-                shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                <Link to="/menu">
-                  Δείτε όλα τα προϊόντα
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
+              
+              <div className="md:w-1/2">
+                <ProductCarousel />
+              </div>
             </div>
           </div>
         </section>
