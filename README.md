@@ -1,4 +1,4 @@
-# Smart Canteen Atsoglou
+# OrderAhead
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) <!-- Replace with your actual license if different -->
 [![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/chrissouk-001/smart-canteen-solution?utm_source=oss&utm_medium=github&utm_campaign=chrissouk-001%2Fsmart-canteen-solution&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)](https://coderabbit.ai)
@@ -10,7 +10,7 @@
 
 ## Project Overview
 
-**Smart Canteen Atsoglou** is an innovative web application designed to enhance the experience at the Atsoglou Schools Gymnasium canteen. Developed by the school's team as part of an entrepreneurship competition, under the guidance of Mr. Dimitris Liofis, MSc, this application aims to provide a fast, user-friendly, and environmentally conscious solution for students ordering from the canteen.
+**OrderAhead** is an innovative web application designed to enhance the experience at the Atsoglou Schools Gymnasium canteen. Developed by the school's team as part of an entrepreneurship competition, under the guidance of Mr. Dimitris Liofis, MSc, this application aims to provide a fast, user-friendly, and environmentally conscious solution for students ordering from the canteen.
 
 The primary goal is to streamline the ordering process, reduce waiting times, and promote environmental awareness among students.
 
@@ -87,4 +87,4 @@ npm run dev
 
 ---
 
-With Smart Canteen Atsoglou, the daily school canteen experience becomes faster, more organized, and environmentally friendly!
+With OrderAhead, the daily school canteen experience becomes faster, more organized, and environmentally friendly!
