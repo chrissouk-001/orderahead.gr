@@ -301,35 +301,35 @@ const Index: React.FC = () => {
         </section>
         
         {/* Popular Products Section */}
-        <section className="py-12 bg-white dark:bg-background">
+        <section className="py-20 bg-white dark:bg-background">
           <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row gap-12 items-center">
-              <div className="md:w-1/2">
-                <div className="inline-flex items-center gap-1.5 mb-4 px-3 py-1.5 rounded-full bg-accent/20 text-amber-500 dark:text-amber-400 border-amber-200 dark:border-amber-800/30">
-                  <CheckCircle className="w-4 h-4" />
-                  <span>TOP PICKS</span>
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
-                  Δημοφιλή Προϊόντα
-                </h2>
-                <p className="text-muted-foreground text-sm mb-6">
-                  Ανακαλύψτε τις αγαπημένες επιλογές των μαθητών και καθηγητών του σχολείου μας.
-                </p>
-                
-                <Button 
-                  asChild 
-                  className="px-6 py-2 text-sm rounded-xl shadow hover:shadow-md transition-all duration-300 mb-4 md:mb-0"
-                >
-                  <Link to="/menu">
-                    Δείτε όλα τα προϊόντα
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
+            <div className="flex flex-col items-center justify-center mb-16">
+              <div className="inline-flex items-center gap-1.5 mb-4 px-3 py-1.5 rounded-full bg-canteen-yellow/10 dark:bg-secondary/10 text-canteen-yellow dark:text-secondary text-sm font-medium">
+                <CheckCircle className="w-4 h-4" />
+                <span>TOP PICKS</span>
               </div>
-              
-              <div className="md:w-1/2">
-                <ProductCarousel />
-              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-center text-canteen-dark dark:text-white mb-4">
+                Δημοφιλή Προϊόντα
+              </h2>
+              <p className="text-canteen-darkgray dark:text-gray-400 max-w-xl text-center">
+                Ανακαλύψτε τις αγαπημένες επιλογές των μαθητών και καθηγητών του σχολείου μας.
+              </p>
+            </div>
+            
+            <ProductCarousel />
+            
+            <div className="mt-12 text-center">
+              <Button 
+                asChild 
+                className="bg-gradient-to-r from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint
+                hover:opacity-90 text-white px-8 py-6 text-lg rounded-xl
+                shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <Link to="/menu">
+                  Δείτε όλα τα προϊόντα
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
             </div>
           </div>
         </section>
