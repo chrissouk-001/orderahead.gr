@@ -1,0 +1,230 @@
+---
+description: React component patterns, hooks usage, and best practices for OrderAhead.gr
+globs: ["app/**/*.tsx", "app/**/*.ts", "components/**/*.tsx", "components/**/*.ts"]
+alwaysApply: false
+---
+# React Development Guidelines
+
+## Component Structure
+
+1. Use Functional Components
+```typescript
+// ✅ Good
+const MyComponent = ({ prop1, prop2 }: MyComponentProps) => {
+  return <div>...</div>;
+};
+
+// ❌ Avoid
+class MyComponent extends React.Component {
+  render() {
+    return <div>...</div>;
+  }
+}
+```
+
+2. Props Interface Definition
+```typescript
+// ✅ Good
+interface MyComponentProps {
+  title: string;
+  onAction: () => void;
+  children?: React.ReactNode;
+}
+
+const MyComponent = ({ title, onAction, children }: MyComponentProps) => {
+  // ...
+};
+
+// ❌ Avoid
+const MyComponent = (props: any) => {
+  // ...
+};
+```
+
+## Hooks Usage
+
+1. Custom Hooks
+- Name custom hooks with 'use' prefix
+- Extract reusable logic into custom hooks
+```typescript
+// ✅ Good
+const useWindowSize = () => {
+  const [size, setSize] = useState({ width: 0, height: 0 });
+  
+  useEffect(() => {
+    // Implementation
+  }, []);
+  
+  return size;
+};
+
+// ❌ Avoid
+const getWindowSize = () => {
+  // Direct DOM manipulation without hooks
+};
+```
+
+2. Dependencies Array
+```typescript
+// ✅ Good
+useEffect(() => {
+  // Effect logic
+}, [dependency1, dependency2]);
+
+// ❌ Avoid
+useEffect(() => {
+  // Effect logic
+}, []); // Empty array when dependencies are needed
+```
+
+## State Management
+
+1. Local State
+- Use `useState` for component-level state
+- Use `useReducer` for complex state logic
+
+2. Global State
+- Use Context API for shared state across components
+- Consider using state management libraries only when necessary
+```typescript
+// ✅ Good
+export const MyContext = createContext<MyContextType | null>(null);
+
+export const MyProvider = ({ children }: { children: React.ReactNode }) => {
+  const [state, setState] = useState(initialState);
+  return (
+    <MyContext.Provider value={{ state, setState }}>
+      {children}
+    </MyContext.Provider>
+  );
+};
+```
+
+## Performance Optimization
+
+1. Memoization
+```typescript
+// ✅ Good
+const MemoizedComponent = React.memo(MyComponent, (prevProps, nextProps) => {
+  return prevProps.value === nextProps.value;
+});
+
+// Use useMemo for expensive computations
+const expensiveValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+```
+
+2. Event Handlers
+```typescript
+// ✅ Good
+const handleClick = useCallback(() => {
+  // Handler logic
+}, [dependencies]);
+
+// ❌ Avoid
+const handleClick = () => {
+  // Creating new function on every render
+};
+```
+
+## Component Composition
+
+1. Prefer Composition Over Props
+```typescript
+// ✅ Good
+<Card>
+  <Card.Header>Title</Card.Header>
+  <Card.Body>Content</Card.Body>
+</Card>
+
+// ❌ Avoid
+<Card header="Title" body="Content" />
+```
+
+2. Use Render Props Pattern When Needed
+```typescript
+// ✅ Good
+<DataFetcher>
+  {(data) => <DisplayComponent data={data} />}
+</DataFetcher>
+```
+
+## Error Handling
+
+1. Error Boundaries
+```typescript
+// ✅ Good
+const ErrorFallback = ({ error }: { error: Error }) => (
+  <div role="alert">
+    <p>Something went wrong:</p>
+    <pre>{error.message}</pre>
+  </div>
+);
+
+// Use error boundaries at appropriate levels
+<ErrorBoundary FallbackComponent={ErrorFallback}>
+  <MyComponent />
+</ErrorBoundary>
+```
+
+## Testing
+
+1. Component Testing
+- Use React Testing Library for component tests
+- Test user interactions and behavior, not implementation details
+```typescript
+// ✅ Good
+test('shows success message on submit', async () => {
+  render(<MyForm />);
+  await userEvent.click(screen.getByRole('button', { name: /submit/i }));
+  expect(screen.getByText(/success/i)).toBeInTheDocument();
+});
+```
+
+## Accessibility
+
+1. Follow WAI-ARIA Guidelines
+- Use semantic HTML elements
+- Provide ARIA labels where necessary
+- Ensure keyboard navigation support
+```typescript
+// ✅ Good
+<button aria-label="Close dialog" onClick={onClose}>
+  <Icon name="close" />
+</button>
+
+// ❌ Avoid
+<div onClick={onClose}>
+  <Icon name="close" />
+</div>
+```
+
+## Code Style
+
+1. File Organization
+- One component per file
+- Group related components in folders
+- Keep components focused and single-responsibility
+
+2. Naming Conventions
+- PascalCase for component names
+- camelCase for variables and functions
+- Use descriptive, meaningful names
+
+## Import/Export
+
+1. Named Exports
+```typescript
+// ✅ Good
+export const MyComponent = () => { ... };
+
+// ❌ Avoid multiple default exports
+export default () => { ... };
+```
+
+Remember:
+- Keep components small and focused
+- Follow the Single Responsibility Principle
+- Write self-documenting code
+- Add comments only when necessary to explain complex logic
+- Consider mobile-first and responsive design
+- Optimize for performance and accessibility
