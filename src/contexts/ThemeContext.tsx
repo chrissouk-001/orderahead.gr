@@ -12,7 +12,7 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Initialize theme from localStorage or system preference
   useEffect(() => {
@@ -26,17 +26,24 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     
     // Otherwise, check saved preference and system preference
     const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    if (savedTheme === 'dark' || savedTheme === null) {
+    if (savedTheme === 'dark') {
       document.documentElement.classList.add('dark');
       setIsDarkMode(true);
     } else if (savedTheme === 'light') {
       document.documentElement.classList.remove('dark');
       setIsDarkMode(false);
-    } else {
-      // Default to dark mode if no saved preference
+    } else if (prefersDark) {
+      // Use system preference if no saved theme
       document.documentElement.classList.add('dark');
       setIsDarkMode(true);
+      localStorage.setItem('theme', 'dark');
+    } else {
+      // Default to light mode if no preferences found
+      document.documentElement.classList.remove('dark');
+      setIsDarkMode(false);
+      localStorage.setItem('theme', 'light');
     }
   }, []);
 

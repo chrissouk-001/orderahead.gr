@@ -16,7 +16,6 @@ import { products, getProductsByCategory } from '@/data/products';
 import { Product, ProductCategory } from '@/types/product';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import MiniCart from '@/components/MiniCart';
 import { toast } from 'sonner';
 import { motion } from "framer-motion";
 
@@ -172,7 +171,6 @@ const Menu: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
-  const [showMiniCart, setShowMiniCart] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [addedProduct, setAddedProduct] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -188,12 +186,9 @@ const Menu: React.FC = () => {
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();
   
-  // Refs
-  const miniCartRef = useRef<HTMLDivElement>(null);
-  const sortOptionsRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const cartButtonRef = useRef<HTMLButtonElement>(null);
   const sortButtonRef = useRef<HTMLButtonElement>(null);
+  const sortOptionsRef = useRef<HTMLDivElement>(null);
 
   // Check if device is mobile
   useEffect(() => {
@@ -215,22 +210,12 @@ const Menu: React.FC = () => {
   // Handle click outside to close dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // Close mini cart if clicked outside
-      if (
-        showMiniCart &&
-        miniCartRef.current &&
-        !miniCartRef.current.contains(event.target as Node) &&
-        cartButtonRef.current &&
-        !cartButtonRef.current.contains(event.target as Node)
-      ) {
-        setShowMiniCart(false);
-      }
-      
-      // Close sort options if clicked outside
       if (
         showSortOptions &&
         sortOptionsRef.current &&
-        !sortOptionsRef.current.contains(event.target as Node)
+        !sortOptionsRef.current.contains(event.target as Node) &&
+        sortButtonRef.current &&
+        !sortButtonRef.current.contains(event.target as Node)
       ) {
         setShowSortOptions(false);
       }
@@ -238,52 +223,7 @@ const Menu: React.FC = () => {
     
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showMiniCart, showSortOptions]);
-  
-  // Ensure mini cart and sort options are positioned properly
-  useEffect(() => {
-    const positionElements = () => {
-      // Position mini cart
-      if (showMiniCart && miniCartRef.current && cartButtonRef.current) {
-        const cartButtonRect = cartButtonRef.current.getBoundingClientRect();
-        const viewportWidth = window.innerWidth;
-        
-        // Check if cart would go off-screen to the right
-        if (cartButtonRect.right + 320 > viewportWidth) { // 320px is approx width of cart
-          miniCartRef.current.style.right = '0';
-          miniCartRef.current.style.left = 'auto';
-        } else {
-          miniCartRef.current.style.right = 'auto';
-          miniCartRef.current.style.left = `${cartButtonRect.left - 260}px`; // Position to the left of button
-        }
-      }
-      
-      // Position sort options
-      if (showSortOptions && sortOptionsRef.current && sortButtonRef.current) {
-        const sortButtonRect = sortButtonRef.current.getBoundingClientRect();
-        const viewportWidth = window.innerWidth;
-        
-        // Check if sort options would go off-screen to the right
-        if (sortButtonRect.right - 264 < 0) { // 264px is width of sort dropdown
-          sortOptionsRef.current.style.left = '0';
-          sortOptionsRef.current.style.right = 'auto';
-        } else if (sortButtonRect.right + 100 > viewportWidth) { // If near right edge
-          sortOptionsRef.current.style.right = '0';
-          sortOptionsRef.current.style.left = 'auto';
-        } else {
-          sortOptionsRef.current.style.left = `${sortButtonRect.left}px`;
-          sortOptionsRef.current.style.right = 'auto';
-        }
-      }
-    };
-    
-    if (showMiniCart || showSortOptions) {
-      positionElements();
-      window.addEventListener('resize', positionElements);
-    }
-    
-    return () => window.removeEventListener('resize', positionElements);
-  }, [showMiniCart, showSortOptions]);
+  }, [showSortOptions]);
   
   // Apply filters logic
   const applyFilters = () => {
@@ -377,10 +317,6 @@ const Menu: React.FC = () => {
     }, 1000);
     
     addItem(product);
-    // Show mini cart after adding an item
-    setShowMiniCart(true);
-    // Auto-hide after 4 seconds
-    setTimeout(() => setShowMiniCart(false), 4000);
     
     // Show success toast with product image
     toast.success(
@@ -414,10 +350,6 @@ const Menu: React.FC = () => {
     }));
   };
   
-  const toggleMiniCart = () => {
-    setShowMiniCart(prev => !prev);
-  };
-  
   const handleFocusSearch = () => {
     if (searchInputRef.current) {
       searchInputRef.current.focus();
@@ -428,586 +360,290 @@ const Menu: React.FC = () => {
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#0b1220] to-[#051129]">
       <Navbar />
       
-      <main className="flex-grow relative">
-        {/* Header with gradient overlay and decorative elements */}
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-blue-500/5 blur-3xl"></div>
-            <div className="absolute top-20 -left-20 h-72 w-72 rounded-full bg-blue-300/5 blur-3xl"></div>
-            <div className="absolute bottom-0 right-1/4 h-48 w-48 rounded-full bg-blue-200/5 blur-3xl"></div>
+      <main className="bg-gray-50 dark:bg-background min-h-screen pb-16">
+        <div className="container mx-auto px-4 pt-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-canteen-dark dark:text-white">Κατάλογος</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
+              Επιλέξτε τα προϊόντα σας και παραγγείλτε εύκολα και γρήγορα
+            </p>
           </div>
           
-          <div className="container mx-auto px-4 pt-6 pb-8 relative z-10">
-            <div className="flex flex-col space-y-6">
-              {/* Main heading with animation */}
-              <motion.h1 
-                className="text-3xl md:text-4xl font-bold text-white"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                Κατάλογος Προϊόντων
-              </motion.h1>
-            
-              {/* Catalog tools section */}
-              <div className="flex flex-col space-y-4">
-                <div className="flex flex-col md:flex-row md:items-center gap-3 w-full">
-                  {/* Search input with icon */}
-                  <div className="relative flex-grow">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Search className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                    </div>
-                    <input
-                      ref={searchInputRef}
-                      type="text"
-                      className="block w-full rounded-xl py-3 pl-10 pr-4 bg-[#112136]/70 backdrop-blur-sm border border-[#1d2f4f] focus:ring-2 focus:ring-canteen-teal/50 focus:border-canteen-teal/50 text-white placeholder-gray-400 transition-all duration-200 text-base"
-                      placeholder="Αναζήτηση προϊόντων..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      aria-label="Αναζήτηση προϊόντων"
-                    />
-                    {searchQuery && (
-                      <button
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors"
-                        onClick={() => setSearchQuery('')}
-                        aria-label="Καθαρισμός αναζήτησης"
-                      >
-                        <X className="h-5 w-5" />
-                      </button>
-                    )}
-                  </div>
-                  
-                  {/* View and filter controls group */}
-                  <div className="flex items-center gap-3">
-                    {/* View toggle */}
-                    <div className="flex items-center bg-[#112136]/70 backdrop-blur-sm border border-[#1d2f4f] rounded-xl p-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={`h-10 px-3 rounded-lg flex items-center gap-2 transition-all ${
-                          viewMode === 'grid'
-                            ? 'bg-[#1a2c47] text-white shadow-sm'
-                            : 'text-gray-400 hover:text-white hover:bg-[#0b1220]/50'
-                        }`}
-                        onClick={() => setViewMode('grid')}
-                        aria-label="Προβολή πλέγματος"
-                        aria-pressed={viewMode === 'grid'}
-                      >
-                        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" />
-                          <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" />
-                          <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" />
-                          <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="2" />
-                        </svg>
-                        <span className="hidden sm:inline">Πλέγμα</span>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={`h-10 px-3 rounded-lg flex items-center gap-2 transition-all ${
-                          viewMode === 'list'
-                            ? 'bg-[#1a2c47] text-white shadow-sm'
-                            : 'text-gray-400 hover:text-white hover:bg-[#0b1220]/50'
-                        }`}
-                        onClick={() => setViewMode('list')}
-                        aria-label="Προβολή λίστας"
-                        aria-pressed={viewMode === 'list'}
-                      >
-                        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M3 6H21M3 12H21M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                        </svg>
-                        <span className="hidden sm:inline">Λίστα</span>
-                      </Button>
-                    </div>
-                    
-                    {/* Filter button */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-11 px-4 rounded-xl bg-[#112136]/70 backdrop-blur-sm border-[#1d2f4f] hover:bg-[#1a2c47] transition-all duration-300 hover:shadow-md text-white flex items-center gap-2"
-                      onClick={() => setShowFilters(!showFilters)}
-                      aria-expanded={showFilters}
-                      aria-controls="filter-panel"
-                    >
-                      <Filter className="h-4 w-4" />
-                      <span>Φίλτρα</span>
-                      {isFiltersApplied && (
-                        <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-canteen-teal text-xs font-medium text-white">
-                          {healthFiltersSelected.length + dietaryFiltersSelected.length}
-                        </span>
-                      )}
-                    </Button>
-                    
-                    {/* Sort button */}
-                    <div className="relative">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-11 px-4 rounded-xl bg-[#112136]/70 backdrop-blur-sm border-[#1d2f4f] hover:bg-[#1a2c47] transition-all duration-300 hover:shadow-md text-white flex items-center gap-2"
-                        onClick={() => setShowSortOptions(!showSortOptions)}
-                        ref={sortButtonRef}
-                        aria-expanded={showSortOptions}
-                        aria-controls="sort-options"
-                        aria-haspopup="true"
-                      >
-                        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M3 6H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                          <path d="M6 12H18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                          <path d="M10 18H14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                        </svg>
-                        <span className="hidden sm:inline">Ταξινόμηση</span>
-                        <ChevronDown size={16} className={`transition-transform duration-300 ${showSortOptions ? 'transform rotate-180' : ''}`} />
-                      </Button>
-                      
-                      {showSortOptions && (
-                        <motion.div 
-                          id="sort-options"
-                          ref={sortOptionsRef}
-                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          transition={{ duration: 0.2 }}
-                          className="absolute z-[100] mt-2 w-64 bg-[#112136]/90 backdrop-blur-sm border border-[#1d2f4f] rounded-xl shadow-xl overflow-hidden"
-                          style={{ 
-                            right: isMobile ? '0' : 'auto',
-                            left: isMobile ? 'auto' : '0'
-                          }}
-                          role="menu"
+          {/* Search and Filters Row */}
+          <div className="mb-8">
+            <div className="bg-white dark:bg-card rounded-xl shadow-sm border border-gray-200 dark:border-[#1d2f4f] overflow-hidden">
+              <div className="p-4">
+                <div className="flex flex-col lg:flex-row gap-4">
+                  <div className="flex-grow flex flex-col sm:flex-row gap-3">
+                    {/* Search */}
+                    <div className="relative flex-grow">
+                      <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                        <Search className="h-5 w-5 text-gray-400" />
+                      </div>
+                      <Input
+                        type="search"
+                        placeholder="Αναζήτηση προϊόντων..."
+                        className="w-full pl-10 bg-gray-50/50 dark:bg-[#0b1220]/50 border-gray-200 dark:border-[#1d2f4f] focus:border-canteen-teal dark:focus:border-primary text-canteen-dark dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                        ref={searchInputRef}
+                        aria-label="Αναζήτηση προϊόντων"
+                      />
+                      {searchQuery && (
+                        <button 
+                          className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                          onClick={() => setSearchQuery('')}
+                          aria-label="Καθαρισμός αναζήτησης"
                         >
-                          <div className="sticky top-0 z-10 bg-[#112136] border-b border-[#1d2f4f] rounded-t-xl flex justify-between items-center px-3 py-2">
-                            <h3 className="text-sm font-medium text-white">Ταξινόμηση</h3>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              className="h-8 w-8 rounded-full p-0 text-gray-400 hover:text-white hover:bg-[#1a2c47]"
-                              onClick={() => setShowSortOptions(false)}
-                              aria-label="Κλείσιμο επιλογών ταξινόμησης"
-                            >
-                              <X size={16} />
-                            </Button>
-                          </div>
-                          <div className="py-1">
-                            {sortOptions.map((option) => (
-                              <button
-                                key={option.value}
-                                role="menuitem"
-                                className={`w-full text-left px-4 py-3 text-sm transition-colors duration-300 ${
-                                  sortBy === option.value 
-                                    ? 'bg-[#1a2c47] text-canteen-yellow font-medium border-l-2 border-canteen-yellow' 
-                                    : 'hover:bg-[#0b1220] text-white hover:text-canteen-yellow'
-                                }`}
-                                onClick={() => {
-                                  setSortBy(option.value);
-                                  setShowSortOptions(false);
-                                }}
-                                aria-current={sortBy === option.value ? 'true' : 'false'}
-                              >
-                                {option.label}
-                              </button>
-                            ))}
-                          </div>
-                        </motion.div>
+                          <X className="h-4 w-4" />
+                        </button>
                       )}
                     </div>
-                    
-                    {/* Cart button for mobile */}
-                    {isAuthenticated && isMobile && (
+
+                    {/* Sort and View */}
+                    <div className="flex gap-2">
+                      {/* Sort Button */}
                       <div className="relative">
-                        <Button 
-                          size="icon" 
-                          variant="outline" 
-                          className="relative flex-shrink-0 h-11 w-11 bg-[#112136]/70 backdrop-blur-sm border-[#1d2f4f] hover:bg-[#1a2c47] rounded-xl transition-all duration-300 hover:shadow-md hover:border-canteen-coral/50 text-white"
-                          onClick={toggleMiniCart}
-                          ref={cartButtonRef}
-                          aria-label="Καλάθι αγορών"
-                          aria-expanded={showMiniCart}
-                          aria-controls="mini-cart"
+                        <Button
+                          variant="outline"
+                          className="h-10 px-3 bg-gray-50/50 dark:bg-[#0b1220]/50 border-gray-200 dark:border-[#1d2f4f] text-gray-700 dark:text-gray-300 hover:text-canteen-dark dark:hover:text-white hover:border-gray-300 dark:hover:border-[#1a2c47]"
+                          onClick={() => setShowSortOptions(!showSortOptions)}
+                          ref={sortButtonRef}
+                          aria-expanded={showSortOptions}
+                          aria-haspopup="listbox"
                         >
-                          <ShoppingBag className="h-5 w-5 text-white" />
-                          {getTotalItems() > 0 && (
-                            <motion.span 
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              className="absolute -top-1 -right-1 bg-gradient-to-r from-canteen-coral to-canteen-yellow text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-md"
-                              aria-label={`${getTotalItems()} προϊόντα στο καλάθι`}
-                            >
-                              {getTotalItems()}
-                            </motion.span>
-                          )}
+                          <span className="mr-1">Ταξινόμηση</span>
+                          <ChevronDown className="h-4 w-4" />
                         </Button>
                         
-                        {/* Mini Cart Dropdown */}
-                        {showMiniCart && (
+                        {/* Sort Options Dropdown */}
+                        {showSortOptions && (
                           <motion.div 
-                            id="mini-cart"
-                            ref={miniCartRef}
-                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute z-[100] mt-2 w-80 bg-[#112136]/90 backdrop-blur-sm border border-[#1d2f4f] rounded-xl shadow-xl"
-                            style={{ 
-                              maxHeight: 'calc(90vh - 100px)', 
-                              overflowY: 'auto',
-                              right: isMobile ? '0' : '10px',
-                              left: isMobile ? 'auto' : 'auto'
-                            }}
+                            ref={sortOptionsRef}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="absolute z-20 mt-1 w-56 bg-white dark:bg-card border border-gray-200 dark:border-[#1d2f4f] rounded-lg shadow-lg overflow-hidden"
                           >
-                            <div className="sticky top-0 z-10 bg-[#112136] border-b border-[#1d2f4f] rounded-t-xl flex justify-between items-center px-3 py-2">
-                              <h3 className="text-sm font-medium text-white">Το καλάθι σας</h3>
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                className="h-8 w-8 rounded-full p-0 text-gray-400 hover:text-white hover:bg-[#1a2c47]"
-                                onClick={() => setShowMiniCart(false)}
-                                aria-label="Κλείσιμο καλαθιού"
-                              >
-                                <X size={16} />
-                              </Button>
+                            <div className="py-1" role="listbox">
+                              {sortOptions.map(option => (
+                                <button
+                                  key={option.value}
+                                  className={`w-full text-left px-4 py-2 text-sm ${
+                                    sortBy === option.value 
+                                      ? 'bg-gray-100 dark:bg-[#1a2c47] text-canteen-teal dark:text-white font-medium' 
+                                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#112136]/70'
+                                  }`}
+                                  onClick={() => {
+                                    setSortBy(option.value);
+                                    setShowSortOptions(false);
+                                  }}
+                                  aria-current={sortBy === option.value ? 'true' : 'false'}
+                                >
+                                  {option.label}
+                                </button>
+                              ))}
                             </div>
-                            <MiniCart layout="compact" />
                           </motion.div>
                         )}
                       </div>
-                    )}
+
+                      {/* View Toggle Buttons */}
+                      <div className="hidden sm:flex p-0.5 border border-gray-200 dark:border-[#1d2f4f] rounded-lg bg-gray-50/50 dark:bg-[#0b1220]/50">
+                        <button
+                          className={`p-1.5 rounded-md ${
+                            viewMode === 'grid' 
+                              ? 'bg-white dark:bg-[#1a2c47] text-canteen-dark dark:text-white shadow-sm' 
+                              : 'text-gray-500 dark:text-gray-400 hover:text-canteen-dark dark:hover:text-white'
+                          }`}
+                          onClick={() => setViewMode('grid')}
+                          aria-label="Προβολή πλέγματος"
+                          aria-pressed={viewMode === 'grid'}
+                        >
+                          <div className="grid grid-cols-2 gap-0.5">
+                            <div className="h-1.5 w-1.5 rounded-sm bg-current"></div>
+                            <div className="h-1.5 w-1.5 rounded-sm bg-current"></div>
+                            <div className="h-1.5 w-1.5 rounded-sm bg-current"></div>
+                            <div className="h-1.5 w-1.5 rounded-sm bg-current"></div>
+                          </div>
+                        </button>
+                        <button
+                          className={`p-1.5 rounded-md ${
+                            viewMode === 'list' 
+                              ? 'bg-white dark:bg-[#1a2c47] text-canteen-dark dark:text-white shadow-sm' 
+                              : 'text-gray-500 dark:text-gray-400 hover:text-canteen-dark dark:hover:text-white'
+                          }`}
+                          onClick={() => setViewMode('list')}
+                          aria-label="Προβολή λίστας"
+                          aria-pressed={viewMode === 'list'}
+                        >
+                          <div className="flex flex-col gap-0.5">
+                            <div className="h-1 w-4 rounded-sm bg-current"></div>
+                            <div className="h-1 w-4 rounded-sm bg-current"></div>
+                            <div className="h-1 w-4 rounded-sm bg-current"></div>
+                          </div>
+                        </button>
+                      </div>
+
+                      {/* Filter Button */}
+                      <Button
+                        variant="outline"
+                        className="h-10 px-3 bg-gray-50/50 dark:bg-[#0b1220]/50 border-gray-200 dark:border-[#1d2f4f] text-gray-700 dark:text-gray-300 hover:text-canteen-dark dark:hover:text-white hover:border-gray-300 dark:hover:border-[#1a2c47]"
+                        onClick={() => setShowFilters(!showFilters)}
+                        aria-expanded={showFilters}
+                        aria-controls="filter-panel"
+                      >
+                        <Filter className="h-4 w-4 mr-1" />
+                        <span>Φίλτρα</span>
+                      </Button>
+                    </div>
                   </div>
                 </div>
-                
-                {/* Category tabs */}
-                <div className="overflow-x-auto scrollbar-hide pb-2">
-                  <div className="flex items-center space-x-2">
-                    <button
-                      className={`py-2 px-4 rounded-lg text-sm font-medium whitespace-nowrap ${
-                        activeCategory === 'all'
-                          ? 'bg-[#1a2c47] text-white shadow-sm border border-[#1d2f4f]'
-                          : 'bg-[#112136]/50 text-gray-400 hover:text-white hover:bg-[#112136] border border-[#1d2f4f]/50'
-                      } transition-all duration-200`}
-                      onClick={() => setActiveCategory('all')}
-                      aria-pressed={activeCategory === 'all'}
-                    >
-                      Όλα
-                    </button>
-                    {categories.map((category) => (
-                      <button
-                        key={category.value}
-                        className={`py-2 px-4 rounded-lg text-sm font-medium whitespace-nowrap ${
-                          activeCategory === category.value
-                            ? 'bg-[#1a2c47] text-white shadow-sm border border-[#1d2f4f]'
-                            : 'bg-[#112136]/50 text-gray-400 hover:text-white hover:bg-[#112136] border border-[#1d2f4f]/50'
-                        } transition-all duration-200`}
-                        onClick={() => setActiveCategory(category.value)}
-                        aria-pressed={activeCategory === category.value}
-                      >
-                        {category.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* Active filters display */}
-                {isFiltersApplied && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex flex-wrap gap-2 py-2"
-                  >
-                    <span className="text-sm font-medium text-gray-400 mr-1 py-1">Ενεργά φίλτρα:</span>
-                    {healthFiltersSelected.map((filter) => (
-                      <Badge 
-                        key={filter} 
-                        variant="outline"
-                        className="bg-[#1a2c47]/70 text-white border-[#1d2f4f] py-1 pl-2 pr-1 flex items-center gap-1 rounded-lg"
-                      >
-                        {healthFilters.find(f => f.value === filter)?.label || filter}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-5 w-5 p-0 rounded-full hover:bg-[#112136] text-gray-400 hover:text-canteen-coral"
-                          onClick={() => toggleHealthFilter(filter)}
-                          aria-label={`Αφαίρεση φίλτρου ${healthFilters.find(f => f.value === filter)?.label || filter}`}
-                        >
-                          <X size={12} />
-                        </Button>
-                      </Badge>
-                    ))}
-                    {dietaryFiltersSelected.map((filter) => (
-                      <Badge 
-                        key={filter} 
-                        variant="outline"
-                        className="bg-[#1a2c47]/70 text-white border-[#1d2f4f] py-1 pl-2 pr-1 flex items-center gap-1 rounded-lg"
-                      >
-                        {dietaryFilters.find(f => f.value === filter)?.label || filter}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-5 w-5 p-0 rounded-full hover:bg-[#112136] text-gray-400 hover:text-canteen-coral"
-                          onClick={() => toggleDietaryFilter(filter)}
-                          aria-label={`Αφαίρεση φίλτρου ${dietaryFilters.find(f => f.value === filter)?.label || filter}`}
-                        >
-                          <X size={12} />
-                        </Button>
-                      </Badge>
-                    ))}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-xs text-canteen-coral hover:text-canteen-coral/80 h-7 underline underline-offset-2"
-                      onClick={clearFilters}
-                      aria-label="Αφαίρεση όλων των φίλτρων"
-                    >
-                      Αφαίρεση όλων
-                    </Button>
-                  </motion.div>
-                )}
               </div>
             </div>
           </div>
-        </div>
-        
-        {/* Filter panel */}
-        {showFilters && (
-          <motion.div 
-            id="filter-panel"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="border-y border-[#1d2f4f] bg-[#0b1220]/90 backdrop-blur-md"
-          >
-            <div className="container mx-auto px-4 py-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold text-white">Φίλτρα</h2>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-gray-400 hover:text-white"
-                  onClick={() => setShowFilters(false)}
-                  aria-label="Κλείσιμο φίλτρων"
-                >
-                  <X size={18} />
-                </Button>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-sm font-medium text-white mb-3">Διατροφικό προφίλ</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {healthFilters.map((filter) => (
-                      <div key={filter.value} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={`health-${filter.value}`} 
-                          checked={healthFiltersSelected.includes(filter.value)}
-                          onCheckedChange={() => toggleHealthFilter(filter.value)}
-                          className="border-[#1d2f4f] data-[state=checked]:bg-canteen-teal data-[state=checked]:border-canteen-teal"
-                        />
-                        <label 
-                          htmlFor={`health-${filter.value}`}
-                          className="text-sm text-gray-300 cursor-pointer"
-                        >
-                          {filter.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="text-sm font-medium text-white mb-3">Διαιτητικές προτιμήσεις</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {dietaryFilters.map((filter) => (
-                      <div key={filter.value} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={`dietary-${filter.value}`} 
-                          checked={dietaryFiltersSelected.includes(filter.value)}
-                          onCheckedChange={() => toggleDietaryFilter(filter.value)}
-                          className="border-[#1d2f4f] data-[state=checked]:bg-canteen-teal data-[state=checked]:border-canteen-teal"
-                        />
-                        <label 
-                          htmlFor={`dietary-${filter.value}`}
-                          className="text-sm text-gray-300 cursor-pointer"
-                        >
-                          {filter.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex justify-end mt-6 space-x-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-[#1d2f4f] text-gray-300 hover:text-white hover:bg-[#1a2c47]"
-                  onClick={clearFilters}
-                >
-                  Καθαρισμός
-                </Button>
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="bg-canteen-teal hover:bg-canteen-teal/90 text-white"
-                  onClick={() => {
-                    setIsFiltersApplied(healthFiltersSelected.length > 0 || dietaryFiltersSelected.length > 0);
-                    setShowFilters(false);
-                  }}
-                >
-                  Εφαρμογή φίλτρων
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-        
-        {/* Products */}
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className="w-full lg:w-3/4">
-              {/* Results info */}
-              <div className="flex justify-between items-center mb-6 px-1">
-                <motion.div 
-                  className="flex items-center gap-2"
-                  key={sortedProducts.length}
-                  initial={{ opacity: 0, x: -5 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Badge variant="outline" className="bg-[#112136]/70 text-white border-[#1d2f4f] py-1">
-                    {sortedProducts.length} προϊόντα
-                  </Badge>
-                  {sortBy !== 'popular' && (
-                    <div className="flex items-center gap-1 text-sm">
-                      <span className="text-gray-400">Ταξινόμηση:</span>
-                      <span className="text-canteen-yellow font-medium">{sortOptions.find(option => option.value === sortBy)?.label}</span>
-                    </div>
-                  )}
-                </motion.div>
-                
-                {/* Filtered clear indicator */}
-                {isFiltersApplied && (
+          
+          {/* Filter panel */}
+          {showFilters && (
+            <motion.div 
+              id="filter-panel"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="border-y border-gray-200 dark:border-[#1d2f4f] bg-gray-50/90 dark:bg-[#0b1220]/90 backdrop-blur-md"
+            >
+              <div className="container mx-auto px-4 py-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-lg font-semibold text-canteen-dark dark:text-white">Φίλτρα</h2>
                   <Button
-                    variant="link"
+                    variant="ghost"
                     size="sm"
-                    className="text-canteen-coral hover:text-canteen-coral/80 p-0 h-auto text-sm"
+                    className="text-gray-500 hover:text-canteen-dark dark:text-gray-400 dark:hover:text-white"
+                    onClick={() => setShowFilters(false)}
+                    aria-label="Κλείσιμο φίλτρων"
+                  >
+                    <X size={18} />
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="text-sm font-medium text-canteen-dark dark:text-white mb-3">Διατροφικό προφίλ</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {healthFilters.map((filter) => (
+                        <div key={filter.value} className="flex items-center space-x-2">
+                          <Checkbox 
+                            id={`health-${filter.value}`} 
+                            checked={healthFiltersSelected.includes(filter.value)}
+                            onCheckedChange={() => toggleHealthFilter(filter.value)}
+                            className="border-gray-300 dark:border-[#1d2f4f] data-[state=checked]:bg-canteen-teal data-[state=checked]:border-canteen-teal"
+                          />
+                          <Label 
+                            htmlFor={`health-${filter.value}`}
+                            className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
+                          >
+                            {filter.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-sm font-medium text-canteen-dark dark:text-white mb-3">Διατροφικές προτιμήσεις</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {dietaryFilters.map((filter) => (
+                        <div key={filter.value} className="flex items-center space-x-2">
+                          <Checkbox 
+                            id={`dietary-${filter.value}`} 
+                            checked={dietaryFiltersSelected.includes(filter.value)}
+                            onCheckedChange={() => toggleDietaryFilter(filter.value)}
+                            className="border-gray-300 dark:border-[#1d2f4f] data-[state=checked]:bg-canteen-teal data-[state=checked]:border-canteen-teal"
+                          />
+                          <Label 
+                            htmlFor={`dietary-${filter.value}`}
+                            className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
+                          >
+                            {filter.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex justify-end mt-6">
+                  <Button
+                    variant="outline"
+                    className="mr-2 border-gray-300 dark:border-[#1d2f4f] text-gray-600 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500"
                     onClick={clearFilters}
                   >
-                    Αφαίρεση φίλτρων
+                    Καθαρισμός
                   </Button>
-                )}
+                  <Button
+                    className="bg-canteen-teal text-white hover:bg-canteen-teal/90"
+                    onClick={() => {
+                      applyFilters();
+                      setShowFilters(false);
+                    }}
+                  >
+                    Εφαρμογή
+                  </Button>
+                </div>
               </div>
-              
-              {/* Empty state */}
-              {sortedProducts.length === 0 && (
-                <motion.div 
+            </motion.div>
+          )}
+
+          {/* Main Content */}
+          <div className="w-full">
+            {/* Products grid/list */}
+            <div className={viewMode === 'grid' 
+              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 lg:gap-5" 
+              : "flex flex-col gap-4"
+            }>
+              {filteredProducts.map((product) => (
+                <motion.div
+                  key={product.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="bg-[#112136]/80 backdrop-blur-sm border border-[#1d2f4f] rounded-xl p-8 text-center"
+                  transition={{ duration: 0.3 }}
+                  layout
+                  className={addedProduct === product.id ? 'animate-pulse-subtle' : ''}
                 >
-                  <div className="flex justify-center mb-4">
-                    <div className="h-16 w-16 rounded-full bg-[#0b1220] flex items-center justify-center relative border border-[#1d2f4f]">
-                      <Search className="h-8 w-8 text-gray-400" />
-                    </div>
-                  </div>
-                  <h2 className="text-xl font-medium text-white mb-2">Δεν βρέθηκαν προϊόντα</h2>
-                  <p className="text-gray-400 max-w-sm mx-auto mb-4">
-                    Δοκιμάστε να αλλάξετε τα φίλτρα αναζήτησης ή εξερευνήστε όλες τις κατηγορίες.
+                  {viewMode === 'grid' ? (
+                    <ProductCard
+                      product={product}
+                      onAddToCart={handleAddToCart}
+                      onImageError={handleImageError}
+                      hasImageError={!!imageErrors[product.id]}
+                    />
+                  ) : (
+                    <ProductListItem
+                      product={product}
+                      onAddToCart={handleAddToCart}
+                      onImageError={handleImageError}
+                      hasImageError={!!imageErrors[product.id]}
+                    />
+                  )}
+                </motion.div>
+              ))}
+              
+              {filteredProducts.length === 0 && (
+                <div className="col-span-full flex flex-col items-center justify-center p-12 bg-white/70 dark:bg-[#112136]/70 rounded-xl border border-gray-200 dark:border-[#1d2f4f] backdrop-blur-sm">
+                  <Info className="h-16 w-16 text-gray-300 dark:text-gray-600 mb-4" />
+                  <h3 className="text-xl font-medium text-canteen-dark dark:text-white mb-2">Δεν βρέθηκαν προϊόντα</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-center">
+                    Δοκιμάστε να αλλάξετε τα φίλτρα ή τον όρο αναζήτησης.
                   </p>
-                  <Button 
+                  <Button
                     variant="outline"
-                    className="bg-[#1a2c47]/70 hover:bg-[#1a2c47] text-white border-[#1d2f4f]"
+                    className="mt-4 border-gray-200 dark:border-[#1d2f4f] text-canteen-teal dark:text-primary hover:border-canteen-teal dark:hover:border-primary"
                     onClick={clearFilters}
                   >
                     Καθαρισμός φίλτρων
                   </Button>
-                </motion.div>
-              )}
-              
-              {/* Products grid/list */}
-              {sortedProducts.length > 0 && (
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className={viewMode === 'grid' ? 
-                    "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6" : 
-                    "flex flex-col gap-4"
-                  }
-                >
-                  {sortedProducts.map((product) => (
-                    <motion.div 
-                      key={product.id} 
-                      className="relative h-full"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      {viewMode === 'grid' ? (
-                        <ProductCard
-                          product={product}
-                          onAddToCart={handleAddToCart}
-                          onImageError={handleImageError}
-                          hasImageError={!!imageErrors[product.id]}
-                        />
-                      ) : (
-                        <ProductListItem
-                          product={product}
-                          onAddToCart={handleAddToCart}
-                          onImageError={handleImageError}
-                          hasImageError={!!imageErrors[product.id]}
-                        />
-                      )}
-                      {addedProduct === product.id && (
-                        <motion.div 
-                          className="absolute inset-0 bg-canteen-teal/10 dark:bg-primary/10 rounded-xl border-2 border-canteen-teal/20 dark:border-primary/20 pointer-events-none z-10"
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0 }}
-                        />
-                      )}
-                    </motion.div>
-                  ))}
-                </motion.div>
-              )}
-              
-              {/* Pagination (if needed) */}
-              {sortedProducts.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="flex justify-between items-center mt-10 pt-6 border-t border-[#1d2f4f]"
-                >
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="h-9 px-3 bg-[#112136]/70 backdrop-blur-sm border-[#1d2f4f] hover:bg-[#1a2c47] text-white" 
-                    disabled
-                  >
-                    <ArrowLeft size={16} className="mr-2" />
-                    Προηγούμενη
-                  </Button>
-                  <div className="text-sm text-gray-400">
-                    Σελίδα 1 από 1
-                  </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="h-9 px-3 bg-[#112136]/70 backdrop-blur-sm border-[#1d2f4f] hover:bg-[#1a2c47] text-white" 
-                    disabled
-                  >
-                    Επόμενη
-                    <ArrowRight size={16} className="ml-2" />
-                  </Button>
-                </motion.div>
+                </div>
               )}
             </div>
-            
-            {/* Desktop mini cart */}
-            {!isMobile && isAuthenticated && (
-              <div className="w-full lg:w-1/4 hidden lg:block">
-                <div className="sticky top-24 border border-[#1d2f4f] rounded-xl overflow-hidden bg-[#112136]/80 backdrop-blur-sm shadow-sm">
-                  <MiniCart layout="compact" />
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </main>
@@ -1100,7 +736,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="group h-full flex flex-col rounded-xl overflow-hidden relative transition-all duration-300 border border-[#1d2f4f] hover:border-canteen-teal/50 bg-[#112136]/80 dark:bg-[#112136]/80 backdrop-blur-sm">
+    <div className="group h-full flex flex-col rounded-xl overflow-hidden relative transition-all duration-300 border border-gray-200 dark:border-[#1d2f4f] hover:border-canteen-teal/50 bg-white/90 dark:bg-[#112136]/80 backdrop-blur-sm">
       {/* Product Image with Gradient Overlay */}
       <div 
         className="relative aspect-[4/3] overflow-hidden cursor-pointer"
@@ -1114,7 +750,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         />
         
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#051129]/80 via-transparent to-transparent opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 dark:from-[#051129]/80 via-transparent to-transparent opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
         
         {/* Health Badge */}
         <div className="absolute bottom-3 right-3 z-10">
@@ -1142,7 +778,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className="absolute right-3 top-3 z-10 flex flex-col gap-2">
           <Button
             size="icon"
-            className="h-8 w-8 rounded-full bg-[#112136]/80 backdrop-blur-sm hover:bg-[#1a2c47] text-canteen-coral hover:text-canteen-coral opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md"
+            className="h-8 w-8 rounded-full bg-white/80 dark:bg-[#112136]/80 backdrop-blur-sm hover:bg-gray-100 dark:hover:bg-[#1a2c47] text-canteen-coral hover:text-canteen-coral opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md"
             aria-label={`Προσθήκη ${product.name} στα αγαπημένα`}
           >
             <Heart className="h-4 w-4" />
@@ -1154,19 +790,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <div className="p-4 flex flex-col flex-grow relative">
         {/* Category Tag */}
         <div className="absolute -top-3 left-4">
-          <Badge variant="outline" className="bg-[#112136]/90 backdrop-blur-sm shadow-sm border-canteen-teal/20 text-canteen-teal text-xs">
+          <Badge variant="outline" className="bg-white/90 dark:bg-[#112136]/90 backdrop-blur-sm shadow-sm border-canteen-teal/20 text-canteen-teal text-xs">
             {categories.find(c => c.value === product.category)?.label || product.category}
           </Badge>
         </div>
         
         <h3 
-          className="text-lg font-medium text-white mt-1 mb-1 line-clamp-1 group-hover:text-canteen-teal transition-colors duration-300 cursor-pointer"
+          className="text-lg font-medium text-canteen-dark dark:text-white mt-1 mb-1 line-clamp-1 group-hover:text-canteen-teal transition-colors duration-300 cursor-pointer"
           onClick={() => setIsDialogOpen(true)}
         >
           {product.name}
         </h3>
         
-        <p className="text-sm text-gray-300 mb-2 line-clamp-2">
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">
           {product.description}
         </p>
         
@@ -1175,18 +811,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {/* Dietary Icons */}
           <div className="flex gap-1">
             {dietaryInfo.includes('vegan') && (
-              <Badge variant="outline" className="h-6 w-6 p-0 flex items-center justify-center rounded-full border-green-500/30 bg-green-900/20" title="Vegan">
-                <span className="text-green-400 text-xs">V</span>
+              <Badge variant="outline" className="h-6 w-6 p-0 flex items-center justify-center rounded-full border-green-500/30 bg-green-100/70 dark:bg-green-900/20" title="Vegan">
+                <span className="text-green-700 dark:text-green-400 text-xs">V</span>
               </Badge>
             )}
             {dietaryInfo.includes('vegetarian') && (
-              <Badge variant="outline" className="h-6 w-6 p-0 flex items-center justify-center rounded-full border-green-500/30 bg-green-900/20" title="Χορτοφαγικό">
-                <span className="text-green-400 text-xs">Χ</span>
+              <Badge variant="outline" className="h-6 w-6 p-0 flex items-center justify-center rounded-full border-green-500/30 bg-green-100/70 dark:bg-green-900/20" title="Χορτοφαγικό">
+                <span className="text-green-700 dark:text-green-400 text-xs">Χ</span>
               </Badge>
             )}
             {dietaryInfo.includes('gluten-free') && (
-              <Badge variant="outline" className="h-6 w-6 p-0 flex items-center justify-center rounded-full border-amber-500/30 bg-amber-900/20" title="Χωρίς Γλουτένη">
-                <span className="text-amber-400 text-xs">G</span>
+              <Badge variant="outline" className="h-6 w-6 p-0 flex items-center justify-center rounded-full border-amber-500/30 bg-amber-100/70 dark:bg-amber-900/20" title="Χωρίς Γλουτένη">
+                <span className="text-amber-700 dark:text-amber-400 text-xs">G</span>
               </Badge>
             )}
           </div>
@@ -1204,13 +840,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {/* Rating */}
           <div className="ml-auto flex items-center">
             {renderStars(rating)}
-            <span className="ml-1 text-xs text-gray-400">({count})</span>
+            <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">({count})</span>
           </div>
         </div>
         
         {/* Price and Add to Cart */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#1d2f4f]">
-          <div className="font-bold text-white text-lg">{product.price.toFixed(2)}€</div>
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200 dark:border-[#1d2f4f]">
+          <div className="font-bold text-canteen-dark dark:text-white text-lg">{product.price.toFixed(2)}€</div>
           <Button
             size="sm"
             className="bg-canteen-teal hover:bg-canteen-teal/90 text-white"
@@ -1224,9 +860,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
       
       {/* Product Detail Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-2xl bg-[#112136] border border-[#1d2f4f] text-white">
+        <DialogContent className="sm:max-w-2xl bg-white dark:bg-[#112136] border border-gray-200 dark:border-[#1d2f4f] text-canteen-dark dark:text-white">
           <DialogHeader>
-            <DialogTitle className="text-xl text-white">{product.name}</DialogTitle>
+            <DialogTitle className="text-xl text-canteen-dark dark:text-white">{product.name}</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="relative rounded-lg overflow-hidden">
@@ -1253,25 +889,25 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 <Badge variant="outline" className="mb-2 border-canteen-teal/20 text-canteen-teal">
                   {categories.find(c => c.value === product.category)?.label || product.category}
                 </Badge>
-                <h3 className="text-2xl font-medium text-white mb-2">{product.name}</h3>
+                <h3 className="text-2xl font-medium text-canteen-dark dark:text-white mb-2">{product.name}</h3>
                 <div className="flex items-center gap-2 mb-3">
                   {renderStars(rating)}
-                  <span className="text-sm text-gray-400">({count} αξιολογήσεις)</span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">({count} αξιολογήσεις)</span>
                 </div>
-                <p className="text-gray-300">{product.description}</p>
+                <p className="text-gray-600 dark:text-gray-300">{product.description}</p>
               </div>
               
-              <Card className="mb-4 bg-[#0b1220] border-[#1d2f4f]">
+              <Card className="mb-4 bg-gray-50 dark:bg-[#0b1220] border-gray-200 dark:border-[#1d2f4f]">
                 <CardHeader className="py-3">
-                  <CardTitle className="text-base text-white">Διατροφικά στοιχεία</CardTitle>
+                  <CardTitle className="text-base text-canteen-dark dark:text-white">Διατροφικά στοιχεία</CardTitle>
                 </CardHeader>
                 <CardContent className="py-0">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <h4 className="text-sm font-medium text-white">Κατάλληλο για:</h4>
+                      <h4 className="text-sm font-medium text-canteen-dark dark:text-white">Κατάλληλο για:</h4>
                       <ul className="mt-1 space-y-1">
                         {dietaryInfo.filter(d => !d.startsWith('contains-')).map((info) => (
-                          <li key={info} className="flex items-center text-sm text-gray-300">
+                          <li key={info} className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                             <span className="h-1.5 w-1.5 rounded-full bg-canteen-teal mr-2"></span>
                             {formatDietaryInfo(info)}
                           </li>
@@ -1282,10 +918,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
                       </ul>
                     </div>
                     <div>
-                      <h4 className="text-sm font-medium text-white">Προειδοποιήσεις:</h4>
+                      <h4 className="text-sm font-medium text-canteen-dark dark:text-white">Προειδοποιήσεις:</h4>
                       <ul className="mt-1 space-y-1">
                         {allergyInfo.map((info) => (
-                          <li key={info} className="flex items-center text-sm text-gray-300">
+                          <li key={info} className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                             <span className="h-1.5 w-1.5 rounded-full bg-canteen-coral mr-2"></span>
                             {formatAllergyInfo(info)}
                           </li>
@@ -1300,7 +936,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </Card>
               
               <div className="mt-auto flex items-center justify-between">
-                <div className="font-bold text-white text-2xl">{product.price.toFixed(2)}€</div>
+                <div className="font-bold text-canteen-dark dark:text-white text-2xl">{product.price.toFixed(2)}€</div>
                 <Button
                   onClick={() => {
                     onAddToCart(product);
@@ -1402,39 +1038,32 @@ const ProductListItem: React.FC<ProductListItemProps> = ({
   };
 
   return (
-    <div className="group flex rounded-xl overflow-hidden relative transition-all duration-300 border border-[#1d2f4f] hover:border-canteen-teal/50 bg-[#112136]/80 dark:bg-[#112136]/80 backdrop-blur-sm">
+    <div className="group flex rounded-xl overflow-hidden relative transition-all duration-300 border border-gray-200 dark:border-[#1d2f4f] hover:border-canteen-teal/50 bg-white/90 dark:bg-[#112136]/80 backdrop-blur-sm">
       {/* Product Image */}
       <div 
-        className="relative h-32 w-32 sm:h-40 sm:w-40 flex-shrink-0 overflow-hidden cursor-pointer"
+        className="relative h-full w-32 sm:w-36 md:w-44 overflow-hidden cursor-pointer"
         onClick={() => setIsDialogOpen(true)}
       >
         <img 
           src={getProductImage(product, hasImageError)} 
           alt={product.name} 
-          className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
+          className="h-full w-full object-cover transform transition-transform duration-700 group-hover:scale-110"
           onError={() => onImageError(product.id)}
         />
         
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#051129]/80 via-transparent to-transparent opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
-        
-        {/* Health Badge */}
-        <div className="absolute bottom-2 right-2 z-10">
-          <Badge className={`${getHealthLabel().color} shadow-md px-2 py-0.5 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
-            {getHealthLabel().text}
-          </Badge>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/70 dark:from-[#051129]/80 via-transparent to-transparent opacity-70 group-hover:opacity-100 transition-opacity duration-300"></div>
         
         {/* Product Tags */}
-        <div className="absolute top-2 left-2 z-10 flex flex-wrap gap-1">
+        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1.5">
           {product.popular && (
-            <Badge className="bg-gradient-to-r from-canteen-teal to-canteen-mint text-white shadow-md scale-75">
+            <Badge className="bg-gradient-to-r from-canteen-teal to-canteen-mint text-white shadow-md">
               <Star className="w-3 h-3 mr-1" />
               Δημοφιλές
             </Badge>
           )}
           {product.isNew && (
-            <Badge className="bg-gradient-to-r from-canteen-yellow to-canteen-coral text-white shadow-md animate-pulse scale-75">
+            <Badge className="bg-gradient-to-r from-canteen-yellow to-canteen-coral text-white shadow-md animate-pulse">
               Νέο
             </Badge>
           )}
@@ -1442,43 +1071,46 @@ const ProductListItem: React.FC<ProductListItemProps> = ({
       </div>
       
       {/* Product Info */}
-      <div className="p-4 flex flex-col justify-between flex-grow">
-        <div>
-          {/* Category Tag */}
-          <div className="mb-2">
-            <Badge variant="outline" className="bg-[#112136]/90 shadow-sm border-canteen-teal/20 text-canteen-teal text-xs">
+      <div className="flex-1 p-4 flex flex-col">
+        <div className="flex items-start justify-between">
+          <div>
+            <Badge variant="outline" className="mb-1 border-canteen-teal/20 text-canteen-teal text-xs">
               {categories.find(c => c.value === product.category)?.label || product.category}
             </Badge>
+            <h3 
+              className="text-lg font-medium text-canteen-dark dark:text-white mb-1 group-hover:text-canteen-teal transition-colors duration-300 cursor-pointer"
+              onClick={() => setIsDialogOpen(true)}
+            >
+              {product.name}
+            </h3>
           </div>
           
-          <h3 
-            className="text-lg font-medium text-white mb-1 group-hover:text-canteen-teal transition-colors duration-300 cursor-pointer"
-            onClick={() => setIsDialogOpen(true)}
-          >
-            {product.name}
-          </h3>
-          
-          <p className="text-sm text-gray-300 mb-2 line-clamp-2">
-            {product.description}
-          </p>
+          <Badge className={`${getHealthLabel().color} ml-2 shadow-md h-fit`}>
+            {getHealthLabel().text}
+          </Badge>
         </div>
         
-        <div className="flex flex-wrap items-center gap-4 mt-2">
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">
+          {product.description}
+        </p>
+        
+        {/* Dietary and Allergy Info + Rating */}
+        <div className="flex items-center gap-2 mt-auto">
           {/* Dietary Icons */}
           <div className="flex gap-1">
             {dietaryInfo.includes('vegan') && (
-              <Badge variant="outline" className="h-6 w-6 p-0 flex items-center justify-center rounded-full border-green-500/30 bg-green-900/20" title="Vegan">
-                <span className="text-green-400 text-xs">V</span>
+              <Badge variant="outline" className="h-6 w-6 p-0 flex items-center justify-center rounded-full border-green-500/30 bg-green-100/70 dark:bg-green-900/20" title="Vegan">
+                <span className="text-green-700 dark:text-green-400 text-xs">V</span>
               </Badge>
             )}
             {dietaryInfo.includes('vegetarian') && (
-              <Badge variant="outline" className="h-6 w-6 p-0 flex items-center justify-center rounded-full border-green-500/30 bg-green-900/20" title="Χορτοφαγικό">
-                <span className="text-green-400 text-xs">Χ</span>
+              <Badge variant="outline" className="h-6 w-6 p-0 flex items-center justify-center rounded-full border-green-500/30 bg-green-100/70 dark:bg-green-900/20" title="Χορτοφαγικό">
+                <span className="text-green-700 dark:text-green-400 text-xs">Χ</span>
               </Badge>
             )}
             {dietaryInfo.includes('gluten-free') && (
-              <Badge variant="outline" className="h-6 w-6 p-0 flex items-center justify-center rounded-full border-amber-500/30 bg-amber-900/20" title="Χωρίς Γλουτένη">
-                <span className="text-amber-400 text-xs">G</span>
+              <Badge variant="outline" className="h-6 w-6 p-0 flex items-center justify-center rounded-full border-amber-500/30 bg-amber-100/70 dark:bg-amber-900/20" title="Χωρίς Γλουτένη">
+                <span className="text-amber-700 dark:text-amber-400 text-xs">G</span>
               </Badge>
             )}
           </div>
@@ -1487,22 +1119,22 @@ const ProductListItem: React.FC<ProductListItemProps> = ({
           {allergyInfo.length > 0 && (
             <div 
               className="cursor-help" 
-              title={allergyInfo.map(info => formatAllergyInfo(info)).join(', ')}
+              title={allergyInfo.map(formatAllergyInfo).join(', ')}
             >
               <AlertTriangle className="h-4 w-4 text-canteen-coral" />
             </div>
           )}
           
           {/* Rating */}
-          <div className="flex items-center ml-auto">
+          <div className="ml-auto flex items-center">
             {renderStars(rating)}
-            <span className="ml-1 text-xs text-gray-400">({count})</span>
+            <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">({count})</span>
           </div>
         </div>
         
         {/* Price and Add to Cart */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#1d2f4f]">
-          <div className="font-bold text-white text-lg">{product.price.toFixed(2)}€</div>
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200 dark:border-[#1d2f4f]">
+          <div className="font-bold text-canteen-dark dark:text-white text-lg">{product.price.toFixed(2)}€</div>
           <Button
             size="sm"
             className="bg-canteen-teal hover:bg-canteen-teal/90 text-white"
@@ -1516,9 +1148,9 @@ const ProductListItem: React.FC<ProductListItemProps> = ({
       
       {/* Product Detail Dialog - same as in ProductCard */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-2xl bg-[#112136] border border-[#1d2f4f] text-white">
+        <DialogContent className="sm:max-w-2xl bg-white dark:bg-[#112136] border border-gray-200 dark:border-[#1d2f4f] text-canteen-dark dark:text-white">
           <DialogHeader>
-            <DialogTitle className="text-xl text-white">{product.name}</DialogTitle>
+            <DialogTitle className="text-xl text-canteen-dark dark:text-white">{product.name}</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="relative rounded-lg overflow-hidden">
@@ -1545,25 +1177,25 @@ const ProductListItem: React.FC<ProductListItemProps> = ({
                 <Badge variant="outline" className="mb-2 border-canteen-teal/20 text-canteen-teal">
                   {categories.find(c => c.value === product.category)?.label || product.category}
                 </Badge>
-                <h3 className="text-2xl font-medium text-white mb-2">{product.name}</h3>
+                <h3 className="text-2xl font-medium text-canteen-dark dark:text-white mb-2">{product.name}</h3>
                 <div className="flex items-center gap-2 mb-3">
                   {renderStars(rating)}
-                  <span className="text-sm text-gray-400">({count} αξιολογήσεις)</span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">({count} αξιολογήσεις)</span>
                 </div>
-                <p className="text-gray-300">{product.description}</p>
+                <p className="text-gray-600 dark:text-gray-300">{product.description}</p>
               </div>
               
-              <Card className="mb-4 bg-[#0b1220] border-[#1d2f4f]">
+              <Card className="mb-4 bg-gray-50 dark:bg-[#0b1220] border-gray-200 dark:border-[#1d2f4f]">
                 <CardHeader className="py-3">
-                  <CardTitle className="text-base text-white">Διατροφικά στοιχεία</CardTitle>
+                  <CardTitle className="text-base text-canteen-dark dark:text-white">Διατροφικά στοιχεία</CardTitle>
                 </CardHeader>
                 <CardContent className="py-0">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <h4 className="text-sm font-medium text-white">Κατάλληλο για:</h4>
+                      <h4 className="text-sm font-medium text-canteen-dark dark:text-white">Κατάλληλο για:</h4>
                       <ul className="mt-1 space-y-1">
                         {dietaryInfo.filter(d => !d.startsWith('contains-')).map((info) => (
-                          <li key={info} className="flex items-center text-sm text-gray-300">
+                          <li key={info} className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                             <span className="h-1.5 w-1.5 rounded-full bg-canteen-teal mr-2"></span>
                             {formatDietaryInfo(info)}
                           </li>
@@ -1574,10 +1206,10 @@ const ProductListItem: React.FC<ProductListItemProps> = ({
                       </ul>
                     </div>
                     <div>
-                      <h4 className="text-sm font-medium text-white">Προειδοποιήσεις:</h4>
+                      <h4 className="text-sm font-medium text-canteen-dark dark:text-white">Προειδοποιήσεις:</h4>
                       <ul className="mt-1 space-y-1">
                         {allergyInfo.map((info) => (
-                          <li key={info} className="flex items-center text-sm text-gray-300">
+                          <li key={info} className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                             <span className="h-1.5 w-1.5 rounded-full bg-canteen-coral mr-2"></span>
                             {formatAllergyInfo(info)}
                           </li>
@@ -1592,7 +1224,7 @@ const ProductListItem: React.FC<ProductListItemProps> = ({
               </Card>
               
               <div className="mt-auto flex items-center justify-between">
-                <div className="font-bold text-white text-2xl">{product.price.toFixed(2)}€</div>
+                <div className="font-bold text-canteen-dark dark:text-white text-2xl">{product.price.toFixed(2)}€</div>
                 <Button
                   onClick={() => {
                     onAddToCart(product);

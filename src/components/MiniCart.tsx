@@ -22,15 +22,15 @@ const MiniCart: React.FC<MiniCartProps> = ({ layout = 'default' }) => {
   
   if (items.length === 0) {
     return (
-      <div className={`text-center ${layout === 'compact' ? 'p-5 bg-[#112136] dark:bg-[#112136] rounded-lg' : 'p-8'}`}>
+      <div className={`text-center ${layout === 'compact' ? 'p-5 bg-white dark:bg-[#112136] rounded-lg' : 'p-8'}`}>
         <div className="flex flex-col items-center justify-center">
           <div className="relative mb-4">
-            <div className="h-16 w-16 rounded-full bg-[#0b1220] flex items-center justify-center relative border border-[#1d2f4f]">
+            <div className="h-16 w-16 rounded-full bg-gray-100 dark:bg-[#0b1220] flex items-center justify-center relative border border-gray-200 dark:border-[#1d2f4f]">
               <ShoppingBag className="h-8 w-8 text-canteen-teal animate-in fade-in zoom-in duration-500" />
             </div>
           </div>
-          <h3 className="font-medium text-lg text-white animate-in fade-in slide-in-from-bottom-3 duration-300">Το καλάθι σας είναι άδειο</h3>
-          <p className="text-sm text-gray-400 mt-2 max-w-[220px] mx-auto animate-in fade-in slide-in-from-bottom-3 duration-300 delay-100">
+          <h3 className="font-medium text-lg text-canteen-dark dark:text-white animate-in fade-in slide-in-from-bottom-3 duration-300">Το καλάθι σας είναι άδειο</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 max-w-[220px] mx-auto animate-in fade-in slide-in-from-bottom-3 duration-300 delay-100">
             Προσθέστε προϊόντα στο καλάθι σας
           </p>
           {layout !== 'compact' && (
@@ -142,15 +142,15 @@ const MiniCart: React.FC<MiniCartProps> = ({ layout = 'default' }) => {
           </div>
         </div>
       ) : (
-        <div className={`${layout === 'compact' ? 'bg-[#112136]/90 dark:bg-[#112136]/90 backdrop-blur-sm rounded-lg shadow-lg border border-[#1d2f4f]' : 'bg-white dark:bg-card rounded-lg shadow-md p-5 border border-gray-200 dark:border-muted/30'}`}>
+        <div className={`${layout === 'compact' ? 'bg-white/90 dark:bg-[#112136]/90 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 dark:border-[#1d2f4f]' : 'bg-white dark:bg-card rounded-lg shadow-md p-5 border border-gray-200 dark:border-muted/30'}`}>
           <div className="space-y-0 mb-1 p-3">
             {items.slice(0, 3).map((item, index) => (
               <div 
                 key={item.product.id} 
-                className="flex items-center py-2.5 border-b border-[#1d2f4f]/50 last:border-0 transition-all duration-200 hover:bg-[#1a2c47]/70 dark:hover:bg-[#1a2c47]/70 animate-in fade-in-50 slide-in-from-right-3"
+                className="flex items-center py-2.5 border-b border-gray-200 dark:border-[#1d2f4f]/50 last:border-0 transition-all duration-200 hover:bg-gray-100/70 dark:hover:bg-[#1a2c47]/70 animate-in fade-in-50 slide-in-from-right-3"
                 style={{ animationDelay: `${index * 75}ms` }}
               >
-                <div className="h-10 w-10 rounded-md bg-[#051129] overflow-hidden flex-shrink-0 border border-[#1d2f4f]/50">
+                <div className="h-10 w-10 rounded-md bg-gray-100 dark:bg-[#051129] overflow-hidden flex-shrink-0 border border-gray-200 dark:border-[#1d2f4f]/50">
                   <img 
                     src={item.product.image} 
                     alt={item.product.name} 
@@ -161,15 +161,15 @@ const MiniCart: React.FC<MiniCartProps> = ({ layout = 'default' }) => {
                   />
                 </div>
                 <div className="ml-3 flex-grow min-w-0">
-                  <p className="text-sm font-medium text-white line-clamp-1">{item.product.name}</p>
+                  <p className="text-sm font-medium text-canteen-dark dark:text-white line-clamp-1">{item.product.name}</p>
                   <div className="flex justify-between items-center">
-                    <p className="text-xs text-gray-400">{item.quantity} x {item.product.price.toFixed(2)}€</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{item.quantity} x {item.product.price.toFixed(2)}€</p>
                     <p className="text-xs font-medium text-canteen-teal ml-1">{(item.quantity * item.product.price).toFixed(2)}€</p>
                   </div>
                 </div>
                 <button 
                   onClick={() => handleRemoveItem(item.product.id)}
-                  className="ml-2 p-1 text-gray-400 hover:text-canteen-coral rounded-full"
+                  className="ml-2 p-1 text-gray-500 dark:text-gray-400 hover:text-canteen-coral rounded-full"
                   aria-label="Remove item"
                 >
                   <X size={14} />
@@ -178,15 +178,15 @@ const MiniCart: React.FC<MiniCartProps> = ({ layout = 'default' }) => {
             ))}
             
             {items.length > 3 && (
-              <p className="text-xs text-center font-medium text-gray-400 py-1 mt-1 bg-[#0b1220] rounded">
+              <p className="text-xs text-center font-medium text-gray-500 dark:text-gray-400 py-1 mt-1 bg-gray-100 dark:bg-[#0b1220] rounded">
                 + {items.length - 3} ακόμη προϊόντα
               </p>
             )}
           </div>
           
-          <div className="flex justify-between items-center bg-gradient-to-r from-[#0b1220] to-[#112136] px-3 py-3 rounded-b-lg">
+          <div className="flex justify-between items-center bg-gradient-to-r from-gray-100 to-white dark:from-[#0b1220] dark:to-[#112136] px-3 py-3 rounded-b-lg">
             <div>
-              <span className="text-sm font-medium text-gray-300">Σύνολο</span>
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Σύνολο</span>
               <span className="ml-2 text-base font-bold text-canteen-teal">{getTotalPrice().toFixed(2)}€</span>
             </div>
             
