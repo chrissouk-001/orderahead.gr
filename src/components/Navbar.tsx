@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, User, LogOut, Sun, Moon, Menu, X, ChevronRight } from 'lucide-react';
+import { 
+  ShoppingBag, 
+  User, 
+  LogOut, 
+  Sun, 
+  Moon, 
+  Menu, 
+  X, 
+  ChevronRight,
+  LaptopIcon 
+} from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -12,13 +22,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const { getTotalItems } = useCart();
-  const { isDarkMode, toggleDarkMode } = useTheme();
+  const { theme, setTheme, isDarkMode } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
   // Close mobile menu when route changes
@@ -26,29 +40,48 @@ const Navbar: React.FC = () => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
   
+  // Detect scroll for navbar background
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  
   const isActive = (path: string) => {
     return location.pathname === path;
   };
   
   return (
-    <header className="sticky top-0 z-50 bg-white dark:bg-background shadow-sm border-b border-gray-100 dark:border-primary/10 backdrop-blur-md bg-white/90 dark:bg-background/95">
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${
+      scrolled 
+        ? 'bg-white/90 dark:bg-background/95 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-primary/10' 
+        : 'bg-white dark:bg-transparent dark:backdrop-blur-none'
+    }`}>
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
+          {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="bg-gradient-to-br from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint rounded-full p-1.5 overflow-hidden transform transition-all duration-300 group-hover:scale-105 shadow-md">
+            <motion.div 
+              className="bg-gradient-to-br from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint rounded-full p-1.5 overflow-hidden shadow-md"
+              whileHover={{ scale: 1.1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
               <img 
                 src="/OrderAhead-logo.svg" 
                 alt="OrderAhead.gr Logo" 
                 className="h-6 w-6 rounded-full" 
               />
-            </div>
+            </motion.div>
             <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-canteen-dark to-canteen-teal dark:from-white dark:to-primary transition-colors duration-300">
               OrderAhead.gr
             </span>
           </Link>
           
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
+          <nav className="hidden md:flex items-center space-x-2">
             <NavLink to="/" isActive={isActive('/')} isDark={isDarkMode}>
               Αρχική
             </NavLink>
@@ -63,21 +96,64 @@ const Navbar: React.FC = () => {
             </NavLink>
           </nav>
           
-          <div className="flex items-center gap-1.5">
-            {/* Dark Mode Toggle Button */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={toggleDarkMode} 
-              className="rounded-full text-canteen-darkgray dark:text-gray-400 hover:text-canteen-teal dark:hover:text-primary hover:bg-canteen-lightgray dark:hover:bg-primary/10"
-              aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              {isDarkMode ? 
-                <Sun size={18} className="transition-all duration-500 rotate-0 hover:rotate-90" /> : 
-                <Moon size={18} className="transition-all duration-500" />
-              }
-            </Button>
+          <div className="flex items-center gap-2">
+            {/* Theme Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="rounded-full bg-gray-100 dark:bg-gray-800/20 hover:bg-gray-200 dark:hover:bg-gray-800/30 transition-colors"
+                >
+                  {theme === 'dark' ? (
+                    <Moon size={18} className="text-indigo-400" />
+                  ) : theme === 'light' ? (
+                    <Sun size={18} className="text-yellow-500" />
+                  ) : (
+                    <LaptopIcon size={18} className="text-blue-400" />
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-[150px] bg-white dark:bg-gray-900 text-gray-800 dark:text-white p-1 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                <div className="space-y-1 p-1">
+                  <DropdownMenuItem 
+                    onClick={() => setTheme('light')} 
+                    className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${
+                      theme === 'light' 
+                        ? 'bg-gray-100 dark:bg-gray-800 text-yellow-600 dark:text-yellow-400' 
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }`}
+                  >
+                    <Sun size={15} className="text-yellow-500" />
+                    <span>Φωτεινό</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => setTheme('dark')} 
+                    className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${
+                      theme === 'dark' 
+                        ? 'bg-gray-100 dark:bg-gray-800 text-indigo-600 dark:text-indigo-400' 
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }`}
+                  >
+                    <Moon size={15} className="text-indigo-400" />
+                    <span>Σκοτεινό</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => setTheme('system')} 
+                    className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${
+                      theme === 'system' 
+                        ? 'bg-gray-100 dark:bg-gray-800 text-blue-600 dark:text-blue-400' 
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }`}
+                  >
+                    <LaptopIcon size={15} className="text-blue-400" />
+                    <span>Σύστημα</span>
+                  </DropdownMenuItem>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
             
+            {/* Cart Button */}
             {isAuthenticated && (
               <Link 
                 to="/cart" 
@@ -86,17 +162,26 @@ const Navbar: React.FC = () => {
               >
                 <ShoppingBag size={18} />
                 {getTotalItems() > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-canteen-coral dark:bg-canteen-coral text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center transition-all duration-300">
+                  <motion.span 
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="absolute -top-1 -right-1 bg-canteen-coral dark:bg-canteen-coral text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center"
+                  >
                     {getTotalItems()}
-                  </span>
+                  </motion.span>
                 )}
               </Link>
             )}
             
+            {/* User Menu or Login Button */}
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full text-canteen-darkgray dark:text-gray-400 hover:text-canteen-teal dark:hover:text-primary hover:bg-canteen-lightgray dark:hover:bg-primary/10">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="rounded-full text-canteen-darkgray dark:text-gray-400 hover:text-canteen-teal dark:hover:text-primary hover:bg-canteen-lightgray dark:hover:bg-primary/10"
+                  >
                     <User size={18} />
                   </Button>
                 </DropdownMenuTrigger>
@@ -155,34 +240,40 @@ const Navbar: React.FC = () => {
       </div>
       
       {/* Mobile Navigation Menu */}
-      <div 
-        className={`md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-card border-b border-gray-100 dark:border-primary/10 shadow-lg transition-all duration-300 ${
-          mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
-        } overflow-hidden`}
-      >
-        <nav className="flex flex-col p-4 gap-2">
-          <MobileNavLink to="/" isActive={isActive('/')} isDark={isDarkMode}>
-            Αρχική
-          </MobileNavLink>
-          <MobileNavLink to="/menu" isActive={isActive('/menu')} isDark={isDarkMode}>
-            Κατάλογος
-          </MobileNavLink>
-          <MobileNavLink to="/order-status" isActive={isActive('/order-status')} isDark={isDarkMode}>
-            Κατάσταση Παραγγελίας
-          </MobileNavLink>
-          <MobileNavLink to="/contact" isActive={isActive('/contact')} isDark={isDarkMode}>
-            Επικοινωνία
-          </MobileNavLink>
-          
-          {!isAuthenticated && (
-            <Link to="/login" className="w-full mt-2">
-              <Button className="bg-gradient-to-r from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint hover:opacity-90 text-white w-full transition-colors duration-300 shadow-md rounded-lg py-5">
-                Σύνδεση
-              </Button>
-            </Link>
-          )}
-        </nav>
-      </div>
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-white dark:bg-card border-b border-gray-100 dark:border-primary/10 shadow-lg overflow-hidden"
+          >
+            <nav className="flex flex-col p-4 gap-2">
+              <MobileNavLink to="/" isActive={isActive('/')} isDark={isDarkMode}>
+                Αρχική
+              </MobileNavLink>
+              <MobileNavLink to="/menu" isActive={isActive('/menu')} isDark={isDarkMode}>
+                Κατάλογος
+              </MobileNavLink>
+              <MobileNavLink to="/order-status" isActive={isActive('/order-status')} isDark={isDarkMode}>
+                Κατάσταση Παραγγελίας
+              </MobileNavLink>
+              <MobileNavLink to="/contact" isActive={isActive('/contact')} isDark={isDarkMode}>
+                Επικοινωνία
+              </MobileNavLink>
+              
+              {!isAuthenticated && (
+                <Link to="/login" className="w-full mt-2">
+                  <Button className="bg-gradient-to-r from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint hover:opacity-90 text-white w-full transition-colors duration-300 shadow-md rounded-lg py-5">
+                    Σύνδεση
+                  </Button>
+                </Link>
+              )}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
@@ -211,7 +302,11 @@ const NavLink: React.FC<{ to: string; isActive: boolean; isDark: boolean; childr
     >
       {children}
       {isActive && (
-        <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 rounded-full ${isDark ? 'bg-primary' : 'bg-canteen-teal'}`}></span>
+        <motion.span 
+          layoutId="activeNavIndicator"
+          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+          className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 rounded-full ${isDark ? 'bg-primary' : 'bg-canteen-teal'}`}
+        ></motion.span>
       )}
     </Link>
   );

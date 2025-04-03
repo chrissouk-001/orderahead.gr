@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { motion } from 'framer-motion';
+import { useInView } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Plus, Star, Heart, ShoppingBag, Sparkles } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { getPopularProducts } from "@/data/products";
 import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { Product } from '@/types/product';
-import { getPopularProducts } from '@/data/products';
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, ChevronRight, Plus, Star, Heart } from "lucide-react";
 
 // Health indicator types
 type HealthIndicator = 'healthy' | 'moderate' | 'unhealthy';
@@ -67,15 +70,61 @@ const getAllergyInfo = (productId: string): AllergyInfo[] => {
   return allergyMap[productId] || [];
 };
 
-export function ProductCarousel() {
-  const { isAuthenticated } = useAuth();
+export const ProductCarousel = () => {
   const { addItem } = useCart();
+  const { isAuthenticated } = useAuth();
+  const [products, setProducts] = useState<Product[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchEndX, setTouchEndX] = useState(0);
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const products = getPopularProducts();
+  const [isMobile, setIsMobile] = useState(false);
+  const [likedProducts, setLikedProducts] = useState<Record<string, boolean>>({});
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, amount: 0.2 });
   
+  // Set mobile state based on screen width
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
+  // Fetch products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const popularProducts = await getPopularProducts();
+      setProducts(popularProducts);
+    };
+    
+    fetchProducts();
+  }, []);
+  
+  // Calculate number of visible items based on screen size
+  const getVisibleItemCount = () => {
+    if (window.innerWidth < 640) return 1;
+    if (window.innerWidth < 768) return 2;
+    if (window.innerWidth < 1024) return 3;
+    return 4;
+  };
+  
+  const visibleItems = getVisibleItemCount();
+  
+  // Navigation functions
+  const goToNext = () => {
+    if (currentIndex < products.length - visibleItems) {
+      setCurrentIndex(prevIndex => prevIndex + 1);
+    }
+  };
+  
+  const goToPrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(prevIndex => prevIndex - 1);
+    }
+  };
+  
+  // Add to cart function
   const handleAddToCart = (product: Product) => {
     if (!isAuthenticated) {
       toast.error('Παρακαλώ συνδεθείτε για να προσθέσετε προϊόντα στο καλάθι');
@@ -86,196 +135,204 @@ export function ProductCarousel() {
     toast.success(`${product.name} προστέθηκε στο καλάθι`);
   };
   
-  const goToNext = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === products.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-  
-  const goToPrev = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? products.length - 1 : prevIndex - 1
-    );
-  };
-  
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.targetTouches[0].clientX);
-  };
-  
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEndX(e.targetTouches[0].clientX);
-  };
-  
-  const handleTouchEnd = () => {
-    if (touchStartX - touchEndX > 50) {
-      // Swiped left
-      goToNext();
-    } else if (touchEndX - touchStartX > 50) {
-      // Swiped right
-      goToPrev();
+  // Like product function
+  const toggleLike = (productId: string) => {
+    setLikedProducts(prev => ({
+      ...prev,
+      [productId]: !prev[productId]
+    }));
+    
+    const product = products.find(p => p.id === productId);
+    if (product) {
+      toast.success(`${likedProducts[productId] ? 'Αφαιρέθηκε από τα αγαπημένα' : 'Προστέθηκε στα αγαπημένα'}: ${product.name}`);
     }
   };
   
-  useEffect(() => {
-    const interval = setInterval(() => {
-      goToNext();
-    }, 5000);
-    
-    return () => clearInterval(interval);
-  }, []);
-  
-  // Calculate visible products based on screen size
-  const getVisibleProducts = () => {
-    // On mobile, show 1 product
-    // On small screens, show 2 products
-    // On medium screens, show 3 products
-    // On large screens, show 4 products
-    const screenWidth = window.innerWidth;
-    let visibleCount = 1;
-    
-    if (screenWidth >= 1280) {
-      visibleCount = 4;
-    } else if (screenWidth >= 1024) {
-      visibleCount = 3;
-    } else if (screenWidth >= 640) {
-      visibleCount = 2;
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
     }
-    
-    const visibleProducts = [];
-    for (let i = 0; i < visibleCount; i++) {
-      const index = (currentIndex + i) % products.length;
-      visibleProducts.push(products[index]);
-    }
-    
-    return visibleProducts;
   };
   
-  return (
-    <div className="relative">
-      <div 
-        className="overflow-hidden"
-        ref={carouselRef}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {getVisibleProducts().map((product, index) => (
-            <ProductCard 
-              key={`${product.id}-${index}`} 
-              product={product} 
-              onAddToCart={handleAddToCart} 
-            />
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 260,
+        damping: 20
+      }
+    }
+  };
+  
+  // Calculate transform value for carousel
+  const calculateTransform = () => {
+    // Full card width (including gap)
+    let itemWidth = 300; // Base width
+    const gap = 16;
+    
+    if (containerRef.current) {
+      const containerWidth = containerRef.current.offsetWidth;
+      itemWidth = (containerWidth / visibleItems) - (gap * (visibleItems - 1) / visibleItems);
+    }
+    
+    return `translateX(-${currentIndex * (itemWidth + gap)}px)`;
+  };
+  
+  if (!products.length) {
+    return (
+      <div className="flex justify-center items-center h-60">
+        <div className="animate-pulse flex space-x-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="w-64 h-80 bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
           ))}
         </div>
       </div>
-      
-      {/* Navigation Buttons */}
-      <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 z-10">
-        <Button
-          variant="outline"
-          size="icon"
-          className="rounded-full bg-white dark:bg-card border border-gray-100 dark:border-primary/10 shadow-md hover:shadow-lg transition-all w-10 h-10 text-canteen-darkgray dark:text-gray-400 hover:text-canteen-teal dark:hover:text-primary"
-          onClick={goToPrev}
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </Button>
-      </div>
-      <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 z-10">
-        <Button
-          variant="outline"
-          size="icon"
-          className="rounded-full bg-white dark:bg-card border border-gray-100 dark:border-primary/10 shadow-md hover:shadow-lg transition-all w-10 h-10 text-canteen-darkgray dark:text-gray-400 hover:text-canteen-teal dark:hover:text-primary"
-          onClick={goToNext}
-        >
-          <ChevronRight className="h-5 w-5" />
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-interface ProductCardProps {
-  product: Product;
-  onAddToCart: (product: Product) => void;
-}
-
-const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+    );
+  }
+  
   return (
-    <div className="group relative bg-white dark:bg-card rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-primary/10 h-full flex flex-col">
-      {/* Product Image */}
-      <div className="relative h-48 overflow-hidden">
-        <img 
-          src={product.image} 
-          alt={product.name} 
-          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = "/images/products/sandwich.jpg";
-          }}
-        />
-        
-        {/* Overlay Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        
-        {/* Product tags */}
-        <div className="absolute top-2 left-2 flex flex-wrap gap-2">
-          {product.popular && (
-            <Badge className="bg-gradient-to-r from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint text-white">
-              <Star className="w-3 h-3 mr-1" />
-              Δημοφιλές
-            </Badge>
-          )}
-          {product.isNew && (
-            <Badge className="bg-gradient-to-r from-canteen-yellow to-canteen-coral dark:from-secondary dark:to-canteen-coral text-white animate-pulse">
-              Νέο
-            </Badge>
-          )}
-        </div>
-        
-        {/* Add to Cart button */}
-        <Button
-          size="icon"
-          className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white dark:bg-card text-canteen-teal dark:text-primary hover:bg-canteen-teal hover:dark:bg-primary hover:text-white rounded-full shadow-md h-9 w-9"
-          onClick={() => onAddToCart(product)}
-          aria-label={`Προσθήκη ${product.name} στο καλάθι`}
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
-        
-        {/* Favorite button */}
+    <motion.div 
+      ref={containerRef}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={containerVariants}
+      className="relative overflow-hidden px-1 py-4"
+    >
+      {/* Navigation buttons */}
+      {currentIndex > 0 && (
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/40 backdrop-blur-sm hover:bg-white/60 text-canteen-darkgray hover:text-canteen-coral dark:text-gray-300 dark:hover:text-canteen-coral rounded-full h-8 w-8"
-          aria-label={`Προσθήκη ${product.name} στα αγαπημένα`}
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 dark:bg-card/80 shadow-md hover:shadow-lg rounded-full border border-gray-100 dark:border-primary/10"
+          onClick={goToPrev}
         >
-          <Heart className="h-4 w-4" />
+          <ChevronLeft className="h-6 w-6 text-canteen-dark dark:text-white" />
         </Button>
+      )}
+      
+      {currentIndex < products.length - visibleItems && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 dark:bg-card/80 shadow-md hover:shadow-lg rounded-full border border-gray-100 dark:border-primary/10"
+          onClick={goToNext}
+        >
+          <ChevronRight className="h-6 w-6 text-canteen-dark dark:text-white" />
+        </Button>
+      )}
+      
+      {/* Products carousel */}
+      <div
+        className="flex gap-4 transition-transform duration-500 ease-out"
+        style={{ transform: calculateTransform() }}
+      >
+        {products.map((product) => (
+          <motion.div 
+            key={product.id}
+            variants={itemVariants}
+            className="min-w-[280px] flex-shrink-0"
+          >
+            <Card className="overflow-hidden group h-full border border-gray-100 dark:border-primary/10 bg-white dark:bg-card hover:shadow-xl transition-all duration-300 relative">
+              {/* Badge for new or eco products */}
+              {product.isNew && (
+                <Badge className="absolute top-11 left-3 z-10 bg-canteen-coral/90 dark:bg-canteen-coral/90 text-white py-1 px-2.5 text-xs rounded-full shadow-md">
+                  <Sparkles className="h-3 w-3 mr-1" />
+                  Νέο
+                </Badge>
+              )}
+              {product.isEco && (
+                <Badge className="absolute top-20 left-3 z-10 bg-canteen-teal/90 dark:bg-primary/90 text-white py-1 px-2.5 text-xs rounded-full shadow-md">
+                  Eco
+                </Badge>
+              )}
+              
+              {/* Product image */}
+              <div className="relative h-48 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-background/30 dark:to-background/10 overflow-hidden">
+                <motion.img 
+                  src={product.image} 
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                />
+                <motion.button 
+                  className={`absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center ${
+                    likedProducts[product.id] 
+                      ? 'bg-canteen-coral text-white' 
+                      : 'bg-white/80 dark:bg-card/80 text-gray-500 dark:text-gray-400'
+                  } shadow-md`}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={() => toggleLike(product.id)}
+                >
+                  <Heart className={`h-4 w-4 ${likedProducts[product.id] ? 'fill-current' : ''}`} />
+                </motion.button>
+              </div>
+              
+              <CardHeader className="p-4 pb-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-canteen-dark dark:text-white">{product.name}</h3>
+                </div>
+                <p className="text-canteen-darkgray dark:text-gray-400 text-sm">{product.description}</p>
+              </CardHeader>
+              
+              <CardContent className="p-4 pt-0">
+                <div className="flex items-center mt-1 mb-2">
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <Star 
+                        key={i} 
+                        className={`h-4 w-4 ${i < (product.rating || 5) ? 'text-canteen-yellow fill-canteen-yellow dark:text-secondary dark:fill-secondary' : 'text-gray-300 dark:text-gray-600'}`} 
+                      />
+                    ))}
+                  </div>
+                  <span className="text-xs text-canteen-darkgray dark:text-gray-400 ml-1">({product.reviews || 42})</span>
+                </div>
+              </CardContent>
+              
+              <CardFooter className="p-4 pt-0 flex items-center justify-between">
+                <div className="font-bold text-lg text-canteen-dark dark:text-white">
+                  {product.price.toFixed(2)}€
+                </div>
+                <Button 
+                  className="bg-gradient-to-r from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint hover:opacity-90 text-white"
+                  size="sm"
+                  onClick={() => handleAddToCart(product)}
+                >
+                  <ShoppingBag className="h-4 w-4 mr-1" />
+                  Προσθήκη
+                </Button>
+              </CardFooter>
+            </Card>
+          </motion.div>
+        ))}
       </div>
       
-      {/* Product Info */}
-      <div className="p-4 flex flex-col flex-grow">
-        <h3 className="text-lg font-medium text-canteen-dark dark:text-white mb-1 line-clamp-1">
-          {product.name}
-        </h3>
-        <p className="text-sm text-canteen-darkgray dark:text-gray-400 mb-3 line-clamp-2">
-          {product.description}
-        </p>
-        
-        <div className="flex items-center justify-between mt-auto pt-2">
-          <div className="flex items-center text-canteen-yellow dark:text-secondary">
-            {Array(5).fill(0).map((_, i) => (
-              <Star 
-                key={i} 
-                className="w-3.5 h-3.5 fill-current" 
-                strokeWidth={0}
-              />
-            ))}
-            <span className="ml-1 text-xs text-canteen-darkgray dark:text-gray-400">(42)</span>
-          </div>
-          <span className="font-bold text-canteen-dark dark:text-white">{product.price.toFixed(2)}€</span>
+      {/* Pagination dots (for mobile) */}
+      {isMobile && (
+        <div className="flex justify-center gap-1.5 mt-4">
+          {Array.from({ length: Math.ceil(products.length / visibleItems) }).map((_, index) => (
+            <button
+              key={index}
+              className={`w-2 h-2 rounded-full transition-all ${
+                index === currentIndex
+                  ? 'bg-canteen-teal dark:bg-primary w-4'
+                  : 'bg-gray-300 dark:bg-gray-700'
+              }`}
+              onClick={() => setCurrentIndex(index)}
+            />
+          ))}
         </div>
-      </div>
-    </div>
+      )}
+    </motion.div>
   );
 };

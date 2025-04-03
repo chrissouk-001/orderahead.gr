@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Search, ShoppingCart, Heart, AlertTriangle, Info, X, Filter, ChevronDown, ArrowLeft, ArrowRight, Star, Leaf, Sprout, Check, Eye, Grid2X2, List } from 'lucide-react';
+import { Plus, Search, ShoppingCart, Heart, AlertTriangle, Info, X, Filter, ChevronDown, ArrowLeft, ArrowRight, Star, Leaf, Sprout, Check, Eye, Grid2X2, List, Sparkles } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -772,15 +772,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
         
         {/* New Badge */}
         {product.isNew && (
-          <div className="absolute -top-2 -right-2 z-20">
-            <div className="relative">
-              <div className="w-16 h-16 overflow-hidden rotate-45 transform origin-bottom-left">
-                <div className="bg-accent text-accent-foreground text-xs h-6 flex items-center justify-center font-bold shadow-md">
-                  Νέο
-                </div>
-              </div>
-            </div>
-          </div>
+          <Badge className="absolute top-11 left-3 z-10 bg-canteen-coral/90 dark:bg-canteen-coral/90 text-white py-1 px-2.5 text-xs rounded-full shadow-md">
+            <Sparkles className="h-3 w-3 mr-1" />
+            Νέο
+          </Badge>
         )}
       </div>
       
@@ -998,15 +993,10 @@ const ProductListItem: React.FC<ProductListItemProps> = ({
         
         {/* New Badge */}
         {product.isNew && (
-          <div className="absolute -top-2 -right-2 z-20">
-            <div className="relative">
-              <div className="w-12 h-12 overflow-hidden rotate-45 transform origin-bottom-left">
-                <div className="bg-accent text-accent-foreground text-xs h-5 flex items-center justify-center font-bold shadow-md">
-                  Νέο
-                </div>
-              </div>
-            </div>
-          </div>
+          <Badge className="absolute top-11 left-3 z-10 bg-canteen-coral/90 dark:bg-canteen-coral/90 text-white py-1 px-2.5 text-xs rounded-full shadow-md">
+            <Sparkles className="h-3 w-3 mr-1" />
+            Νέο
+          </Badge>
         )}
       </div>
       

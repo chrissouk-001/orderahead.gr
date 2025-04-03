@@ -1,4 +1,3 @@
-
 export type ProductCategory = 
   | 'sandwich' 
   | 'pastry' 
@@ -15,4 +14,7 @@ export type Product = {
   category: ProductCategory;
   popular?: boolean;
   isNew?: boolean;
+  isEco?: boolean;
+  rating?: number;
+  reviews?: number;
 };
