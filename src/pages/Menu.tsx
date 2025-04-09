@@ -14,8 +14,6 @@ import { useCart } from '@/contexts/CartContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { products, getProductsByCategory } from '@/data/products';
 import { Product, ProductCategory } from '@/types/product';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { toast } from 'sonner';
 import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -361,8 +359,6 @@ const Menu: React.FC = () => {
   
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#0b1220] to-[#051129]">
-      <Navbar />
-      
       <main className="bg-gray-50 dark:bg-background min-h-screen pb-16">
         <div className="container mx-auto px-4 pt-8">
           {/* Main Catalog Header */}
@@ -613,8 +609,6 @@ const Menu: React.FC = () => {
           </div>
         </div>
       </main>
-      
-      <Footer />
     </div>
   );
 };

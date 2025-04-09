@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle, ChevronLeft, ChevronRight, CalendarClock, Info, Sparkles, PartyPopper, QrCode, Clock, Bell } from 'lucide-react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -108,8 +106,6 @@ const OrderSuccess: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-background dark:to-background/80 relative overflow-hidden">
-      <Navbar />
-      
       {/* Decorative Wave Background */}
       <div className="absolute inset-0 z-0 overflow-hidden opacity-20 dark:opacity-10 pointer-events-none">
         <motion.div 
@@ -549,8 +545,6 @@ const OrderSuccess: React.FC = () => {
           </motion.div>
         </motion.div>
       </main>
-      
-      <Footer />
     </div>
   );
 };

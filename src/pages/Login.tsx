@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -86,8 +84,6 @@ const Login: React.FC = () => {
   
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-background">
-      <Navbar />
-      
       <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
         {/* Background Decorative Elements */}
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -256,8 +252,6 @@ const Login: React.FC = () => {
           </Card>
         </div>
       </main>
-      
-      <Footer />
     </div>
   );
 };

@@ -4,8 +4,6 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useCart } from '@/contexts/CartContext';
 import { Link } from 'react-router-dom';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 
 const OrderStatus: React.FC = () => {
   const { getOrderNumber } = useCart();
@@ -75,8 +73,6 @@ const OrderStatus: React.FC = () => {
   
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-background">
-      <Navbar />
-      
       <main className="flex-grow container mx-auto px-4 py-12">
         <div className="max-w-3xl mx-auto">
           <div className="flex items-center mb-8">
@@ -214,8 +210,6 @@ const OrderStatus: React.FC = () => {
           )}
         </div>
       </main>
-      
-      <Footer />
     </div>
   );
 };

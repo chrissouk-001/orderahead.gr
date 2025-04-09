@@ -1,5 +1,18 @@
+/**
+ * products.ts
+ * 
+ * This module contains product data and utility functions for product retrieval.
+ * In a production application, this data would come from a database or API.
+ * For this demo, we use static data to simulate the product catalog.
+ */
+
 import { Product } from '@/types/product';
 
+/**
+ * Mock product catalog
+ * A collection of food and drink items available for purchase
+ * Each product includes details like price, description, category, and image
+ */
 export const products: Product[] = [
   {
     id: '1',
@@ -90,14 +103,32 @@ export const products: Product[] = [
   }
 ];
 
+/**
+ * Get products filtered by category
+ * 
+ * @param category - The product category to filter by
+ * @returns Array of products matching the specified category
+ */
 export const getProductsByCategory = (category: string) => {
   return products.filter(product => product.category === category);
 };
 
+/**
+ * Get featured/popular products
+ * Used for displaying highlighted products on the homepage
+ * 
+ * @returns Array of products marked as popular
+ */
 export const getPopularProducts = () => {
   return products.filter(product => product.popular);
 };
 
+/**
+ * Get a specific product by its ID
+ * 
+ * @param id - The unique product ID to search for
+ * @returns The matching product or undefined if not found
+ */
 export const getProductById = (id: string) => {
   return products.find(product => product.id === id);
 };

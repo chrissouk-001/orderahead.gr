@@ -66,17 +66,61 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 174 100% 29%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
+  }
+
+  /* Improve mobile experience with better touch targets */
+  @media (max-width: 768px) {
+    button, 
+    [role="button"],
+    a,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    .btn {
+      /* Ensure touch targets are at least 44x44px as per WCAG 2.5.5 */
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    /* Increase form input size on mobile for better usability */
+    input:not([type="checkbox"]):not([type="radio"]),
+    select,
+    textarea {
+      font-size: 16px; /* Prevents iOS zoom on input focus */
+      padding: 0.75rem;
+    }
+    
+    /* Increase default font size for better readability */
+    body {
+      font-size: 1rem;
+    }
+    
+    /* Increase spacing between interactive elements */
+    .button-group > * {
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
   }
 
   body {
     @apply bg-background text-foreground font-sans text-[0.925rem];
     font-family: 'Open Sans', sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+    /* Set height to prevent mobile 100vh issues */
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    /* Enable smooth scrolling */
+    scroll-behavior: smooth;
+    /* Add touch timeout for better experience */
+    touch-action: manipulation;
+  }
+
+  /* Fix for mobile Safari 100vh issue */
+  html {
+    height: -webkit-fill-available;
   }
   
   /* Smooth page transitions */
@@ -93,6 +137,23 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+  
+  /* Add styles for mobile nav drawer */
+  .mobile-nav-drawer {
+    @apply fixed inset-0 z-50 flex transform transition-transform duration-300 ease-in-out;
+    transform: translateX(-100%);
+  }
+  
+  .mobile-nav-drawer.open {
+    transform: translateX(0);
+  }
+  
+  /* Fix for iOS overscroll issue */
+  @supports (-webkit-touch-callout: none) {
+    .height-screen {
+      height: -webkit-fill-available;
     }
   }
 }

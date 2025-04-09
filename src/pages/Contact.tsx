@@ -1,7 +1,5 @@
 import React, { FormEvent, useState } from 'react';
 import { MapPin, Phone, Mail, Send } from 'lucide-react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -46,7 +44,7 @@ const Contact: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-background">
-      <Navbar />
+      {/* Removed Navbar here */}
       
       {/* Hero section */}
       <div className="bg-gradient-to-r from-canteen-teal to-blue-500 dark:from-primary dark:to-primary/80 py-10">
@@ -187,7 +185,7 @@ const Contact: React.FC = () => {
         </div>
       </main>
       
-      <Footer />
+      {/* Removed Footer here */}
     </div>
   );
 };

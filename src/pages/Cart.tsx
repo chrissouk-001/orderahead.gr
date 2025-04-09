@@ -5,8 +5,6 @@ import { ShoppingBag, Plus, Minus, X, ShoppingCart, Package, CreditCard } from '
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/components/ui/use-toast';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 
 const Cart: React.FC = () => {
   const { items, getTotalPrice, updateQuantity, removeItem, clearCart } = useCart();
@@ -60,8 +58,6 @@ const Cart: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#0b1220] to-[#051129]">
-      <Navbar />
-      
       <main className="flex-grow container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8 text-white">Το καλάθι μου</h1>
         
@@ -226,8 +222,6 @@ const Cart: React.FC = () => {
           </div>
         )}
       </main>
-      
-      <Footer />
     </div>
   );
 };

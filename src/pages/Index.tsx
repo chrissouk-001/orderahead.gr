@@ -1,3 +1,15 @@
+/**
+ * Index.tsx
+ * 
+ * Homepage component for OrderAhead.gr application
+ * Features:
+ * - Hero section with CTA for ordering
+ * - Eco-friendly initiative information
+ * - Features showcase with parallax effects
+ * - Popular products carousel
+ * - About and testimonials section
+ */
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -20,8 +32,6 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { toast } from 'sonner';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { ProductCarousel } from "@/components/ProductCarousel";
 import { getPopularProducts } from "@/data/products";
 import { Product } from '@/types/product';
@@ -29,19 +39,29 @@ import { AnimatedAppFlow } from '@/components/ui/animated-app-flow';
 import { Badge } from "@/components/ui/badge";
 
 const Index: React.FC = () => {
+  // Access authentication and cart contexts
   const { isAuthenticated } = useAuth();
   const { addItem } = useCart();
+  
+  // State for parallax effect based on mouse position
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  
+  // State to track visibility for scroll animations
   const [isVisible, setIsVisible] = useState({
     features: false,
     about: false,
     eco: false
   });
   
+  // Refs for scroll animation sections
   const featuresRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
   const ecoRef = useRef<HTMLDivElement>(null);
   
+  /**
+   * Handle adding a product to cart with authentication check
+   * @param product - Product to add to cart
+   */
   const handleAddToCart = (product: Product) => {
     if (!isAuthenticated) {
       toast.error('Παρακαλώ συνδεθείτε για να προσθέσετε προϊόντα στο καλάθι');
@@ -53,6 +73,7 @@ const Index: React.FC = () => {
   };
   
   useEffect(() => {
+    // Track mouse movement for parallax effect
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: e.clientX / window.innerWidth,
@@ -62,19 +83,23 @@ const Index: React.FC = () => {
 
     window.addEventListener('mousemove', handleMouseMove);
     
+    // Handle scroll events for revealing animations
     const handleScroll = () => {
       const scrollY = window.scrollY || window.pageYOffset;
       
+      // Check if features section is visible
       if (featuresRef.current) {
         const featuresTop = featuresRef.current.getBoundingClientRect().top + scrollY - window.innerHeight + 100;
         setIsVisible(prev => ({ ...prev, features: scrollY > featuresTop }));
       }
       
+      // Check if about section is visible
       if (aboutRef.current) {
         const aboutTop = aboutRef.current.getBoundingClientRect().top + scrollY - window.innerHeight + 100;
         setIsVisible(prev => ({ ...prev, about: scrollY > aboutTop }));
       }
       
+      // Check if eco section is visible
       if (ecoRef.current) {
         const ecoTop = ecoRef.current.getBoundingClientRect().top + scrollY - window.innerHeight + 100;
         setIsVisible(prev => ({ ...prev, eco: scrollY > ecoTop }));
@@ -84,31 +109,33 @@ const Index: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Initial check
     
+    // Cleanup event listeners
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
   
+  // Calculate parallax effect based on mouse position
   const parallaxStyle = {
     transform: `translate(${mousePosition.x * -15}px, ${mousePosition.y * -15}px)`
   };
   
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-background transition-colors duration-300">
-      <Navbar />
-      
       <main className="flex-grow">
-        {/* Hero Section */}
+        {/* Hero Section - Main landing area with CTAs */}
         <section className="py-16 bg-white dark:bg-background">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
+                {/* Version badge */}
                 <div className="inline-flex items-center gap-1.5 mb-3 px-3 py-1.5 rounded-full bg-canteen-teal/10 dark:bg-primary/10 text-canteen-teal dark:text-primary text-sm font-medium">
                   <CheckCircle className="w-4 h-4" />
                   <span>Νέα έκδοση 2.0</span>
                 </div>
                 
+                {/* Main headline */}
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-canteen-dark dark:text-white mb-4">
                   Σχολικό κυλικείο
                   <span className="text-canteen-teal dark:text-primary block mt-1">
@@ -116,12 +143,14 @@ const Index: React.FC = () => {
                   </span>
                 </h1>
                 
+                {/* Value proposition */}
                 <p className="text-canteen-darkgray dark:text-gray-300 mb-6">
                   Με την εφαρμογή <span className="font-semibold">OrderAhead.gr</span>, 
                   η διαδικασία παραγγελίας γίνεται πιο γρήγορη, οργανωμένη και φιλική 
                   προς το περιβάλλον!
                 </p>
                 
+                {/* CTA buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 mb-6">
                   <Button 
                     className="bg-canteen-teal dark:bg-primary hover:opacity-90 text-white px-6 py-2 rounded-lg"
@@ -140,6 +169,7 @@ const Index: React.FC = () => {
                   </Button>
                 </div>
                 
+                {/* Social proof section */}
                 <div className="flex items-center gap-4">
                   <div className="flex -space-x-2">
                     {[1, 2, 3, 4].map((i) => (
@@ -152,12 +182,14 @@ const Index: React.FC = () => {
                 </div>
               </div>
               
+              {/* App flow animation/demo */}
               <div>
                 <div className="relative">
                   <div className="bg-white dark:bg-card border border-gray-100 dark:border-primary/10 rounded-lg overflow-hidden">
                     <AnimatedAppFlow />
                   </div>
                   
+                  {/* Waiting time stat */}
                   <div className="absolute bottom-4 left-4 bg-white dark:bg-card p-3 rounded-lg border border-gray-100 dark:border-primary/10">
                     <div className="flex items-center gap-2">
                       <Clock className="w-5 h-5 text-canteen-teal dark:text-primary" />
@@ -173,107 +205,7 @@ const Index: React.FC = () => {
           </div>
         </section>
         
-        {/* School Meals Section */}
-        <section className="py-16 bg-white dark:bg-background relative">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-1.5 mb-4 px-3 py-1.5 rounded-full bg-canteen-yellow/10 dark:bg-secondary/10 text-canteen-yellow dark:text-secondary text-sm font-medium">
-                <Coffee className="w-4 h-4" />
-                <span>COMING SOON</span>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-canteen-dark dark:text-white mb-4">
-                Πακέτα <span className="text-canteen-yellow dark:text-secondary">Γευμάτων για Σχολεία</span>
-              </h2>
-              <p className="text-canteen-darkgray dark:text-gray-400 max-w-2xl mx-auto">
-                Σύντομα, η OrderAhead θα παρέχει έτοιμα πακέτα γευμάτων σε σχολεία σε όλη την Ελλάδα, 
-                με μεγάλη ποικιλία επιλογών για μαθητές και εκπαιδευτικούς.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <Leaf className="h-6 w-6 text-canteen-teal dark:text-primary mt-1" />
-                    <div>
-                      <h3 className="text-xl font-bold text-canteen-dark dark:text-white mb-2">Υγιεινές Επιλογές</h3>
-                      <p className="text-canteen-darkgray dark:text-gray-400">
-                        Πακέτα φρέσκων γευμάτων με υψηλή διατροφική αξία, προσαρμοσμένα στις ανάγκες των μαθητών όλων των ηλικιών.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <ShieldCheck className="h-6 w-6 text-canteen-yellow dark:text-secondary mt-1" />
-                    <div>
-                      <h3 className="text-xl font-bold text-canteen-dark dark:text-white mb-2">Ποιοτικά Υλικά</h3>
-                      <p className="text-canteen-darkgray dark:text-gray-400">
-                        Χρησιμοποιούμε μόνο επιλεγμένα τοπικά υλικά από πιστοποιημένους προμηθευτές που εγγυώνται την ποιότητα.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <MessageSquare className="h-6 w-6 text-canteen-coral dark:text-canteen-coral mt-1" />
-                    <div>
-                      <h3 className="text-xl font-bold text-canteen-dark dark:text-white mb-2">Προσαρμοσμένα Πακέτα</h3>
-                      <p className="text-canteen-darkgray dark:text-gray-400">
-                        Δυνατότητα προσαρμογής των πακέτων γευμάτων ανάλογα με τις διατροφικές ανάγκες του κάθε σχολείου.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="pt-4">
-                    <Button 
-                      className="bg-canteen-yellow dark:bg-secondary hover:opacity-90 text-white px-6 py-2 rounded-lg"
-                      asChild
-                    >
-                      <Link to="/contact">
-                        Εγγραφείτε για ενημερώσεις
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white dark:bg-card p-4 rounded-lg border border-gray-100 dark:border-primary/10">
-                    <Leaf className="w-6 h-6 text-canteen-teal dark:text-primary mb-3" />
-                    <p className="font-medium text-canteen-dark dark:text-white">Μεσογειακή Σαλάτα</p>
-                    <p className="text-xs text-canteen-darkgray dark:text-gray-400">Φρέσκα λαχανικά εποχής</p>
-                  </div>
-                  <div className="bg-white dark:bg-card p-4 rounded-lg border border-gray-100 dark:border-primary/10">
-                    <Coffee className="w-6 h-6 text-canteen-yellow dark:text-secondary mb-3" />
-                    <p className="font-medium text-canteen-dark dark:text-white">Ολικής Άλεσης Σάντουιτς</p>
-                    <p className="text-xs text-canteen-darkgray dark:text-gray-400">Με επιλεγμένα υλικά</p>
-                  </div>
-                  <div className="bg-white dark:bg-card p-4 rounded-lg border border-gray-100 dark:border-primary/10">
-                    <Clock className="w-6 h-6 text-canteen-coral dark:text-canteen-coral mb-3" />
-                    <p className="font-medium text-canteen-dark dark:text-white">Φρέσκα Φρούτα Εποχής</p>
-                    <p className="text-xs text-canteen-darkgray dark:text-gray-400">Ποικιλία φρούτων</p>
-                  </div>
-                  <div className="bg-white dark:bg-card p-4 rounded-lg border border-gray-100 dark:border-primary/10">
-                    <MessageSquare className="w-6 h-6 text-canteen-mint dark:text-canteen-mint mb-3" />
-                    <p className="font-medium text-canteen-dark dark:text-white">Γιαούρτι με Δημητριακά</p>
-                    <p className="text-xs text-canteen-darkgray dark:text-gray-400">Υψηλή περιεκτικότητα πρωτεΐνης</p>
-                  </div>
-                </div>
-                
-                <div className="mt-4 bg-white dark:bg-card p-4 rounded-lg border border-gray-100 dark:border-primary/10 flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-canteen-yellow dark:text-secondary" />
-                  <div>
-                    <p className="text-sm text-canteen-darkgray dark:text-gray-400">Διαθέσιμα Πακέτα</p>
-                    <p className="font-bold text-xl text-canteen-dark dark:text-white">20+ επιλογές</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        
-        {/* Eco-friendly Section */}
+        {/* Eco-friendly Section - Highlighting environmental benefits */}
         <section 
           ref={ecoRef}
           className="py-16 bg-white dark:bg-background"
@@ -281,6 +213,7 @@ const Index: React.FC = () => {
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
+                {/* Eco badge */}
                 <div className="inline-flex items-center gap-1.5 mb-3 px-3 py-1.5 rounded-full bg-canteen-teal/10 dark:bg-primary/10 text-canteen-teal dark:text-primary text-sm font-medium">
                   <Leaf className="w-4 h-4" />
                   <span>ECO-FRIENDLY</span>
@@ -294,6 +227,7 @@ const Index: React.FC = () => {
                   χαρτί έχετε εξοικονομήσει με τις ψηφιακές σας παραγγελίες.
                 </p>
                 
+                {/* Environmental impact stats */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                   <div className="bg-white dark:bg-card rounded-lg p-4 border border-gray-100 dark:border-primary/10">
                     <div className="flex items-center gap-3 mb-2">
@@ -348,8 +282,6 @@ const Index: React.FC = () => {
           </div>
         </section>
       </main>
-      
-      <Footer />
     </div>
   );
 };

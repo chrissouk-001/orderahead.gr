@@ -3,13 +3,15 @@ import { Link } from 'react-router-dom';
 import { ShoppingCart, Plus, Minus, X, ShoppingBag } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useCart } from '@/contexts/CartContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type MiniCartProps = {
-  layout?: 'default' | 'compact';
+  layout?: 'default' | 'compact' | 'mobile';
 };
 
 const MiniCart: React.FC<MiniCartProps> = ({ layout = 'default' }) => {
   const { items, getTotalPrice, updateQuantity, removeItem } = useCart();
+  const isMobile = useIsMobile();
   
   const handleUpdateQuantity = (productId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -20,9 +22,18 @@ const MiniCart: React.FC<MiniCartProps> = ({ layout = 'default' }) => {
     removeItem(productId);
   };
   
+  // If mobile layout is requested or we're on mobile, force the mobile view
+  const effectiveLayout = isMobile ? 'mobile' : layout;
+  
   if (items.length === 0) {
     return (
-      <div className={`text-center ${layout === 'compact' ? 'p-5 bg-white dark:bg-[#112136] rounded-lg' : 'p-8'}`}>
+      <div className={`text-center ${
+        effectiveLayout === 'compact' 
+          ? 'p-5 bg-white dark:bg-[#112136] rounded-lg' 
+          : effectiveLayout === 'mobile'
+            ? 'p-4 bg-white dark:bg-[#112136] rounded-lg'
+            : 'p-8'
+      }`}>
         <div className="flex flex-col items-center justify-center">
           <div className="relative mb-4">
             <div className="h-16 w-16 rounded-full bg-gray-100 dark:bg-[#0b1220] flex items-center justify-center relative border border-gray-200 dark:border-[#1d2f4f]">
@@ -33,7 +44,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ layout = 'default' }) => {
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 max-w-[220px] mx-auto animate-in fade-in slide-in-from-bottom-3 duration-300 delay-100">
             Προσθέστε προϊόντα στο καλάθι σας
           </p>
-          {layout !== 'compact' && (
+          {effectiveLayout !== 'compact' && (
             <Button asChild className="mt-5 w-full bg-canteen-teal hover:bg-canteen-teal/90 text-white shadow-md hover:shadow-lg transition-all duration-300 animate-in fade-in-50 slide-in-from-bottom-3 duration-300 delay-200">
               <Link to="/menu">Προσθήκη προϊόντων</Link>
             </Button>
@@ -43,9 +54,103 @@ const MiniCart: React.FC<MiniCartProps> = ({ layout = 'default' }) => {
     );
   }
   
+  if (effectiveLayout === 'mobile') {
+    return (
+      <div className="bg-white dark:bg-[#112136] shadow-lg rounded-lg overflow-hidden border border-gray-200 dark:border-[#1d2f4f]">
+        <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-[#1d2f4f]">
+          <h3 className="font-medium text-canteen-dark dark:text-white">Το καλάθι μου</h3>
+          <div className="text-sm font-medium text-canteen-teal dark:text-primary">
+            {items.length} {items.length === 1 ? 'προϊόν' : 'προϊόντα'}
+          </div>
+        </div>
+        
+        <div className="max-h-[60vh] overflow-y-auto p-2">
+          {items.map((item) => (
+            <div 
+              key={item.product.id} 
+              className="flex items-center gap-3 p-2 border-b border-gray-100 dark:border-[#1d2f4f]/30 last:border-0"
+            >
+              <div className="h-14 w-14 rounded-md bg-gray-100 dark:bg-[#0b1220] overflow-hidden flex-shrink-0">
+                <img 
+                  src={item.product.image} 
+                  alt={item.product.name} 
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/placeholder.svg";
+                  }}
+                />
+              </div>
+              
+              <div className="flex-grow min-w-0">
+                <p className="font-medium text-canteen-dark dark:text-white line-clamp-1">
+                  {item.product.name}
+                </p>
+                <div className="flex justify-between items-center mt-1">
+                  <p className="text-sm text-canteen-teal dark:text-primary font-medium">
+                    {(item.quantity * item.product.price).toFixed(2)}€
+                  </p>
+                  
+                  <div className="flex items-center">
+                    <button
+                      onClick={() => handleUpdateQuantity(item.product.id, item.quantity - 1)}
+                      className="w-7 h-7 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#0b1220] rounded-full"
+                    >
+                      <Minus size={14} />
+                    </button>
+                    <span className="mx-1 min-w-[20px] text-center text-sm text-canteen-dark dark:text-white">
+                      {item.quantity}
+                    </span>
+                    <button
+                      onClick={() => handleUpdateQuantity(item.product.id, item.quantity + 1)}
+                      className="w-7 h-7 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#0b1220] rounded-full"
+                    >
+                      <Plus size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <button
+                onClick={() => handleRemoveItem(item.product.id)}
+                className="text-gray-400 hover:text-canteen-coral p-1 rounded-full hover:bg-gray-100 dark:hover:bg-[#0b1220]"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          ))}
+        </div>
+        
+        <div className="p-3 bg-gray-50 dark:bg-[#0b1220]">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-canteen-dark dark:text-white">Σύνολο:</span>
+            <span className="font-bold text-lg text-canteen-teal dark:text-primary">
+              {getTotalPrice().toFixed(2)}€
+            </span>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-2">
+            <Button 
+              asChild
+              variant="outline" 
+              className="w-full border-gray-200 dark:border-[#1d2f4f] text-canteen-dark dark:text-white"
+            >
+              <Link to="/cart">Καλάθι</Link>
+            </Button>
+            <Button 
+              asChild
+              className="w-full bg-canteen-teal hover:bg-canteen-teal/90 dark:bg-primary dark:hover:bg-primary/90 text-white"
+            >
+              <Link to="/checkout">Ταμείο</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <>
-      {layout === 'default' ? (
+      {effectiveLayout === 'default' ? (
         <div className="lg:flex lg:gap-6">
           {/* Products List */}
           <div className="bg-white dark:bg-card rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-muted/30 lg:w-2/3">
@@ -142,7 +247,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ layout = 'default' }) => {
           </div>
         </div>
       ) : (
-        <div className={`${layout === 'compact' ? 'bg-white/90 dark:bg-[#112136]/90 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 dark:border-[#1d2f4f]' : 'bg-white dark:bg-card rounded-lg shadow-md p-5 border border-gray-200 dark:border-muted/30'}`}>
+        <div className={`${effectiveLayout === 'compact' ? 'bg-white/90 dark:bg-[#112136]/90 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 dark:border-[#1d2f4f]' : 'bg-white dark:bg-card rounded-lg shadow-md p-5 border border-gray-200 dark:border-muted/30'}`}>
           <div className="space-y-0 mb-1 p-3">
             {items.slice(0, 3).map((item, index) => (
               <div 

@@ -76,7 +76,10 @@ export const ProductCarousel = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [isSmallMobile, setIsSmallMobile] = useState(false);
   const [likedProducts, setLikedProducts] = useState<Record<string, boolean>>({});
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.2 });
   
@@ -84,11 +87,16 @@ export const ProductCarousel = () => {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
+      setIsSmallMobile(window.innerWidth < 480);
     };
     
     handleResize(); // Initial check
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
   }, []);
   
   // Fetch products
@@ -103,7 +111,8 @@ export const ProductCarousel = () => {
   
   // Calculate number of visible items based on screen size
   const getVisibleItemCount = () => {
-    if (window.innerWidth < 640) return 1;
+    if (window.innerWidth < 480) return 1;
+    if (window.innerWidth < 640) return 1.5;
     if (window.innerWidth < 768) return 2;
     if (window.innerWidth < 1024) return 3;
     return 4;
@@ -124,8 +133,40 @@ export const ProductCarousel = () => {
     }
   };
   
+  // Touch handlers for swipe navigation
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+    setTouchEnd(null);
+  };
+  
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+    
+    if (isLeftSwipe && currentIndex < products.length - visibleItems) {
+      goToNext();
+    }
+    
+    if (isRightSwipe && currentIndex > 0) {
+      goToPrev();
+    }
+    
+    // Reset values
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+  
   // Add to cart function
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = (product: Product, event: React.MouseEvent) => {
+    event.stopPropagation();
+    
     if (!isAuthenticated) {
       toast.error('Παρακαλώ συνδεθείτε για να προσθέσετε προϊόντα στο καλάθι');
       return;
@@ -136,7 +177,9 @@ export const ProductCarousel = () => {
   };
   
   // Like product function
-  const toggleLike = (productId: string) => {
+  const toggleLike = (productId: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    
     setLikedProducts(prev => ({
       ...prev,
       [productId]: !prev[productId]
@@ -176,12 +219,17 @@ export const ProductCarousel = () => {
   // Calculate transform value for carousel
   const calculateTransform = () => {
     // Full card width (including gap)
-    let itemWidth = 300; // Base width
+    let itemWidth = 280; // Base width
     const gap = 16;
     
     if (containerRef.current) {
       const containerWidth = containerRef.current.offsetWidth;
-      itemWidth = (containerWidth / visibleItems) - (gap * (visibleItems - 1) / visibleItems);
+      if (isSmallMobile) {
+        // On very small screens, just show 1 card that takes full width
+        itemWidth = containerWidth - 32; // Subtract padding
+      } else {
+        itemWidth = (containerWidth / visibleItems) - (gap * (visibleItems - 1) / visibleItems);
+      }
     }
     
     return `translateX(-${currentIndex * (itemWidth + gap)}px)`;
@@ -213,7 +261,7 @@ export const ProductCarousel = () => {
           variant="ghost"
           size="icon"
           className="absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 dark:bg-card/80 shadow-md hover:shadow-lg rounded-full border border-gray-100 dark:border-primary/10"
-          onClick={goToPrev}
+          onClick={(event) => { event.stopPropagation(); goToPrev(); }}
         >
           <ChevronLeft className="h-6 w-6 text-canteen-dark dark:text-white" />
         </Button>
@@ -224,7 +272,7 @@ export const ProductCarousel = () => {
           variant="ghost"
           size="icon"
           className="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 dark:bg-card/80 shadow-md hover:shadow-lg rounded-full border border-gray-100 dark:border-primary/10"
-          onClick={goToNext}
+          onClick={(event) => { event.stopPropagation(); goToNext(); }}
         >
           <ChevronRight className="h-6 w-6 text-canteen-dark dark:text-white" />
         </Button>
@@ -234,6 +282,9 @@ export const ProductCarousel = () => {
       <div
         className="flex gap-4 transition-transform duration-500 ease-out"
         style={{ transform: calculateTransform() }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {products.map((product) => (
           <motion.div 
@@ -272,7 +323,7 @@ export const ProductCarousel = () => {
                   } shadow-md`}
                   whileTap={{ scale: 0.9 }}
                   transition={{ duration: 0.2 }}
-                  onClick={() => toggleLike(product.id)}
+                  onClick={(event) => { event.stopPropagation(); toggleLike(product.id, event); }}
                 >
                   <Heart className={`h-4 w-4 ${likedProducts[product.id] ? 'fill-current' : ''}`} />
                 </motion.button>
@@ -306,7 +357,7 @@ export const ProductCarousel = () => {
                 <Button 
                   className="bg-gradient-to-r from-canteen-teal to-canteen-mint dark:from-primary dark:to-canteen-mint hover:opacity-90 text-white"
                   size="sm"
-                  onClick={() => handleAddToCart(product)}
+                  onClick={(event) => { event.stopPropagation(); handleAddToCart(product, event); }}
                 >
                   <ShoppingBag className="h-4 w-4 mr-1" />
                   Προσθήκη
@@ -328,7 +379,7 @@ export const ProductCarousel = () => {
                   ? 'bg-canteen-teal dark:bg-primary w-4'
                   : 'bg-gray-300 dark:bg-gray-700'
               }`}
-              onClick={() => setCurrentIndex(index)}
+              onClick={(event) => { event.stopPropagation(); setCurrentIndex(index); }}
             />
           ))}
         </div>
